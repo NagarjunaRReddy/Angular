@@ -1,0 +1,28 @@
+<div class="table-container mx-1 mt-2 py-2">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+  
+      <!-- Define columns -->
+      <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>{{ column.header }}</th>
+        <td class="text-center" mat-cell *matCellDef="let element">
+          <ng-container *ngIf="column.columnDef === 'deliveryDate'; else otherFormat">
+            {{ ConvertDate(element[column.columnDef]) }}
+          </ng-container>
+          <ng-template #otherFormat>
+            {{ element[column.columnDef] }}
+          </ng-template>
+        </td>
+      </ng-container>
+      
+  
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:displayedColumns.includes('select')?false:true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell no-data text-center" [attr.colspan]="displayedColumns.length + 1" >
+            No data availaible!
+        </td>
+    </tr>
+    </table>
+  
+</div>

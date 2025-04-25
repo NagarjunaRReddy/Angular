@@ -1,0 +1,48 @@
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+  {{ data.title }}
+  <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+</h4>
+<mat-dialog-content class="py-1 mt-2">
+  <form [formGroup]="addEditForm">
+    <div class="form-group row align-items-center mb-2">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="dealer_Id" class="">Drawing Status</label>
+        <label class="text-danger">*</label>
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align">
+        <input [ngClass]="{
+            'has-error':
+              addEditForm.controls['DrawingStatus'].errors &&
+              addEditForm.controls['DrawingStatus'].touched
+          }" type="text" [readOnly]="data.view" class="form-control m-2" placeholder="Enter Drawing Status"
+          formControlName="DrawingStatus" />
+        <div *ngIf="addEditForm.controls['DrawingStatus'].invalid && addEditForm.controls['DrawingStatus'].touched"
+          class="invalid-feedback my-2">
+          <span *ngIf="addEditForm.controls['DrawingStatus'].hasError('required')" class="px-2 my-1">
+            Drawing Status is required
+          </span>
+          <span *ngIf="addEditForm.controls['DrawingStatus'].hasError('cannotContainSpace')">
+            White Spaces not allowed
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row align-items-center mb-2">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="color" class="">Color Code</label>
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align">
+        <input id="color" name="color" type="color" [readOnly]="data.view" class="form-control m-2 selectColor"
+          formControlName="Color" />
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="mb-2">
+  <button mat-raised-button class="btn save-cancel-button btn-danger" color="warn" (click)="onCancel()">
+    Cancel
+  </button>
+  <button mat-raised-button class="btn save-cancel-button btn-save ms-2" (click)="onSave()">
+    {{ data.button }}
+  </button>
+</mat-dialog-actions>

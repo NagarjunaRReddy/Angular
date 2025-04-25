@@ -1,0 +1,381 @@
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+  {{ data.title }} <i class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+</h4>
+<mat-dialog-content class="no-wrap">
+  <form [formGroup]="userForm">
+    <div class="container">
+      <div class="row my-2 align-items-center">
+        <div class="col-lg-12">
+          <div class="row align-items-center">
+
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="firstName" class="no-wrap">First Name</label><label class="text-danger">*</label>
+            </div>
+
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align position-relative">
+              <input [ngClass]="{
+                  'has-error':
+                    userForm.controls['FirstName'].invalid &&
+                    userForm.controls['FirstName'].touched
+                }" type="text" [readOnly]="data.view" class="form-control my-1" placeholder="Enter First Name"
+                name="firstName" formControlName="FirstName" />
+
+              <div *ngIf="userForm.controls['FirstName'].errors && userForm.controls['FirstName'].touched"
+                class="invalid-feedback mt-2">
+                <span
+                  *ngIf="userForm.controls['FirstName'].hasError('required') && userForm.controls['FirstName'].touched"
+                  class="px-2">First Name is required</span>
+                <span *ngIf="userForm.controls['FirstName'].hasError('cannotContainSpace')" class="px-2">White Spaces
+                  not
+                  allowed</span>
+              </div>
+            </div>
+
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="lastName">Last Name</label><label class="text-danger">*</label>
+            </div>
+
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align position-relative">
+              <input [ngClass]="{
+                  'has-error':
+                    userForm.controls['LastName'].errors &&
+                    userForm.controls['LastName'].touched
+                }" type="text" [readOnly]="data.view" class="form-control my-1" placeholder="Enter Last Name"
+                formControlName="LastName" name="lastName" />
+
+              <div *ngIf="userForm.controls['LastName'].errors && userForm.controls['LastName'].touched"
+                class="invalid-feedback mt-2">
+                <span
+                  *ngIf="userForm.controls['LastName'].hasError('required') && userForm.controls['LastName'].touched"
+                  class="px-2">Last Name is
+                  required</span>
+                <span *ngIf="
+                    userForm.controls['LastName'].hasError('cannotContainSpace')
+                  " class="px-2">White Spaces not allowed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row my-2 align-items-center">
+        <div class="col-lg-12">
+          <div class="row align-items-center">
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="email">Email</label><label class="text-danger">*</label>
+            </div>
+
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align position-relative">
+              <input [ngClass]="{
+                  'has-error':
+                    userForm.controls['Email'].errors &&
+                    userForm.controls['Email'].touched
+                }" type="text" [readOnly]="data.view" class="form-control my-1" placeholder="Enter Email"
+                formControlName="Email" name="email" />
+
+              <div *ngIf="userForm.controls['Email'].errors" class="invalid-feedback mt-2">
+                <span *ngIf="userForm.controls['Email'].hasError('required') && userForm.controls['Email'].touched"
+                  class="px-2">Email is required</span>
+                <span *ngIf="userForm.get('Email').hasError('pattern')">Invalid
+                  Email</span>
+              </div>
+            </div>
+            <!-- Designation -->
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="site" class="col-lg-2 col-md-12 col-sm-12 col-form-label"
+                for="designation">Designation</label>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align">
+              <input type="text" [readOnly]="data.view" class="form-control my-1" autocomplete="off"
+                placeholder="Enter Designation" formControlName="Designation" name="designation" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row my-2 align-items-center">
+        <div class="col-lg-12">
+          <div class="row align-items-center">
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="password" class="no-wrap">Password</label><label class="text-danger">*</label>
+            </div>
+            <!-- Password -->
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align position-relative">
+              <div class="position-relative">
+                <input [ngClass]="{
+                    'has-error':
+                      userForm.controls['Password'].errors &&
+                      userForm.controls['Password'].touched
+                  }" [type]="password_type" (input)="passwordValidator()" [readOnly]="data.view" class="form-control my-1"
+                  placeholder="Enter Password" formControlName="Password" name="password" />
+                <i (click)="togglePasswordMode()" *ngIf="password_type == 'text'" matTooltip="Hide"
+                  class="fa-regular fa-eye password-icon"></i>
+                <i (click)="togglePasswordMode()" *ngIf="password_type == 'password'" matTooltip="View"
+                  class="fa-regular fa-eye-slash password-icon"></i>
+              </div>
+
+              <div *ngIf="userForm.controls['Password'].errors && userForm.controls['Password'].touched"
+                class="invalid-feedback mt-2">
+                <span
+                  *ngIf="userForm.controls['Password'].hasError('required') && userForm.controls['Password'].touched"
+                  class="px-2">Password is required</span>
+
+                <span *ngIf="
+                    userForm.controls['Password'].hasError('cannotContainSpace')
+                  " class="px-2">White Spaces not allowed</span>
+
+                <span *ngIf="userForm.get('Password').hasError('minlength')" class="px-2">
+                  Minimum 6 characters required</span>
+                <span *ngIf="
+                    !userForm.get('Password').hasError('minlength') &&
+                    userForm.get('Password').hasError('pattern')" class="px-2">
+                  Should include aplha(uppercase & lowercase), numeric
+                  characters
+                </span>
+              </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="confirmPassword" class="no-wrap">Confirm Password</label><label class="text-danger">*</label>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align position-relative">
+              <div class="position-relative">
+                <input [ngClass]="{
+                    'has-error':
+                      userForm.controls['ConfirmPassword'].errors &&
+                      userForm.controls['ConfirmPassword'].touched
+                  }" [type]="confirm_password_type" [readOnly]="data.view" class="form-control my-1"
+                  (input)="confirmPasswordValidator()" placeholder="Enter Confirm Password"
+                  formControlName="ConfirmPassword" name="confirmPassword" />
+                  <i (click)="toggleConfirmPasswordMode()" *ngIf="confirm_password_type == 'text'" matTooltip="Hide"
+                  class="fa-regular fa-eye password-icon"></i>
+                <i (click)="toggleConfirmPasswordMode()" *ngIf="confirm_password_type == 'password'" matTooltip="View"
+                  class="fa-regular fa-eye-slash password-icon"></i>
+              </div>
+
+              <div *ngIf="userForm.controls['ConfirmPassword'].errors" class="invalid-feedback mt-2">
+                <span *ngIf="userForm.controls['ConfirmPassword'].hasError('required') &&
+                    userForm.controls['ConfirmPassword'].touched
+                  " class="px-2">Confirm Password is required</span>
+                <span *ngIf="
+                    userForm.get('ConfirmPassword')?.hasError('pswdNotMatch')
+                  " class="px-2">
+                  Passwords must match.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row my-2 align-items-center">
+        <div class="col-lg-12">
+          <div class="row align-items-center">
+            <!-- Access Role -->
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="accesRole" class="no-wrap">Access Role <label class="text-danger">*</label></label>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align position-relative">
+              <mat-select [ngClass]="{'has-error': userForm.controls['RoleId'].errors &&
+                    userForm.controls['RoleId'].touched}" formControlName="RoleId" class="formSelect my-2"
+                panelClass="drop-panel" placeholder="-- Select Role --" name="accessRole">
+
+                <input type="text" class="search-drpdwn form-control" #myInput matInput placeholder="Search"
+                  (input)="FilterLine(myInput.value)" (keydown)="$event.stopPropagation()" />
+
+                <mat-option [value]="role.RoleId" *ngFor="let role of filteredRoles">
+                  {{ role.RoleName }}
+                </mat-option>
+                <mat-option *ngIf="filteredRoles == []" disabled>No result found
+                </mat-option>
+              </mat-select>
+              <div *ngIf="userForm.controls['RoleId'].errors" class="invalid-feedback mt-2 px-2">
+                <span *ngIf="
+                    (userForm.controls['RoleId'].hasError('required') ||
+                    userForm.controls['RoleId'].hasError('defaultSelect')) && userForm.controls['RoleId'].touched
+                  ">Role is required
+                </span>
+
+                <span *ngIf="
+                userForm.controls['RoleId'].hasError('cannotContainSpace')">White Spaces not
+                  allowed</span>
+              </div>
+            </div>
+            <!-- Select Status -->
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="status" class="no-wrap">Status <label class="text-danger">*</label></label>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align position-relative">
+              <mat-select [ngClass]="{'has-error': userForm.controls['StatusId'].errors &&  userForm.controls['StatusId'].touched
+                }" formControlName="StatusId" class="formSelect my-2" panelClass="drop-panel"
+                placeholder="-- Select Status --" name="status">
+                <mat-option [value]="status.value" *ngFor="let status of StatusList">
+                  {{ status.data }}
+                </mat-option>
+                <mat-option *ngIf="StatusList == []" disabled>No result found
+                </mat-option>
+              </mat-select>
+
+              <div *ngIf="userForm.controls['StatusId'].errors" class="invalid-feedback mt-2 px-2">
+                <span
+                  *ngIf="(userForm.controls['StatusId'].hasError('required') ||
+                  userForm.controls['StatusId'].hasError('defaultSelect')) && userForm.controls['StatusId'].touched ">Status
+                  is required</span>
+
+                <span *ngIf="
+                  userForm.controls['StatusId'].hasError('cannotContainSpace')">White Spaces not
+                  allowed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row my-2 align-items-center">
+        <div class="col-lg-12">
+          <div class="row align-items-center">
+            <!-- Phone Number -->
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="phoneNo" class="no-wrap">Mobile</label><label class="text-danger">*</label>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align position-relative">
+              <input [ngClass]="{
+                  'has-error':
+                    userForm.controls['PhoneNo'].errors &&
+                    userForm.controls['PhoneNo'].touched
+                }" type="text" (keypress)="numberOnly($event)" [readOnly]="data.view" class="form-control my-1"
+                placeholder="Enter Mobile Number" formControlName="PhoneNo" />
+
+              <div *ngIf="userForm.controls['PhoneNo'].errors" class="invalid-feedback mt-2">
+                <span *ngIf="userForm.controls['PhoneNo'].hasError('required') && userForm.controls['PhoneNo'].touched"
+                  class="px-2">Phone is required</span>
+
+                <span *ngIf="userForm.controls['PhoneNo'].hasError('cannotContainSpace')" class="px-2">White Spaces not
+                  allowed</span>
+              </div>
+            </div>
+            <!-- Select Language  -->
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="language" class="no-wrap">Language</label><label class="text-danger">*</label>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align position-relative">
+              <mat-select [ngClass]="{
+                  'has-error':
+                    userForm.controls['LanguageId'].errors &&
+                    userForm.controls['LanguageId'].touched
+                }" formControlName="LanguageId" class="formSelect my-2" panelClass="drop-panel"
+                placeholder="-- Select Language --" name="language">
+
+                <mat-option [value]="language.LanguageId" *ngFor="let language of LanguageList">
+                  {{ language.LanguageName }}
+                </mat-option>
+
+                <mat-option *ngIf="LanguageList == []" disabled>No result found
+                </mat-option>
+              </mat-select>
+              <div *ngIf="userForm.controls['LanguageId'].errors" class="invalid-feedback mt-2 px-2">
+                <span *ngIf=" (userForm.controls['LanguageId'].hasError('required') ||
+                userForm.controls['LanguageId'].hasError('defaultSelect')) &&
+                userForm.controls['LanguageId'].touched">Language
+                  is required</span>
+                <span *ngIf="userForm.controls['LanguageId'].hasError('cannotContainSpace')">White Spaces
+                  not allowed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row my-2 align-items-center">
+        <div class="col-lg-12">
+          <div class="row align-items-center">
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="businessUnit" class="no-wrap">Business Unit</label><label class="text-danger">*</label>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align position-relative">
+              <mat-select panelClass="drop-panel" placeholder="-- Select Business Unit --"
+                [value]="selectedvalue" name="BusinessUnitId" formControlName="BusinessUnits"
+                multiple class="formSelect">
+                <input type="text" class="search-drpdwn form-control" matInput placeholder="Search..." />
+                <mat-option class="formSelect" *ngFor="let option of BussinessRoleList" [value]="option.BusinessUnitId">
+                  {{ option['Business Unit'] }}
+                  <!-- {{ option.BusinessUnit }}    -->
+                </mat-option>
+              </mat-select>
+
+              <div *ngIf="userForm.controls['BusinessUnits'].errors" class="invalid-feedback px-2 mt-2" >
+                <span  *ngIf=" userForm.controls['BusinessUnits'].hasError('required')  &&
+                userForm.controls['BusinessUnits'].touched">
+                  Business Unit is required</span>
+                <!--*ngIf="selectedvalue.length === 0 || userForm.value.BusinessUnits.length == 0"-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row my-2 align-items-center">
+        <div class="col-lg-12">
+          <div class="row align-items-center">
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="tenant" class="no-wrap">Tenant</label><label class="text-danger">*</label>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align position-relative">
+              <mat-select [ngClass]="{
+                  'has-error':
+                    userForm.controls['TenantId'].errors &&
+                    userForm.controls['TenantId'].touched
+                }" formControlName="TenantId" class="formSelect my-2" panelClass="drop-panel"
+                placeholder="-- Select Tenant--" name="tenant">
+                <input type="text" class="search-drpdwn form-control" #tenantInput matInput placeholder="Search"
+                  (input)="FilterTenant(tenantInput.value)" (keydown)="$event.stopPropagation()" />
+                <mat-option [value]="tenant.TenantId" *ngFor="let tenant of filteredTenantList">
+                  {{ tenant.TenantName }}
+                </mat-option>
+                <mat-option *ngIf="filteredTenantList == []" disabled>No result found
+                </mat-option>
+              </mat-select>
+              <div *ngIf="userForm.controls['TenantId'].errors" class="invalid-feedback mt-2">
+                <span *ngIf="
+                 (userForm.controls['TenantId'].hasError('required') ||
+                 userForm.controls['TenantId'].hasError('defaultSelect')) && userForm.controls['TenantId'].touched
+                  " class="px-2">Tenant is required</span>
+
+                <span *ngIf="userForm.controls['TenantId'].hasError('cannotContainSpace')" class="px-2">White Spaces not
+                  allowed</span>
+              </div>
+            </div>
+            <!-- Address Text area -->
+            <div class="col-lg-2 col-md-12 col-sm-12 col-form-label d-flex">
+              <label for="address" class="no-wrap">Address</label><label class="text-danger">*</label>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 validator-align position-relative">
+              <textarea [ngClass]="{
+                  'has-error':
+                    userForm.controls['Address'].errors &&
+                    userForm.controls['Address'].touched
+                }" formControlName="Address" [readOnly]="data.view" name="address" class="form-control my-2"
+                placeholder="Enter Address"></textarea>
+              <div *ngIf="userForm.controls['Address'].errors" class="invalid-feedback mt-2">
+                <span *ngIf="userForm.controls['Address'].hasError('required') && userForm.controls['Address'].touched
+                  " class="px-2">Address is required</span>
+                <span *ngIf="userForm.controls['Address'].hasError('cannotContainSpace')" class="px-2">White Spaces
+                  not
+                  allowed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="!data.view" align="center">
+  <button mat-raised-button class="save-cancel-button btn btn-danger shadow-sm my-2 px-4" (click)="onCancel()">
+    Cancel
+  </button>
+  <button mat-raised-button type="submit" class="btn save-cancel-button btn-save ms-2 text-light px-4 mx-3"
+    (click)="onSave()">
+    {{ data.button }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,132 @@
+.model-title {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  font-size: 1.1rem;
+  background-color: var(--primary-color);
+}
+
+.fa-circle-xmark {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+div>b {
+  font-weight: 500;
+}
+
+hr {
+  border-top: 2px solid;
+  margin: 1.5rem 0;
+}
+
+.btn-export {
+  border: 1px solid var(--text-color);
+  border-radius: 0;
+  font-size: 1.4rem;
+  padding: 1rem;
+}
+
+.table.table-dark thead th {
+  font-weight: 400;
+}
+
+.row-border {
+  border-bottom: 2px solid #000;
+  display: flex;
+}
+
+.table__details th {
+  text-decoration: underline;
+  padding-bottom: 1.2rem;
+  text-wrap: nowrap !important;
+}
+
+.table__details th,
+.table__details td {
+  color: var(--text-color-dark);
+  // border: none;
+}
+
+.table__details td {
+  padding: 4px;
+}
+
+.btn__cancel {
+  border: 1px solid var(--text-color);
+  float: right;
+  border-radius: 0;
+}
+
+::ng-deep .bom-invoice.mat-dialog-content {
+  background-color: #fff;
+}
+
+.invoice-close {
+  position: absolute;
+  right: 13%;
+  /* transition: all .5s; */
+}
+
+.invoice-close .mat-icon {
+  transition: all .5s;
+}
+
+.invoice-close:hover .mat-icon {
+  background-color: #333;
+  color: #fff;
+  /* transition: all .5s; */
+}
+
+.bom-invoice .pdf-img {
+  max-width: 75%;
+  cursor: pointer;
+  position: sticky;
+  top: 10px;
+}
+
+.bom-order-data>div {
+  line-height: 1.7;
+}
+
+.table tr {
+  // border: none;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+
+  tr {
+    th {
+      white-space: nowrap;
+      background-color: var(--primary-color);
+      color: white !important;
+      font-weight: 500;
+      padding: 4px;
+    }
+  }
+}
+
+.download-container {
+  display: flex;
+  flex-direction: row-reverse;
+  // i{
+  //   font-size: 1.5rem;
+  //   padding: 0px 10px;
+  //   &:hover{
+  //     cursor: pointer;
+  //   }
+  // }
+}
+
+@media (max-width:70em) {
+
+  th,
+  td {
+    font-size: 1rem;
+  }
+}

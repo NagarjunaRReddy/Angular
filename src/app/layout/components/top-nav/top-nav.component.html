@@ -1,0 +1,21 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="top-container me-3">
+        <div class="title">{{setTitle(title)}}</div>
+        <div class="search-container">
+          <select class="form-select" (change)="onBusinessUnitChange($event)">
+            <option *ngFor="let businessUnit of busineesUnitData" [value]="businessUnit.BusinessUnitId  ">
+              {{ businessUnit.businessUnit }}
+            </option>
+          </select>
+
+          <div class="search-input position-relative">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="Search" id="Search" placeholder="Search.." class="form-control shadow-sm">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

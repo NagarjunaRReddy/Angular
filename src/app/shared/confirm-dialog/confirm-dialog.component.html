@@ -1,0 +1,9 @@
+<h4 mat-dialog-title class=" text-white position-relative model-title p-0">{{ data.title }} <i matTooltip="Close"
+    class="fa-solid fa-circle-xmark" (click)="onCancel()"></i></h4>
+<mat-dialog-content>
+  <p class="text-center mt-2">{{ data.message }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="mb-2">
+  <button mat-raised-button class="btn btn-danger save-cancel-button" (click)="onCancel()">Cancel</button>
+  <button mat-raised-button class="btn save-cancel-button btn-save ms-2" (click)="onConfirm()">Confirm</button>
+</mat-dialog-actions>

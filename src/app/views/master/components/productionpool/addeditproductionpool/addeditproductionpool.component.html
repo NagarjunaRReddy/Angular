@@ -1,0 +1,66 @@
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+  {{ data.title }}
+  <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+</h4>
+<mat-dialog-content class="py-1 mt-2">
+  <form [formGroup]="addEditForm">
+    <div class="form-group row align-items-center mb-2">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="production_Pool">Production Pool</label><label class="text-danger">*</label>
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align">
+        <input [ngClass]="{
+            'has-error':
+              addEditForm.controls['production_Pool'].errors &&
+              addEditForm.controls['production_Pool'].touched
+          }" type="text" [readOnly]="data.view" class="form-control" placeholder="Enter Production Pool"
+          formControlName="production_Pool" />
+        <div *ngIf="
+            submittedForm && addEditForm.controls['production_Pool'].errors
+          " class="invalid-feedback my-2 mt-3">
+          <span *ngIf="addEditForm.controls['production_Pool'].hasError('required')" class="px-2 my-1">Production Pool
+            is required</span>
+          <span class="px-2 my-1" *ngIf="
+              addEditForm.controls['production_Pool'].hasError(
+                'cannotContainSpace'
+              )
+            ">White Spaces not allowed</span>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex mt-2">
+        <label for="SiteName" class="">Site</label><label class="text-danger">*</label>
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align mt-3">
+
+        <mat-select [ngClass]="{
+            'has-error': submittedForm && (addEditForm.controls['site_Id'].errors)
+          }" panelClass="drop-panel" placeholder="-- Select SiteName--" class="formSelect" formControlName="site_Id">
+
+          <input type="text" (input)="FilterSite($event)" (keydown.enter)="$event.preventDefault()"
+            class="search-drpdwn form-control" matInput placeholder="Search" />
+
+          <mat-option class="formSelect" *ngFor="let option of siteList" [value]="option.SiteId">
+            {{ option.Site }}
+          </mat-option>
+        </mat-select>
+
+        <div *ngIf="submittedForm && (addEditForm.controls['site_Id'].errors|| addEditForm.controls['site_Id'].touched)
+          " class="invalid-feedback my-2 mt-3">
+          <span *ngIf="addEditForm.controls['site_Id'].hasError('required')" class="px-2 my-1">Site Name
+            is required</span>
+        </div>
+      </div>
+
+      <!--(selectionChange)="onselectionChange($event.value)"   [value]="selectedvalue"-->
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="mb-2">
+  <button mat-raised-button class="btn save-cancel-button btn-danger" color="warn" (click)="onCancel()">
+    Cancel
+  </button>
+  <button mat-raised-button class="btn save-cancel-button btn-save ms-2" (click)="onSave()">
+    {{ data.button }}
+  </button>
+</mat-dialog-actions>

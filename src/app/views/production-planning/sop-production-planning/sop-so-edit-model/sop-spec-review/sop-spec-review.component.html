@@ -1,0 +1,34 @@
+<app-common-sop-edit-table [commonTableData]="commonTableData"></app-common-sop-edit-table>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6 offset-lg-3">
+            <div class="table-container mx-1 mt-2 py-2">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+              
+                  <!-- Define columns -->
+                  <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef>{{ column.header }}</th>
+                    <td [style.background-color]="element.colorCode" class="text-center" mat-cell *matCellDef="let element">
+                        {{ column.columnDef === 'specDate' ? ConvertDate(element[column.columnDef]) : element[column.columnDef] }}
+                    </td>
+                  </ng-container>
+
+                  <!-- <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button color="primary" aria-label="Edit" (click)="editItem(element)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </ng-container> -->
+              
+              
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:displayedColumns.includes('select')?false:true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              
+            </div>
+        </div>
+    </div>
+</div>

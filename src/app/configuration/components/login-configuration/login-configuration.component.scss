@@ -1,0 +1,133 @@
+  
+  /* Configuration Panel with Glassmorphism */
+  .configuration-panel {
+    padding: 10px;
+    background: rgb(255, 255, 255); /* Semi-transparent background */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
+    border-radius: 5px;
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    width: 100%;
+    max-width: 400px; /* Limits width to make it look more premium */
+    color: #333;
+    margin-bottom: 20px;
+    z-index: 2;
+    position: absolute;
+    .title{
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        h6{
+            font-size: 1.1rem;
+            margin: 0;
+        }
+    }
+  }
+  
+  /* Label Styling */
+  .configuration-panel label {
+    color: #333;
+    font-size: 0.8rem;
+  }
+  
+  /* Input and Select Styling */
+  .configuration-panel input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    backdrop-filter: blur(5px);
+  }
+
+  .configuration-panel input[type="color"]{
+    padding: 0;
+    border-radius: 0;
+  }
+  
+  /* Preview Area with Glassmorphism */
+  .preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  /* Logo inside Login Container */
+  .logo {
+    width: 100px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.2));
+  }
+  
+  /* Button Styling */
+  .configuration-panel button {
+    padding: 5px 10px;
+    background: var(--primary-color);
+    border-radius: 25px;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-size: 0.8rem;
+    height: 30px;
+    border: none;
+    min-width: 100px;
+    &:hover{
+      background-color: var(--hover-color);
+    }
+  }
+  
+  .color-panel{
+    height: 30px;
+    width: 100px;
+    background-color: #333;
+  }
+
+  .image-upload{
+    height: 30px;
+    background-color: #eaeaea;
+    padding: 0px 5px;
+    border: 2px dashed darkgray;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    i{
+        color: #555555;
+    }
+    span{
+        font-size: 0.7rem;
+        color: #555555;
+        font-weight: 400;
+    }
+    &:hover{
+        cursor: pointer;
+    }
+  }
+
+  .form-control{
+    height: 30px;
+  }
+
+  .color-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    span{
+        color: gray;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+    }
+  }

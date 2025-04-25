@@ -1,0 +1,70 @@
+<div class="container-fluid">
+  <div class="top-btn d-flex my-2">
+    <div>
+      <button class="btn btn-outline-primary nav-btns" [ngClass]="{ activeMenu: activeFilterButton == 'All' }"
+        (click)="setFilterButton('All')">
+        All
+      </button>
+      <button class="btn btn-outline-primary nav-btns" [ngClass]="{ activeMenu: activeFilterButton == 'Active' }"
+        (click)="setFilterButton('Active')">
+        Active
+      </button>
+      <button class="btn btn-outline-primary nav-btns" [ngClass]="{ activeMenu: activeFilterButton == 'InActive' }"
+        (click)="setFilterButton('InActive')">
+        InActive
+      </button>
+    </div>
+    <div class="d-flex align-items-center top-buttons">
+      <input (input)="applyFilter($event)" type="text" class="form-control" placeholder="Search..." />
+      <button class="actionBtn btn btn-dark ms-2 px-3 button-font no-wrap" (click)="addUser($event)">
+        <i class="fa-solid fa-plus"></i> Add User
+      </button>
+    </div>
+  </div>
+  <div class="alert-table col-md-12">
+    <div class="alert-create-table table-container scroll table-container-max-height table-content table-custom"
+      #tableContainer>
+      <table #table id="table" mat-table [dataSource]="dataSource"
+        class="mat-elevation-z8 w-100 text-center rounded-table" matSort matSortDirection="asc">
+        <ng-container *ngFor="let column of columns; let i = index" matColumnDef="{{ column.field }}">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">
+            {{ column.header }}
+          </th>
+          <td mat-cell *matCellDef="let row; let j = index" class="text-center">
+            <div *ngIf="column.field == 'Sl.No'">
+              {{ j + 1 }}
+            </div>
+            <div *ngIf="
+                column.field != 'actions' && column.field != 'ActiveStatus'
+              ">
+              {{ row[column.field] }}
+            </div>
+            <div *ngIf="column.field == 'ActiveStatus'">
+              <span *ngIf="row[column.field] == 1" class="badge badge-success">Active</span>
+              <span *ngIf="row[column.field] == 0" class="badge badge-danger">Inactive</span>
+            </div>
+            <div *ngIf="column.field == 'actions'" class="actions-btns">
+              <!--*ngIf="subMenuAccess[0].EditAccess"-->
+              <i *ngIf="subMenuAccess[0]?.DeleteAccess" matTooltip="Edit" matTooltipPosition="left"
+                class="fa fa-regular fa-pencil iconShadow icon-pd cursor-pointer actionIcon m-1" label="Confirm"
+                title="Edit" aria-hidden="true" (click)="editUser(row, $event)"></i>
+              <!--*ngIf="subMenuAccess[0].DeleteAccess"-->
+              <i *ngIf="subMenuAccess[0]?.DeleteAccess" matTooltip="Delete" class="fa fa-regular fa-trash-can actionIcon m-1 icon-pd cursor-pointer iconShadow 
+                fa-regular fa-trash-can iconShadow icon-pd actionIcon m-1 icons
+                " label="Delete" title="Delete" aria-hidden="true" (click)="deleteUser(row, $event)"></i>
+            </div>
+          </td>
+        </ng-container>
+        <tr class="mat-row text-center" *matNoDataRow>
+          <td class="mat-cell employeenodata" [attr.colspan]="displayedColumns.length">
+            No Data Available
+          </td>
+        </tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+    <mat-paginator class="shadow-sm" [pageSizeOptions]="[25, 50, 100]" showFirstLastButtons>
+    </mat-paginator>
+  </div>
+</div>

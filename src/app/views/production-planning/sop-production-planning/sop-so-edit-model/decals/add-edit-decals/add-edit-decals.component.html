@@ -1,0 +1,51 @@
+<h4 mat-dialog-title class="text-white position-relative model-title">
+    {{ data.title }}
+    <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+  </h4>
+
+  <mat-dialog-content class="m-1">
+    <form [formGroup]="DecalForm">
+        <div class="row my-2 align-items-center">
+            <div class="col-lg-12">
+                <div class="form-group row my-2">
+                    <label for="decalStatus" class="col-lg-5 col-form-label">Decal Status</label>
+                    <div class="col-lg-7">
+                            <mat-select placeholder="--Select Status--" class="formSelect" formControlName="decalStatus">
+                                <mat-option *ngFor="let item of actionStatusList" [value]="item.ActionStatusId">{{item.ActionStatusName}}</mat-option>
+                            </mat-select>
+                    </div>
+                  </div>
+                <div class="form-group row my-2">
+                    <label for="responsible" class="col-lg-5 col-form-label">Responsible</label>
+                    <div class="col-lg-7">
+                            <mat-select placeholder="--Select Responsible--" class="formSelect" formControlName="responsible">
+                                <input (input)="filterResponsible(responsible.value)" type="text" class="search-drpdwn" #responsible placeholder="Search"
+                                (keydown)="$event.stopPropagation()">
+                                <mat-option *ngIf="filteredResponsibleData?.length == 0" disabled>No Data</mat-option>
+                              <mat-option *ngFor="let item of filteredResponsibleData" [value]="item.ActionResponsibleId">{{item.ActionResponsibleName}}</mat-option>
+                            </mat-select>
+                    </div>
+                  </div>
+                <div class="form-group row my-2">
+                    <label for="decalDate" class="col-lg-5 col-form-label">Decal Date </label>
+                    <div class="col-lg-7">
+                        <mat-form-field class="custom-date w-100">
+                            <input matInput [matDatepicker]="picker" placeholder="Decal Date"
+                                class="datepicker appInputRestriction" formControlName="decalDate"
+                                (click)="picker.open()" matDatepickerInput readonly />
+                            <mat-datepicker-toggle matSuffix [for]="picker" [disableRipple]="true">
+                                <mat-icon>calendar_today</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker class="example-header"></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                  </div>
+            </div>
+        </div>
+
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="m-1">
+    <button class="btn btn-outline-danger mx-2 shadow-sm py-1 save-cancel-button" (click)="onCancel()">Cancel</button>
+    <button class="btn btn-dark mx-2 shadow-sm py-1 save-cancel-button" (click)="onSave()">{{data.button}}</button>
+</mat-dialog-actions>

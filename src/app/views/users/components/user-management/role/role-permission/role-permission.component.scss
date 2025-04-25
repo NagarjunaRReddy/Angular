@@ -1,0 +1,41 @@
+.model-title {
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  font-size: 1.2rem;
+  background-color: var(--primary-color);
+}
+
+.fa-circle-xmark {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.header-color {
+  background-color: var(--primary-color)ed;
+}
+
+// .header-color{
+//     background-color: red;
+// }
+
+label {
+  color: black;
+}
+
+@media (max-width:70em) {
+
+  .model-title,
+  label,
+  small {
+    font-size: 0.8rem !important;
+  }
+}
+
+th {
+  background-color: black !important;
+  color: white !important;
+}

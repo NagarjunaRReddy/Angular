@@ -1,0 +1,32 @@
+<!-- Dialog title with close icon -->
+<h4 [ngStyle]="{'backgroundColor': data.tableData.ItemColor}" mat-dialog-title class="text-white position-relative model-title">
+    {{ data.title }}
+    <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+  </h4>
+<div mat-dialog-content class="container">
+    <!-- Dialog content container -->
+    <table class="table table-striped shadow-sm mt-2">
+        <!-- Table for displaying data -->
+        <thead>
+            <!-- Table header with column names -->
+            <tr>
+                <th>Category</th>
+                <th>Sub Category</th>
+                <th>Delivery Date</th>
+                <th>End User</th>
+                <th>Inventory Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table body with data from data.tableData -->
+            <tr>
+                <!-- Displaying individual data points -->
+                <td>{{data.tableData.categoryName}}</td>
+                <td>{{data.tableData.subCategoryName}}</td>
+                <!-- <td>{{data.tableData.deliveryDate | date:'MM/dd/yy'}}</td> -->
+                <td>{{data.tableData.customerName}}</td>
+                <td>{{data.tableData.inventoryStatus}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,33 @@
+.model-title {
+  height: 30px;
+  display: flex;
+  font-size: 1.1rem;
+  background-color: var(--primary-color);
+  justify-content: center;
+  align-items: center;
+}
+
+.fa-circle-xmark {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.fa-solid {
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.table tbody td {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+th {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: normal;
+}

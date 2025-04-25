@@ -1,0 +1,173 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="side-container">
+      <!-- "All" Button -->
+      <button (click)="setActiveIndex('All')" class="cursor-pointer btn shadow-sm px-2 mb-1"
+        [class.active]="activeIndex === 'All'" matTooltip="All" matTooltipPosition="right">
+        All
+      </button>
+
+      <!-- Status Buttons -->
+      <button *ngFor="let data of allStatusData" class="cursor-pointer btn shadow-sm px-2 mb-1"
+        [class.active]="data.AxProdStatusName === activeIndex" (click)="setActiveIndex(data.AxProdStatusName)"
+        [matTooltip]="data.AxProdStatusName" matTooltipPosition="right">
+        {{ data.AxProdStatusName }}
+      </button>
+    </div>
+    <div class="main-container page-layout p-0">
+      <div class="col-12 w-100 mt-0">
+        <form [formGroup]="frmsales">
+          <div class="row align-items-center">
+            <!-- From Date -->
+            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 d-flex">
+              <label for="fromDate" class="form-label">From</label>
+
+              <mat-form-field class="custom-date w-100 dateFields">
+                <input matInput [matDatepicker]="picker" placeholder="From Date" class="datepicker appInputRestriction"
+                  (dateInput)="updateMinToDate($event.value)" formControlName="fromDate" (click)="picker.open()"
+                  matDatepickerInput readonly />
+                <mat-datepicker-toggle matSuffix [for]="picker" [disableRipple]="true">
+                  <mat-icon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker class="example-header"></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <!-- To Date -->
+            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 d-flex">
+              <label for="toDate" class="form-label mb-0">To</label>
+
+              <mat-form-field class="custom-date w-100 dateFields">
+                <input matInput [matDatepicker]="picker1" placeholder="To Date" class="datepicker appInputRestriction"
+                  [min]="minToDate" formControlName="toDate" (click)="picker1.open()" matDatepickerInput readonly />
+                <mat-datepicker-toggle matSuffix [for]="picker1" [disableRipple]="true">
+                  <mat-icon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker1 class="example-header"></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <!-- Site Dropdown -->
+            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 d-flex">
+              <label for="siteId" class="form-label">Site</label>
+              <mat-select placeholder="Select Site" id="siteId" class="formSelect" formControlName="siteId">
+                <mat-option class="formOption" selected value="0">All</mat-option>
+                <mat-option class="formOption" [value]="item.Site" *ngFor="let item of allSiteMaster">
+                  {{ item.Site.charAt(0).toUpperCase() + item.Site.slice(1) }}
+                </mat-option>
+                <mat-option *ngIf="allSiteMaster == []" disabled>No result found
+                </mat-option>
+              </mat-select>
+            </div>
+
+            <!-- Status Dropdown -->
+            <div class="col-4 d-flex">
+              <label for="statusId" class="form-label no-wrap">Sales Resposible</label>
+              <mat-select placeholder="Select Sales " id="statusId" class="formSelect" formControlName="statusId">
+                <input (input)="filtersalesresposible($event)" type="text" class="form-control" #sr matInput
+                  placeholder="Search" (keydown.enter)="$event.preventDefault()" />
+                <mat-option class="formOption" selected value="0">All</mat-option>
+                <mat-option class="formOption" [value]="item['Sales Resposible']" *ngFor="let item of filtersr">
+                  {{ item['Sales Resposible'].charAt(0).toUpperCase() + item['Sales Resposible'].slice(1) }}
+                </mat-option>
+              </mat-select>
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 d-flex ps-0">
+              <button class="shadow-sm btn btn-dark mx-1" (click)="filterData(null, '')">
+                Go
+              </button>
+              <button class="shadow-sm btn btn-outline-secondary mx-1" matTooltip="Clear filter"
+                (click)="clearfilters()">
+                <i class="fa-solid fa-filter-circle-xmark"></i>
+              </button>
+              <button class="shadow-sm btn btn-outline-secondary mx-1" matTooltip="Export Excel"
+                (click)="exportToExcel()">
+                <i class="fa-solid fa-file-excel px-1"></i>
+              </button>
+              <button class="shadow-sm btn btn-outline-secondary mx-1" matTooltip="Personalize View">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+
+            <!-- Search -->
+            <div *ngIf="settings.IsFilter" class="col-xl-2 col-lg-4 col-md-4 col-sm-6 offset-xl-10 my-2 d-flex">
+              <label for="searchTab" class="form-label"></label>
+              <input type="text" id="searchTab" class="form-control" formControlName="searchTab" placeholder="Search..."
+                (input)="doFilter($event)" (keydown.enter)="$event.preventDefault()" />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-12">
+        <div class="category-menu">
+          <div (click)="setActiveCategory('All')" [class.active]="activeCategory === 'All'" class="category-item">
+            All
+          </div>
+
+          <div (click)="setActiveCategory(item['Production Pool'])"
+            [class.active]="item['Production Pool'] === activeCategory" *ngFor="let item of allCategoryList"
+            class="category-item">
+            {{ item['Production Pool'] }}
+          </div>
+        </div>
+      </div>
+      <div *ngIf="loadTable" class="col-12">
+        <div class="table-container" *ngIf="!settings.IsSorting"
+          [ngClass]="{ 'table-scrollable': settings.IsScrollable }">
+          <table mat-sort mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <!-- Dynamic column definitions -->
+            <ng-container *ngFor="let column of columnNames; let i = index" [matColumnDef]="column">
+              <!-- Table Header -->
+              <th class="text-center" mat-sort-header mat-header-cell *matHeaderCellDef>
+                {{ displayedColumns[i] }}
+              </th>
+              <!-- Table Data -->
+              <td class="text-center" mat-cell *matCellDef="let element">
+                {{ element[column] || " " }}
+              </td>
+            </ng-container>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell text-center" [attr.colspan]="10">No Data
+                Available
+              </td>
+            </tr>
+            <tr mat-header-row *matHeaderRowDef="columnNames"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnNames"></tr>
+          </table>
+        </div>
+        <div class="table-container" *ngIf="settings.IsSorting"
+          [ngClass]="{ 'table-scrollable': settings.IsScrollable }">
+          <table matSort mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <!-- Dynamic column definitions -->
+            <ng-container *ngFor="let column of columnNames; let i = index" [matColumnDef]="column">
+              <!-- Header Cell -->
+              <th class="text-center" mat-sort-header mat-header-cell *matHeaderCellDef>
+                {{ displayedColumns[i] }}
+              </th>
+              <!-- Data Cell -->
+              <td class="text-center" mat-cell *matCellDef="let element">
+                {{ element[column] || " " }}
+              </td>
+            </ng-container>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell text-center" [attr.colspan]="10">No Data
+                Available
+              </td>
+            </tr>
+            <!-- Header Row -->
+            <tr mat-header-row *matHeaderRowDef="columnNames"></tr>
+            <!-- Data Row -->
+            <tr mat-row *matRowDef="let row; columns: columnNames"></tr>
+          </table>
+        </div>
+        <!-- Pagination -->
+        <mat-paginator class="shadow-sm" *ngIf="settings.IsPagination" [pageSizeOptions]="[25, 50, 100]"
+          showFirstLastButtons>
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

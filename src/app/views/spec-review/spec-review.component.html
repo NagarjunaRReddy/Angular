@@ -1,0 +1,131 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="p-0 px-2 pt-2 side-container">
+            <button class="cursor-pointer btn shadow-sm px-2 mb-1"
+                *ngFor="let data of statusColumn; let i = index" [class.active]="i == activeIndex"
+                (click)="setActiveStatus(i)">
+                {{data}}</button>
+        </div>
+        <div class="main-container page-layout p-0">
+            <form [formGroup]="frmsales">
+                <div class="container-fluid p-0">
+                    <div class="row mt-2 mx-2">
+                        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 p-0 mb-2">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="mx-2" for="fromDate">From</label>
+                                <!-- <input type="date" name="fromDate" id="fromDate" formControlName="fromDate"
+                                    class="form-control"> -->
+                                    <mat-form-field class="custom-date w-100">
+                                        <input matInput [matDatepicker]="picker" placeholder="From Date"
+                                            class="datepicker appInputRestriction" (dateInput)="updateMinToDate($event.value)" formControlName="fromDate"
+                                            (click)="picker.open()" matDatepickerInput readonly />
+                                        <mat-datepicker-toggle matSuffix [for]="picker" [disableRipple]="true">
+                                            <mat-icon>calendar_today</mat-icon>
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #picker class="example-header"></mat-datepicker>
+                                    </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 p-0 mb-2">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="mx-2" for="toDate">To</label>
+                                <!-- <input type="date" name="toDate" id="toDate" formControlName="toDate"
+                                    class="form-control"> -->
+                                    <mat-form-field class="custom-date w-100">
+                                        <input matInput [matDatepicker]="picker1" placeholder="To Date"
+                                            class="datepicker appInputRestriction" [min]="minToDate" formControlName="toDate"
+                                            (click)="picker1.open()" matDatepickerInput readonly />
+                                        <mat-datepicker-toggle matSuffix [for]="picker1" [disableRipple]="true">
+                                            <mat-icon>calendar_today</mat-icon>
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #picker1 class="example-header"></mat-datepicker>
+                                    </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 p-0 mb-2">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="mx-2" for="toDate">Site</label>
+                                <mat-select formControlName="siteId" class="formSelect w-100" panelClass="drop-panel"
+                                    placeholder="Site">
+                                    <mat-option [value]="0">All</mat-option>
+                                    <mat-option [value]="item.SiteName" *ngFor="let item of allSiteData">
+                                        {{item.SiteName}}
+                                    </mat-option>
+                                    <mat-option *ngIf="allSiteData == []" disabled>No result found
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 p-0 mb-2">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="mx-2 w-50" for="toDate">S&OP Truck Status</label>
+                                <mat-select formControlName="statusId" class="formSelect w-50" panelClass="drop-panel"
+                                    placeholder="Status">
+                                    <mat-option [value]="0">All</mat-option>
+                                    <mat-option [value]="item.TruckStatusId" *ngFor="let item of allStatusData">
+                                        {{item.TruckStatusName}}
+                                    </mat-option>
+                                    <mat-option *ngIf="allStatusData == []" disabled>No result found
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 p-0 mb-2 d-flex top-buttons justify-content-between">
+                            <button class="btn btn-dark mx-2" (click)="filterData()">Go</button>
+                            <button (click)="clearfilters()" class="btn btn-outline-dark mx-1 shadow-sm" matTooltip="Clear Filter"><i class="fa-solid fa-filter-circle-xmark"></i></button>    
+                            <button class="btn btn-outline-dark mx-1 shadow-sm" matTooltip="Export Excel" (click)="exportToExcel()"><i class="fa-solid fa-file-excel px-1"></i></button>
+                        </div>
+                        <div class="col-xl-3 offset-xl-9 col-lg-4 offset-lg-1 col-md-4 col-sm-6 p-0 mb-2 d-flex align-items-center">
+                            <label for="searchInput" class="mx-2">Search</label>
+                            <input (input)="applyFilter($event)" class="form-control-search form-control" id="searchInput" placeholder="Search"
+                                 />
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="alert-table col-md-12 mt-2 mx-2">
+                <div class="alert-create-table table-container scroll table-container-max-height table-content table-custom"
+                    #tableContainer>
+                    <table #table id="table" mat-table [dataSource]="dataSource"
+                        class="mat-elevation-z8 w-100 text-center rounded-table" matSort matSortDirection="asc">
+
+                        <ng-container *ngFor="let column of columns; let i = index" matColumnDef="{{column.field}}">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{column.header}}
+                            </th>
+                            <td [ngStyle]="{'background-color':getBackgroundColor(column.field,row), color:getColor(column.field)}" mat-cell *matCellDef="let row; let j = index">
+                                <div *ngIf="column.field == 'Sl.No'">
+                                    {{ j + 1 }}
+                                </div>
+                                <div *ngIf="column.field == 'DeliveryDate'  || column.field ==  'Sold_Date' || column.field ==  'SpecReviewDate' || 
+                                    column.field ==  'BOMDate' || column.field == 'changeOrderdate'">
+                                    {{ ConvertDate(row[column.field])}}
+                                </div>
+                                <div *ngIf="column.field != 'actions' && column.field != 'deliverydate' && column.field !=  'Sold_Date' && column.field !=  'SpecReviewDate'
+                                && column.field !=  'BOMDate' && column.field != 'changeOrderdate' && column.field != 'DeliveryDate'  && column.field !=  'Sold_Date' && column.field !=  'SpecReviewDate' && 
+                                column.field !=  'BOMDate' && column.field != 'changeOrderdate'">
+                                    {{ row[column.field] }}
+                                </div>
+                                <div *ngIf="column.field == 'actions'" class="actions-btns">
+                                        <i *ngIf="menuAccess[0].EditAccess" class="fa fa-pencil iconShadow icon-pd actionIcon m-1" label="Confirm" matTooltip="Edit"
+                                        aria-hidden="true" (click)="editSpec(row,$event)"></i>
+                                    <i matTooltip="View" class="fa-solid fa-eye iconShadow icon-pd actionIcon m-1" label="View"
+                                        title="View" aria-hidden="true" (click)="viewSpec(row,$event)"></i>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell employeenodata" [attr.colspan]="displayedColumns.length">No Data
+                                Available
+                            </td>
+                        </tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+                <mat-paginator class="shadow" [pageSizeOptions]="[25,50,100]" showFirstLastButtons>
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>

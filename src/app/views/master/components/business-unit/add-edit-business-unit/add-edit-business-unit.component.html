@@ -1,0 +1,128 @@
+<!-- Dialog Header -->
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+  {{ data.title }}
+  <!-- Displays the title of the dialog dynamically -->
+
+  <!-- Close button with tooltip -->
+  <i class="fa-solid fa-circle-xmark" matTooltip="Close" (click)="onCancel()"></i>
+</h4>
+
+<!-- Dialog Content Section -->
+<mat-dialog-content class="py-1 mt-2">
+  <form [formGroup]="addEditForm">
+    <!-- Reactive form using Angular's FormGroup -->
+
+    <!-- Existing Business Unit Field -->
+    <div class="form-group row align-items-center mb-2">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="buName">Business Unit</label>
+        <!-- Label for the input -->
+        <label class="text-danger">*</label>
+        <!-- Indicates required field -->
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align position-relative">
+        <input [ngClass]="{
+            'has-error':
+              addEditForm.controls['buName'].errors &&
+              addEditForm.controls['buName'].touched
+          }" type="text" [readOnly]="data.view" class="form-control m-2 my-2" placeholder="Enter Business Unit"
+          formControlName="buName" />
+        <!-- Binds form control to this input -->
+
+        <!-- Validation Error Messages for Business Unit -->
+        <div *ngIf="submittedForm && addEditForm.controls['buName'].errors" class="invalid-feedback my-2">
+          <span *ngIf="addEditForm.controls['buName'].hasError('required')" class="px-2">Business Unit is
+            required</span>
+          <span *ngIf="
+              addEditForm.controls['buName'].hasError('cannotContainSpace')
+            ">White Spaces not allowed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Capacity Dropdown -->
+    <div class="form-group row align-items-center mb-2">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="capacity">Capacity</label>
+        <!-- Label for dropdown -->
+        <label class="text-danger">*</label>
+        <!-- Indicates required field -->
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align position-relative">
+        <mat-select [ngClass]="{
+            'has-error':submittedForm && addEditForm.controls['capacity'].errors
+          }" class="formSelect m-2 my-2" formControlName="capacity" placeholder="Select Capacity">
+          <!-- Dropdown options for capacity -->
+          <mat-option value="Daily">Daily</mat-option>
+          <mat-option value="Weekly">Weekly</mat-option>
+          <mat-option value="Monthly">Monthly</mat-option>
+        </mat-select>
+
+        <!-- Validation Error Messages for Capacity -->
+        <div *ngIf="submittedForm && addEditForm.controls['capacity'].errors" class="invalid-feedback my-2">
+          <span *ngIf="addEditForm.controls['capacity'].hasError('required')" class="px-2">Capacity is required</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Icon File Upload Field -->
+    <div class="form-group row align-items-center my-3">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="Icon">Icon</label>
+        <!-- Label for icon upload -->
+        <label class="text-danger">*</label>
+        <!-- required field -->
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align position-relative">
+        <div class="mx-2">
+          <div class="upload-area">
+            <div class="attachment-container mt-3" *ngIf="iconName">
+              <img *ngIf="isImageFile(iconName)" [src]="iconUrl" alt="Uploaded Image" class="uploaded-image"
+                (error)="handleImageError()" />
+            </div>
+            <h2 class="upload-title">Upload your images</h2>
+            <span class="upload-subtitle">PNG, JPG files are allowed</span>
+
+            <!-- File Upload Area -->
+            <label for="IconName"
+              class="click-upload d-flex flex-column justify-content-center align-items-center text-center">
+              <input hidden id="IconName" name="IconName" type="file" (change)="onFileSelected($event)"
+                formControlName="IconName" />
+              <div class="upload-box">
+                <span class="upload-text">Click here! To browse files</span>
+              </div>
+            </label>
+
+            <!-- Display selected icon if available -->
+          </div>
+        </div>
+
+        <!-- Validation Error Messages for Icon Upload -->
+        <div *ngIf="submittedForm && addEditForm.controls['IconName'].errors" class="invalid-feedback mt-3">
+          <span *ngIf="addEditForm.controls['IconName'].hasError('required')" class="px-2">Icon Image is required</span>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- Additional Row for Layout -->
+  <!-- <div class="row">
+    <div class="col-lg-12 shadow-sm p-2">
+      <div class="col-lg-12 shadow-sm p-2">
+        Additional content can be added here
+      </div>
+    </div>
+  </div> -->
+</mat-dialog-content>
+
+<!-- Dialog Actions -->
+<mat-dialog-actions *ngIf="!data.view" align="center" class="mb-2">
+  <button mat-raised-button color="warn" (click)="onCancel()" class="save-cancel-button btn btn-danger">
+    Cancel
+  </button>
+  <!-- Cancel button -->
+  <button mat-raised-button class="btn save-cancel-button btn-save ms-2 text-light" (click)="onSave()">
+    {{ data.button }}
+  </button>
+  <!-- Save/Submit button -->
+</mat-dialog-actions>

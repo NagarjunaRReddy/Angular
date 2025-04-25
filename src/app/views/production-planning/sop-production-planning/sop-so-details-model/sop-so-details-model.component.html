@@ -1,0 +1,30 @@
+<h4 mat-dialog-title class=" text-white position-relative model-title" [ngStyle]="{backgroundColor:data.tableData.ItemColor, color:data.tableData.textColor}">{{ data.title }} <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i></h4>
+<mat-dialog-content class="m-1 p-1">
+  <div class="container">
+      <table class="table table-striped shadow-sm mt-2">
+          <thead>
+              <tr>
+                      <!-- <th>Category</th>
+                      <th>Sub Category</th> -->
+                      <th>Delivery Date</th>
+                      <th>End User</th>
+                      <th>Dealer Name</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                <ng-container *ngIf="checkCategorizedData(); else noData">
+                  <!-- <td>{{ data.tableData.categoryName }}</td>
+                  <td>{{ data.tableData.subCategoryName }}</td> -->
+                  <td>{{ ConvertDate(data.tableData.deliveryDate) | date:'MM/dd/yy' }}</td>
+                  <td>{{ data.tableData.customerName }}</td>
+                  <td>{{ data.tableData.dealerName }}</td>
+                </ng-container>
+                <ng-template #noData>
+                  <td colspan="5" class="text-center">Not Categorized!</td>
+                </ng-template>
+              </tr>
+            </tbody>          
+      </table>
+  </div>
+</mat-dialog-content>

@@ -1,0 +1,78 @@
+<div class="row my-2" cdkDropListGroup>
+  <!-- Main row for holding capacity area components -->
+
+  <div class="col-lg-4">
+    <!-- Left Container for displaying a search field and list of Capacity Areas -->
+    <div class="left-container">
+
+      <!-- Search Field Section -->
+      <div class="search-field">
+        <div class="form-group">
+          <div class="form-label">Search</div>
+          <!-- Input for searching through the capacity areas -->
+          <input [(ngModel)]="searchInput" #inputValue (input)="filterList(inputValue.value)" placeholder="Search.."
+            type="text" name="search" id="search" class="form-control formSearch">
+        </div>
+      </div>
+
+      <!-- List Container for holding all capacity areas -->
+      <div class="list-container mt-2 card">
+        <div class="list-header">
+          <span>Capacity Areas</span> <!-- Title of the list displayed to the user -->
+
+          <!-- Add capacity area button, displayed conditionally based on access rights -->
+          <i (click)="addCapacity($event)" matTooltip="Add Capacity Area" class="fa-solid fa-circle-plus"></i>
+        </div>
+
+        <div class="list-data" cdkDropList [cdkDropListData]="filteredList" (cdkDropListDropped)="drop($event)">
+          <ng-container *ngFor="let list of filteredList">
+            <!-- Loop through each item in the filtered list -->
+            <div class="list" cdkDrag>
+              <!-- Each capacity area item marked as draggable -->
+              <span>{{list.CapacityName}}</span> <!-- Display the name of the capacity area -->
+              <div class="icon-container">
+                <!-- Edit icon for the capacity area, conditionally displayed based on access rights -->
+                <i (click)="editCapacity(list, $event)" matTooltip="Edit" class="fa-solid fa-pencil"></i>
+
+                <!-- Delete icon for the capacity area, conditionally displayed based on access rights -->
+                <i (click)="deleteCapacity(list, $event)" matTooltip="Delete" class="fa-solid fa-trash-can"></i>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <!-- Right Container for displaying the drop area for capacity areas -->
+    <div class="right-container">
+
+      <!-- Drop Container for managing the items that can be dropped -->
+      <div class="drop-container">
+        <!-- This collection holds the items dropped in this area -->
+        <div class="drop-inside-container px-1" cdkDropList [cdkDropListData]="droppedList"
+          (cdkDropListDropped)="drop($event)" cdkDropListOrientation="horizontal">
+          <!-- Specifies horizontal dropping of items -->
+
+          <!-- Dynamically create a drop box for each item in the dropped list -->
+          <div class="drop-box mx-1 list" *ngFor="let item of droppedList; let i=index;" cdkDrag
+            [ngClass]="{'selected-drop-box': i === selectedDropBoxIndex}" (click)="toggleBackgroundColor(i, item)">
+            <!-- Handle click to toggle item background color -->
+
+            <span class="drop-title">
+              {{item.CapacityName}}
+              <!-- Display capacity area name for each dropped item -->
+            </span>
+            <span class="drop-icons">
+              <!-- Edit icon for the dropped capacity area, conditionally displayed based on access -->
+              <i (click)="editCapacity(item, $event)" matTooltip="Edit" class="fa-solid fa-pencil"></i>
+
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

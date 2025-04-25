@@ -1,0 +1,64 @@
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+  {{ data.title }}
+  <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+</h4>
+<mat-dialog-content class="py-1 mt-2">
+  <form [formGroup]="addEditForm">
+    <div class="form-group row align-items-center mb-2">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="Attachment_Name" class="">Attachment Status</label><label class="text-danger">*</label>
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align">
+        <input [ngClass]="{
+            'has-error':
+              addEditForm.controls['Attachment_Name'].errors &&
+              addEditForm.controls['Attachment_Name'].touched
+          }" type="text" [readOnly]="data.view" class="form-control m-2" placeholder="Enter Attachment Status"
+          formControlName="Attachment_Name" />
+        <div *ngIf="
+            submittedForm && addEditForm.controls['Attachment_Name'].errors
+          " class="invalid-feedback my-2">
+          <span *ngIf="addEditForm.controls['Attachment_Name'].hasError('required')" class="px-2 my-1">Attachment status
+            is
+            required</span>
+          <span *ngIf="
+              addEditForm.controls['Attachment_Name'].hasError(
+                'cannotContainSpace'
+              )
+            ">White Spaces not allowed</span>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="Attach_Color" class="">Color Code
+        </label><label class="text-danger">*</label>
+      </div>
+
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align">
+        <input [ngClass]="{
+            'has-error':
+              addEditForm.controls['Attach_Color'].errors &&
+              addEditForm.controls['Attach_Color'].touched
+          }" type="color" [readOnly]="data.view" class="form-control m-2 selectColor" placeholder="Enter color Name"
+          formControlName="Attach_Color" />
+        <div *ngIf="submittedForm && addEditForm.controls['Attach_Color'].errors" class="invalid-feedback my-2">
+          <span *ngIf="addEditForm.controls['Attach_Color'].hasError('required')" class="px-2 my-1">color name is
+            required</span>
+          <span *ngIf="
+              addEditForm.controls['Attach_Color'].hasError(
+                'cannotContainSpace'
+              )
+            ">White Spaces not allowed</span>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="mb-2">
+  <button mat-raised-button class="btn save-cancel-btn btn-danger" color="warn" (click)="onCancel()">
+    Cancel
+  </button>
+  <button mat-raised-button class="btn save-cancel-btn btn-save ms-2" (click)="onSave()">
+    {{ data.button }}
+  </button>
+</mat-dialog-actions>

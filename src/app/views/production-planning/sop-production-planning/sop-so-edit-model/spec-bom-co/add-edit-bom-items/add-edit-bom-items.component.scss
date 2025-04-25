@@ -1,0 +1,81 @@
+.model-title{
+  height: 30px;
+  display: flex;    
+  justify-content: center;
+  font-size: 1.1rem;
+  background: linear-gradient(45deg, #e8363e, #8c1a15);
+}
+
+.fa-circle-xmark {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+  .table-container {
+    overflow-x: auto;
+    height: 65vh;
+    box-shadow: var(--box-shadow-inset);
+    border-radius: 5px;
+  }
+  
+  .table thead th {
+    position: sticky;
+    top: 0;
+    background-color: black; /* Set your desired background color */
+    color: #fff;
+    border: 1px solid;
+    z-index: 2;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 5px;
+  }
+  
+  .table tbody th,
+  .table tbody td {
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+  }
+
+  .actionIcon{
+    display: flex;
+    align-items: center;
+    i{
+        cursor: pointer;
+        font-size: 1.5rem;
+    }
+  }
+  
+  ::ng-deep.mat-mdc-form-field-subscript-wrapper {
+    box-sizing: border-box;
+    width: 100%;
+    display: none !important;
+    position: relative;
+}
+
+@media (max-width:70em) {
+  th, td{
+    white-space: nowrap !important;
+  }
+  td{
+    textarea{
+      min-width: 200px;
+    }
+    mat-form-field{
+      width: 75%;
+    }
+  }
+}
+
+
+table,
+th,
+td,
+tbody,
+thead {
+  // background-color: var(--bg-color);
+  font-size: 0.75rem !important;
+}

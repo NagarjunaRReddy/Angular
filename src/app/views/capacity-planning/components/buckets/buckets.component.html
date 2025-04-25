@@ -1,0 +1,85 @@
+<!-- Main container with drag and drop functionality -->
+<div class="row my-2" cdkDropListGroup>
+    <!-- Left side column - 4 columns wide -->
+    <div class="col-lg-4">
+        <div class="left-container">
+            <!-- Search field section -->
+            <div class="search-field">
+                <div class="form-group">
+                    <div class="form-label">Search</div>
+                    <!-- Search input with two-way binding and filter functionality -->
+                    <input [(ngModel)]="searchInput" #inputValue (input)="filterList(inputValue.value)"
+                        placeholder="Search.." type="text" name="search" id="search" class="form-control formSearch">
+                </div>
+            </div>
+
+            <!-- Bucket list container -->
+            <div class="list-container mt-2 card">
+                <!-- Header section for bucket list -->
+                <div class="list-header">
+                    <span>Buckets</span>
+                    <!-- Add bucket button - only visible if user has add access -->
+                    <i (click)="addBucket($event)" matTooltip="Add Bucket" class="fa-solid fa-circle-plus"></i>
+                </div>
+
+                <!-- Draggable list section -->
+                <div class="list-data" cdkDropList [cdkDropListData]="filteredList" (cdkDropListDropped)="drop($event)">
+                    <!-- Loop through filtered bucket list -->
+                    <ng-container *ngFor="let list of filteredList">
+                        <!-- Individual draggable bucket item -->
+                        <div class="list" cdkDrag [class.selected]="selectedItems.includes(list)"
+                            (click)="toggleSelection(list, $event)">
+
+                            <!-- Multi-Select Checkbox -->
+                            <input type="checkbox" [checked]="selectedItems.includes(list)"
+                                (click)="toggleSelection(list, $event)" class="select-checkbox">
+
+                            <!-- Display formatted dates for the bucket -->
+                            <span *ngIf="list.BusinessUnitId   == 3">
+                                {{ list.FormattedDates }} 
+                            </span>
+                            <span *ngIf="list.BusinessUnitId   != 3">{{ list.FormattedDates }}</span>
+
+                            <!-- Container for action icons -->
+                            <div class="icon-container">
+                                <i (click)="editNote(list, $event)" matTooltip="Note" class="fa-solid fa-file-alt">
+                                </i>
+                                <i (click)="deleteBucket(list, $event)" matTooltip="Delete"
+                                    class="fa-solid fa-trash-can">
+                                </i>
+                            </div>
+                        </div>
+
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right side column - 8 columns wide -->
+    <div class="col-lg-8">
+        <div class="right-container">
+            <!-- Drop container for dragged buckets -->
+            <div class="drop-container" cdkDropList [cdkDropListData]="droppedList" (cdkDropListDropped)="drop($event)">
+                <!-- Loop through dropped bucket list -->
+                <div class="drop-box" *ngFor="let item of droppedList; let i=index;" cdkDrag
+                    [ngClass]="{'selected-drop-box': i === selectedDropBoxIndex}"
+                    (click)="toggleBackgroundColor(i, item)">
+
+                    <!-- Display formatted dates for dropped bucket -->
+                    <span class="drop-title">{{item.FormattedDates}} </span>
+                    <!-- Container for view/hide toggle icons -->
+                    <span class="drop-icons">
+                        <!-- Show/Hide toggle icons - only visible if user has edit access -->
+                        <!-- Eye icon for visible items -->
+                        <i (click)="toggleView($event,item)" *ngIf="!item.IsHide" matTooltip="Hide"
+                            class="fa-regular fa-eye"></i>
+                        <!-- Slashed eye icon for hidden items -->
+                        <i (click)="toggleView($event,item)" *ngIf="item.IsHide" matTooltip="View"
+                            class="fa-solid fa-eye-slash"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+  {{ data.title }}
+  <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+</h4>
+<mat-dialog-content class="py-1 mt-2">
+  <form [formGroup]="addEditForm">
+    <div class="form-group row align-items-center mb-2">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="specReviewName" class="">Spec review status</label><label class="text-danger">*</label>
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align">
+        <input [ngClass]="{
+            'has-error':
+              addEditForm.controls['specReviewName'].errors &&
+              addEditForm.controls['specReviewName'].touched
+          }" type="text" [readOnly]="data.view" class="form-control m-2" placeholder="Enter Spec Review Status"
+          formControlName="specReviewName" />
+        <div *ngIf="submittedForm && addEditForm.controls['specReviewName'].errors" class="invalid-feedback my-2">
+          <span *ngIf="addEditForm.controls['specReviewName'].hasError('required')" class="px-2 my-1">
+            Spec Review status is required</span>
+          <span *ngIf="
+              addEditForm.controls['specReviewName'].hasError(
+                'cannotContainSpace'
+              )
+            ">White Spaces not allowed</span>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="Color_Name" class="">Color Code</label><label class="text-danger">*</label>
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align">
+        <input [ngClass]="{
+            'has-error':
+              addEditForm.controls['Color_Name'].errors &&
+              addEditForm.controls['Color_Name'].touched
+          }" type="color" [readOnly]="data.view" class="form-control m-2 selectColor" placeholder="Enter Color code"
+          formControlName="Color_Name" />
+        <div *ngIf="submittedForm && addEditForm.controls['Color_Name'].errors" class="invalid-feedback my-2">
+          <span *ngIf="addEditForm.controls['Color_Name'].hasError('required')" class="px-2 my-1">color code is
+            required</span>
+          <span *ngIf="
+              addEditForm.controls['Color_Name'].hasError('cannotContainSpace')
+            ">White Spaces not allowed</span>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="mb-2">
+  <button mat-raised-button color="warn" class="btn btn-danger save-cancel-button" (click)="onCancel()">
+    Cancel
+  </button>
+  <button mat-raised-button class="btn save-cancel-button btn-save ms-2" (click)="onSave()">
+    {{ data.button }}
+  </button>
+</mat-dialog-actions>

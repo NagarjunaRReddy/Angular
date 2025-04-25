@@ -1,0 +1,81 @@
+<div class="container-fluid">
+  <div class="main-container page-layout p-0">
+    <div class="w-100">
+      <form [formGroup]="frmInventoryOnHand">
+        <div class="row align-items-center">
+
+          <!-- Site Dropdown -->
+          <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 d-flex">
+            <label for="siteId" class="form-label">Site</label>
+            <mat-select placeholder="Select Site" id="siteId" class="formSelect" formControlName="siteId">
+              <mat-option selected value="0" class="formOption">All</mat-option>
+              <mat-option [value]="item.Site" *ngFor="let item of allSiteMaster" class="formOption">
+                {{ item.Site }}
+              </mat-option>
+              <mat-option *ngIf="allSiteMaster == []" disabled>No result found</mat-option>
+            </mat-select>
+          </div>
+
+          <!-- Status Dropdown -->
+          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 d-flex">
+            <label for="vendorId" class="form-label no-wrap">Vendor Name</label>
+            <mat-select id="vendorId" class="formSelect" formControlName="vendorId" placeholder="Select Vendor">
+              <mat-option selected value="0">All</mat-option>
+              <mat-option [value]="item.VendorName" *ngFor="let item of allVendor" [matTooltip]="item.VendorName">
+                {{ item.VendorName }}
+              </mat-option>
+            </mat-select>
+          </div>
+
+          <!-- Buttons -->
+          <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 d-flex ps-3">
+            <button class="shadow-sm btn btn-dark mx-1" (click)="filterData()">Go</button>
+            <button class="shadow-sm btn btn-outline-secondary mx-1" (click)="clearFilter()" matTooltip="Clear Filter">
+              <i class="fa-solid fa-filter-circle-xmark"></i>
+            </button>
+            <button class="shadow-sm btn btn-outline-secondary mx-1" matTooltip="Excel Export" (click)="exportExcel()">
+              <i class="fa-solid fa-file-excel px-1"></i>
+            </button>
+            <button class="shadow-sm btn btn-outline-secondary mx-1" matTooltip="Personalize View">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+
+          <!-- Search -->
+          <div class="col-xl-2 col-lg-4 col-md-6 offset-lg-0 offset-xl-2 col-sm-6 my-2 d-flex">
+            <label for="searchTab" class="form-label"></label>
+            <input type="text" id="searchTab" class="form-control" formControlName="searchTab"
+              (input)="doFilter($event)" (keydown.enter)="$event.preventDefault()" placeholder="Search..." />
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-12">
+      <div class="table-container">
+        <table matSort mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <!-- Dynamic column definitions -->
+          <ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column.columnDef">
+            <!-- Table Header Cell -->
+            <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center">{{ column.header }}</th>
+            <!-- Table Data Cell -->
+            <td mat-cell *matCellDef="let element" class="text-center">
+              {{ element[column.columnDef] || "N/A" }}
+            </td>
+          </ng-container>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell text-center" [attr.colspan]="10">No Data
+              Available
+            </td>
+          </tr>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <mat-paginator class="shadow-sm" *ngIf="settings.IsPagination" [pageSizeOptions]="[25, 50, 100]"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </div>
+</div>

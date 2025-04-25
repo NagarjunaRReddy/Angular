@@ -1,0 +1,41 @@
+<div *ngIf="!isLoading" [ngStyle]="{
+  'background-color': !loginConfig.BackgroundType ? loginConfig.BackgroundColor : '',
+  'justify-content': getJustifyContent(justifyContent)
+}" class="container-fluid position-relative px-5">
+<img
+*ngIf="loginConfig.BackgroundType"
+[src]="backgroundImage"
+alt="Background"
+class="background-img"
+/>
+  <div class="row">
+    <div class="col-lg-12">
+      <div [ngStyle]="{'background-color': loginConfig.FormBackgroundColor}" class="login-container py-3">
+        <!-- <h2 class="text-start login-title my-3">Welcome!</h2> -->
+        <div class="login-image py-3">
+          <!-- <img src="assets/images/smyrnatruck_blue.png" alt=""> -->
+          <img *ngIf="loginConfig.LogoImage; else fallbackImage" [src]="attachmentURL + loginConfig.LogoImage" alt="Logo">
+          <ng-template #fallbackImage>
+            <img [src]="'assets/images/no-image.png'" alt="Fallback Logo">
+          </ng-template>
+
+        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div>
+            <input placeholder="Enter email" id="username" formControlName="username" type="text" />
+          </div>
+          <div>
+            <input placeholder="Enter Password" id="password" formControlName="password" type="password" />
+          </div>
+          <button [ngStyle]="{'background-color': loginConfig.ButtonBackgroundColor, 'color':loginConfig.Buttontextcolor}" type="submit">Login</button>
+          <p class="text-center m-0 forgot-password">
+            <a href="#" class="text-primary">Forgot Password?</a>
+          </p>
+          <p class="text-center register-text">
+            Don’t have an account? <a href="#" class="text-primary">Click here to register</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

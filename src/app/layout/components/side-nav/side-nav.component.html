@@ -1,0 +1,102 @@
+<nav class="main-menu">
+  <div class="login-image text-center py-3">
+    <img [src]="logoUrl" alt="smyrna logo">
+  </div>
+  <ul class="sideMenu">
+    <li [hidden]="!item.ReadAccess" class="py-1" *ngFor="let item of menuData">
+      <a routerLinkActive="active" [routerLink]="item.MenuPath" *ngIf="item.ReadAccess">
+        <i [class]="getIconName(item.Menu_Name)" [ngClass]=" item.Icon"></i>
+
+        <span class="nav-text">
+          {{item.Menu_Name }}
+        </span>
+      </a>
+    </li>
+  </ul>
+
+  <ul class="logout">
+    <li>
+      <a (click)="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span class="nav-text">
+          Logout
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+
+
+<!-- <li class="py-1">
+           <a routerLinkActive="active" routerLink="sales-order">
+               <i class="fa fa-home fa-2x"></i>
+                <span class="nav-text">
+                    Sales Order
+                </span>
+            </a>
+        </li>
+        <li class="py-1">
+            <a routerLinkActive="active" routerLink="big-parts">
+                <i class="fa fa-bolt fa-2x"></i>
+                 <span class="nav-text">
+                    Big Parts
+                 </span>
+             </a>
+         </li>
+        <li class="py-1">
+            <a routerLinkActive="active" routerLink="inventory">
+                <i class="fa-solid fa-cubes-stacked"></i>
+                 <span class="nav-text">
+                     Inventory
+                 </span>
+             </a>
+         </li>
+        <li class="py-1">
+            <a routerLinkActive="active" routerLink="masters">
+                <i class="fa-solid fa-layer-group fa-2x"></i>
+                 <span class="nav-text">
+                     Masters
+                 </span>
+             </a>
+         </li>
+         <li class="py-1">
+            <a routerLinkActive="active" routerLink="capacity-planning">
+                <i class="fa fa-bolt fa-2x"></i>
+                 <span class="nav-text">
+                    Capacity Planning
+                 </span>
+             </a>
+         </li>
+         <li class="py-1">
+            <a routerLinkActive="active" routerLink="color-report">
+                <i class="fa-solid fa-palette fa-2x"></i>
+                 <span class="nav-text">
+                    Color Report
+                 </span>
+             </a>
+         </li>
+         <li class="py-1">
+            <a routerLinkActive="active" routerLink="production-planning">
+                <i class="fa-solid fa-palette fa-2x"></i>
+                 <span class="nav-text">
+                    Production Planning
+                 </span>
+             </a>
+         </li>
+        <li class="py-1">
+           <a routerLinkActive="active" routerLink="users">
+               <i class="fa fa-users fa-2x"></i>
+                <span class="nav-text">
+                    User Management
+                </span>
+            </a>
+        </li>
+        <li class="py-1">
+            <a routerLinkActive="active" routerLink="configuration">
+                <i class="fa fa-cogs fa-2x"></i>
+                 <span class="nav-text">
+                    Configuration
+                 </span>
+             </a>
+         </li> -->

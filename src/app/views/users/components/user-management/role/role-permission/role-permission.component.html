@@ -1,0 +1,74 @@
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+  {{ data.title }} <i class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+</h4>
+
+<mat-dialog-content class="p-1">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <table class="table table-bordered position-relative table-hover">
+          <thead class="role_head">
+            <tr class="text-center">
+              <th>Modules</th>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let item of menuData; let i = index">
+              <tr [ngClass]="{ 'has-children': item.children }">
+                <td class="ps-2 py-2">
+                  <!-- <mat-checkbox class="example-margin" [(ngModel)]="item.ReadAccess "
+                    (change)="toggleParentCheckboxes(item)"> {{item.Menu_Name}} </mat-checkbox> -->
+
+                  <input type="checkbox" [(ngModel)]="item.ReadAccess" (change)="toggleParentCheckboxes(item)"
+                    class="form-check-input m-0 pe-2" />
+                  {{ item.Menu_Name }}
+                </td>
+                <td *ngIf="!item.IsChildren" class="text-center">
+                  <input type="checkbox" [(ngModel)]="item.AddAccess" class="form-check-input m-0 pe-2" />
+                </td>
+                <td *ngIf="!item.IsChildren" class="text-center">
+                  <input type="checkbox" [(ngModel)]="item.EditAccess" class="form-check-input m-0 pe-2" />
+                </td>
+                <td *ngIf="!item.IsChildren" class="text-center">
+                  <input type="checkbox" [(ngModel)]="item.DeleteAccess" class="form-check-input m-0 pe-2" />
+                </td>
+              </tr>
+              <!-- Display children if available -->
+              <ng-container *ngIf="item.children">
+                <tr *ngFor="let child of item.children; let j = index">
+                  <td class="ps-2 py-2">
+                    <div style="margin-left: 20px">
+                      <input type="checkbox" [(ngModel)]="child.ReadAccess"
+                        (change)="toggleChildParentCheckboxes(child, item)" class="form-check-input m-0 pe-2" />
+                      <span class="ps-2">{{ child.Menu_Name }}</span>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <input type="checkbox" [(ngModel)]="child.AddAccess" class="form-check-input m-0 pe-2"
+                      (change)="toggleChildrenCheckboxes(child, item)" />
+                  </td>
+                  <td class="text-center">
+                    <input type="checkbox" [(ngModel)]="child.EditAccess" class="form-check-input m-0 pe-2"
+                      (change)="toggleChildrenCheckboxes(child, item)" />
+                  </td>
+                  <td class="text-center">
+                    <input type="checkbox" [(ngModel)]="child.DeleteAccess" class="form-check-input m-0 pe-2"
+                      (change)="toggleChildrenCheckboxes(child, item)" />
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<div mat-dialog-actions align="center">
+  <button (click)="saveData()" class="btn save-cancel-button btn-save ms-2" mat-raised-button>
+    Update
+  </button>
+</div>

@@ -1,0 +1,250 @@
+<div class="container-fluid pe-0">
+  <div class="row">
+    <!-- SOP Container with drag-and-drop functionality -->
+<div [ngClass]="{'col-lg-4': panView, 'col-lg-12': !panView}">
+  <div class="sop-container" cdkDropListGroup>
+
+    <!-- Search container -->
+    <div [ngClass]="{'d-none':panView}" class="search-container px-2">
+      <div class="search-list">
+        <!-- Sales Order list with search input -->
+        <div class="title">Sales Order</div>
+        <div class="list-data" cdkDropList (cdkDropListDropped)="dropList($event,1,[])" [cdkDropListData]="filterSopList">
+          <div class="filter-input mx-2 py-1">
+            <input [(ngModel)]="soFilterInputValue" (input)="filterSoList($event)" type="text" class="form-control"
+              placeholder="Search SO" />
+          </div>
+          <!-- Display filtered sales order list with drag-and-drop capability -->
+          <ul>
+            <li cdkDrag class="shadow-sm" [ngStyle]="{'background-color': setProductionColor(list, 1, activeView), 'color':list.textColor}"
+              *ngFor="let list of filterSopList; let i=index;">
+              {{list.soNumber }}
+              <i (click)="getSoDetails(list)" matTooltip="View Details" class="fa-solid fa-eye"></i>
+              <!-- <i *ngIf="subMenuAccess[0].EditAccess" (click)="editSo(list, 'AX')" matTooltip="Edit"
+                class="fa-solid fa-pen px-1"></i> -->
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Data container -->
+    <div [ngClass]="{'w-100':panView}" class="data-container">
+      <div class="top-buttons mt-2">
+        <!-- Top buttons to change active view -->
+        <div class="tab-icons">
+          <i *ngFor="let tab of tabs" [ngClass]="{ active: activeView === tab.view }" (click)="changeView(tab.view)"
+            [matTooltip]="tab.tooltip" [class]="tab.iconClass">
+            <span class="ps-2" *ngIf="activeView == tab.view && !panView">{{ tab.label }}</span>
+          </i>
+        </div>
+  
+  
+        <div [ngClass]="{'d-none':panView}" class="overall-search py-1">
+
+          <div class="d-flex all-search position-relative align-items-center">
+            <input [(ngModel)]="searchQuery" (input)="filterColumn()" type="text" class="form-control placeholder-search"
+              placeholder="Search..">
+            <!-- <label *ngIf="showPlaceholder" class="placeholder-label">{{ currentPlaceholder }}</label>
+            <i class="fa-solid fa-magnifying-glass"></i> -->
+          </div>
+
+          <button class="btn btn-outline-dark mx-1 shadow-sm" matTooltip="Export Excel" (click)="getExcelData()"><i
+              class="fa-solid fa-file-excel px-1"></i></button>
+        </div>
+  
+  
+      </div>
+      <!-- <button (click)="generatePDF()">Generate PDF</button> -->
+      <!-- SOP content table -->
+      <div class="sop-content ms-1" id="pdfContent" #scrollContainer (mousedown)="handleMouseDown($event)"
+        (mouseup)="handleMouseUp()" (mousemove)="handleMouseMove($event)">
+        <table class="table">
+          <thead>
+            <!-- Table header with slot information -->
+            <tr>
+              <th>Day / Slot</th>
+              <th *ngFor="let item of slotList">{{ item }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Loop through SOP data and display in the table -->
+            <tr [ngClass]="{'highlight-border': activeView == 'production' ? isCurrentWeek(data.BucketName) : false}" *ngFor="let data of finalSopData; let bucketIndex = index">
+              <td [ngClass]="{'highlight': activeView == 'production' ? isCurrentWeek(data.BucketName) : false}">
+                <!-- Display week and date range information -->
+                <span>{{ data.BucketName }}</span>
+                <span class="d-block date-range">{{ data.bucketNote }}</span>
+              </td>
+              <!-- Loop through slots in the current week -->
+              <td class="slot-data" [ngClass]="{ unavailaibleData: slot.SlotId == 0 }"
+                *ngFor="let slot of data.SlotPlanning; let slotIndex = index"
+                [ngClass]="setDroppedSlotColor(slot.SoList[0], slot.SlotId)" cdkDropList
+                [ngStyle]="{'backgroundColor': setProductionColor(slot.SoList[0], slot.SlotId, activeView), 'color': bindTextColor(slot.SoList[0], slot.SlotId)}"
+                (cdkDropListDropped)="dropList($event, slot.SlotId, slot.SoList)" [cdkDropListData]="slot.SoList">
+  
+                <!-- Display information in each slot -->
+                <span class="empty-container" *ngIf="slot.SoList?.length == 0 && slot.SlotId != 0">Drop SO</span>
+                <div [cdkDragData]="item" cdkDrag *ngFor="let item of slot.SoList">
+                  <div *ngIf="!['production', 'home', 'spec', 'bom','co', 'attachments', 'drawing'].includes(activeView) && item?.rltDays != 0 && item?.referenceItemName != ''" class="badge badge-light badge-data">
+                    <span class="bilnker">
+                      <i class="fa-solid fa-circle fa-beat-fade"></i>
+                    </span>
+                    <span class="item-info">
+                      {{item?.referenceItemName + ': ' + item?.rltDays}}
+                    </span>
+                  </div>                
+                  <div *ngIf="activeView == 'production'" class="badge badge-light badge-data">
+                    <span *ngIf="item?.prdAgeing != ''" class="bilnker">
+                      <i class="fa-solid fa-circle fa-beat-fade"></i>
+                    </span>
+                    <span *ngIf="item?.prdAgeing != ''" class="item-info">
+                      {{'Aging' + ':  ' &nbsp; + item?.prdAgeing + ' Days'}}
+                    </span>
+                  </div>
+                  <div *ngIf="activeView == 'home' && item?.salesAgeing != null && item?.salesAgeing >= 0" class="badge badge-light badge-data">
+                    <span *ngIf="item?.salesAgeing != ''" class="bilnker">
+                      <i class="fa-solid fa-circle fa-beat-fade"></i>
+                    </span>
+                    <span matTooltip="Days Since Sold" *ngIf="item?.salesAgeing != ''" class="item-info">
+                      <span>DSS</span>{{ ':  ' &nbsp; + item?.salesAgeing + ' Days'}}
+                    </span>
+                  </div>
+                  <span
+                    *ngIf="(item.activeSetting || (activeView != 'home' && activeView!= 'user' && !item.activeUser)) && activeView != 'production'"
+                    class="home-view">
+                    <span>{{item.soNumber}}</span>
+                    <span
+                      *ngIf="activeView == 'spec' || activeView == 'co' || activeView == 'bom' || activeView == 'attachments' || activeView == 'drawing'"
+                      [matTooltip]="item.customerName" matTooltipPosition="left" class="home-preview">End User:
+                      {{item.customerName}}</span>
+                    <span [matTooltip]="item.dealerName" matTooltipPosition="left" class="home-preview">Dealer:
+                      {{item.dealerName}}</span>
+                    <span [matTooltip]="item.subCategoryName || '-----'" matTooltipPosition="left"
+                      class="home-preview">{{ item.subCategoryName }}</span>
+                    <!-- <span *ngIf="activeView == 'bom'" class="home-preview">Bom Status : {{item.bomStatus}}</span> -->
+                    <span *ngIf="activeView == 'setting'" [matTooltip]="item.make" matTooltipPosition="left"
+                      class="home-preview">Chassis: {{ item.make }}</span>
+                    <!-- <span *ngIf="activeView == 'setting'" [matTooltip]="item.inventoryStatus" matTooltipPosition="left"
+                      class="home-preview">Status: {{ item.inventoryStatus }}</span> -->
+                  </span>
+  
+                  <span
+                    *ngIf="(item.activeSetting || (activeView != 'home' && activeView!= 'user' && !item.activeUser)) && activeView == 'production'"
+                    class="home-view">
+                    <span>{{item.soNumber}}</span>
+                    <span [matTooltip]="item.subCategoryName || '-----'" matTooltipPosition="left"
+                      class="home-preview">{{ item.subCategoryName }}</span>
+                    <span [matTooltip]="item.dealerName" matTooltipPosition="left" class="home-preview">Dealer:
+                      {{item.dealerName}}</span>
+                    <span [matTooltip]="item?.PRD" matTooltipPosition="left" class="home-preview">PRD:
+                      {{ item?.PRD }}</span>
+                  </span>
+  
+                  <div class="home-view" *ngIf="activeView == 'home' && !item.activeSetting && !item.activeUser">
+                    <span>{{ getDisplayedValue(item) }}</span>
+                    <span [matTooltip]="item.customerName" matTooltipPosition="left" class="home-preview">End User:
+                      {{item.customerName}}</span>
+                    <span [matTooltip]="item.dealerName" matTooltipPosition="left" class="home-preview">Dealer:
+                      {{item.dealerName}}</span>
+                    <span [matTooltip]="item.subCategoryName || '-----'" matTooltipPosition="left"
+                      class="home-preview">{{ item.subCategoryName }}</span>
+                  </div>
+  
+                  <div *ngIf="slot.SlotId != 0 && slot.SoList.length != 0" class="inside-icons">
+                    <i *ngIf="getEnableFor() && getInfoComments(item) != '' && getInfoComments(item) != '0'" [matTooltip]="getInfoComments(item)" class="fa-solid fa-message"></i>
+                    <!-- <i (click)="enablePanView(item)" matTooltip="Pan View" class="fa-solid fa-arrow-right"></i> -->
+                    <i (click)="editSo(item, 'SOP',true)" matTooltip="Pane View" class="fa-solid fa-table-columns"></i>
+                    <i (click)="editSo(item, 'SOP',false)" matTooltip="Edit" class="fa-solid fa-pen"></i>
+                    <i  matTooltip="Remove"
+                      (click)="removeFromSlotList(bucketIndex, slotIndex, slot.SoList)" class="fa-solid fa-xmark"></i>
+                  </div>
+                </div>
+                <ng-container *ngIf="slot.SlotId == 0">
+                  <div class="icon-container" 
+                    (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+                    <i class="fa-solid fa-2x fa-ban"></i>
+                    <span class="text" *ngIf="isHovered">Unavailable</span>
+                  </div>
+                </ng-container>
+  
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <!-- Save button -->
+      <div class="save-button">
+        <div class="row">
+          <div class="col-lg-10">
+            <div class="legend-container">
+              <div class="list-container" *ngIf="activeView == 'home'">
+                <div class="list-data" *ngFor="let item of salesStatusList">
+                  <div [style.backgroundColor]="item.color"></div>
+                  {{ item.salesStatus }}
+                </div>
+              </div>
+              <div class="list-container" *ngIf="activeView == 'setting'">
+                <div class="list-data">
+                  <div [ngStyle]="{'background-color' : '#23b823'}"></div>
+                    On Site
+                  <div [ngStyle]="{'background-color' : '#ff8503'}"></div>
+                  Atleast one item is "On Ordered"
+                  <div [ngStyle]="{'background-color' : '#ca1919'}"></div>
+                  Atleast one item is "Not Ordered"
+                  <div [ngStyle]="{'background-color' : '#9bd1dd'}"></div>
+                    TBD
+                </div>
+              </div>
+
+              <div class="list-container" *ngIf="activeView == 'spec'">
+                <div class="list-data" *ngFor="let item of specReviewStatusList">
+                  <div [style.backgroundColor]="item.Colorcode"></div>
+                  {{ item.SpecreviewstatusName }}
+                </div>
+              </div>
+
+              <div class="list-container" *ngIf="activeView == 'bom'">
+                <div class="list-data" *ngFor="let item of bomStatusList">
+                  <div [style.backgroundColor]="item.Colorcode"></div>
+                  {{ item.BOMStatusName }}
+                </div>
+              </div>
+
+              <div class="list-container" *ngIf="activeView == 'co'">
+                <div class="list-data" *ngFor="let item of coStatusList">
+                  <div [style.backgroundColor]="item.Colorcode"></div>
+                  {{ item.CustomerOrderStatusName }}
+                </div>
+              </div>
+
+              <div class="list-container" *ngIf="activeView == 'attachments'">
+                <div class="list-data" *ngFor="let item of attachmentStatusList">
+                  <div [style.backgroundColor]="item.color"></div>
+                  {{ item.attachmentStatus }}
+                </div>
+              </div>
+
+              <div class="list-container" *ngIf="activeView == 'drawing'">
+                <div class="list-data" *ngFor="let item of drawingStatusList">
+                  <div [style.backgroundColor]="item.color"></div>
+                  {{ item.drawingStatus }}
+                </div>
+              </div>
+               
+            </div>
+          </div>
+          <div class="col-lg-2 d-grid">
+            <button class="btn btn-dark my-1 save-cancel-button" (click)="saveData()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div [@slideInOut] *ngIf="panView" class="col-lg-8 my-2 pan-container">
+  <app-sop-pan-view [data]="panData" (closePane)="closePaneView($event)"></app-sop-pan-view>
+</div> -->
+
+  </div>
+</div>

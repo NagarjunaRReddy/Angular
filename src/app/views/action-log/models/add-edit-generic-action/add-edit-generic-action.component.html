@@ -1,0 +1,91 @@
+<div class="container-fluid p-0">
+  <h4 class=" text-white position-relative model-title p-0" mat-dialog-title>
+    {{data.title}} <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="cancelForm()"></i></h4>
+  <form [formGroup]="actionForm" (ngSubmit)="submitForm()">
+    <mat-dialog-content class="py-1 mt-2">
+      <table class="table table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th *ngIf="data.button !== 'Save'">SL.No.</th>
+            <th>Action Identified</th>
+            <th>Responsible</th>
+            <th>Action Identified Date</th>
+            <th>Target Date</th>
+            <th>Action Status</th>
+            <th *ngIf="data.button == 'Save'">Action</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="actions">
+          <tr *ngFor="let action of actions.controls; let i = index" [formGroupName]="i">
+            <td *ngIf="data.button !== 'Save'">
+              <input type="text" [value]="data.value.slNo" class="form-control">
+            </td>
+
+            <td><input type="text" class="form-control" placeholder="Enter Identified Action"
+                formControlName="actionIdentified"></td>
+
+            <td>
+              <mat-select class="formSelect w-100" panelClass="drop-panel" placeholder="Select Status"
+                formControlName="responsible">
+                <mat-option selected value="Cody Jacobs">Cody Jacobs</mat-option>
+                <mat-option selected value="Will pilcher">Will pilcher</mat-option>
+                <mat-option selected value="Alice Johnson">Alice Johnson</mat-option>
+                <mat-option selected value="Cody Jacobs">Cody Jacobs</mat-option>
+              </mat-select>
+            </td>
+
+            <td>
+              <mat-form-field class="custom-date w-100 dateFields">
+                <input matInput [matDatepicker]="picker" placeholder="Identified Date"
+                  class="datepicker appInputRestriction" formControlName="identifiedDate" (click)="picker.open()"
+                  matDatepickerInput readonly />
+                <mat-datepicker-toggle matSuffix [for]="picker" [disableRipple]="true">
+                  <mat-icon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker class="example-header"></mat-datepicker>
+              </mat-form-field>
+            </td>
+            <td>
+
+              <mat-form-field class="custom-date w-100 dateFields">
+                <input matInput [matDatepicker]="picker1" placeholder="Target Date"
+                  class="datepicker appInputRestriction" [min]="minToDate" formControlName="targetDate"
+                  (click)="picker1.open()" matDatepickerInput readonly />
+                <mat-datepicker-toggle matSuffix [for]="picker1" [disableRipple]="true">
+                  <mat-icon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker1 class="example-header"></mat-datepicker>
+              </mat-form-field>
+            </td>
+
+            <td>
+              <mat-select id="siteId" class="formSelect" placeholder="Select Site" formControlName="actionStatus">
+                <mat-option selected value="Open">Open</mat-option>
+                <mat-option selected value="In Progress">In Progress</mat-option>
+                <mat-option selected value="Closed">Closed</mat-option>
+              </mat-select>
+            </td>
+
+            <td *ngIf="data.button == 'Save' " class="actionIcon">
+              <i matTooltip="Remove" class="mat-mdc-tooltip-trigger fa-solid fa-circle-minus text-danger px-2"
+                (click)="removeRow(i, $event)" *ngIf="actions.length>1"></i>
+
+              <i matTooltip="Add" class="mat-mdc-tooltip-trigger fa-solid fa-circle-plus text-center px-2"
+                (click)="addRow()" *ngIf="i===actions.length-1"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-dialog-content>
+
+    <!-- Buttons -->
+    <mat-dialog-actions align="center" class="mb-2">
+      <button type="button" mat-raised-button class="save-cancel-button btn btn-danger "
+        (click)="cancelForm()">Cancel</button>
+
+      <button mat-raised-button class="btn save-cancel-button btn-save ms-2">
+        {{data.button}}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>

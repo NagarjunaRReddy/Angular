@@ -1,0 +1,73 @@
+<!-- Main container with drag and drop functionality -->
+<div class="row my-2" cdkDropListGroup>
+  <!-- Left column - 4 columns wide -->
+  <div class="col-lg-4">
+    <div class="left-container">
+      <!-- Search box section -->
+      <div class="search-field">
+        <div class="form-group">
+          <div class="form-label">Search</div>
+          <!-- Search input with two-way binding and real-time filtering -->
+          <input [(ngModel)]="searchInput" #inputValue (input)="filterList(inputValue.value)" placeholder="Search.."
+            type="text" name="search" id="search" class="form-control formSearch">
+        </div>
+      </div>
+
+      <!-- Slots list container -->
+      <div class="list-container mt-2 card">
+        <!-- Header section with add slot button -->
+        <div class="list-header">
+          <span>Slots</span>
+          <!-- Add slot button - only visible if user has add access -->
+          <i (click)="addSlot($event)" matTooltip="Add Slot" class="fa-solid fa-circle-plus"></i>
+        </div>
+
+        <!-- Draggable list container -->
+        <div class="list-data" cdkDropList [cdkDropListData]="filteredList" (cdkDropListDropped)="drop($event)">
+          <!-- Loop through filtered slots -->
+          <ng-container *ngFor="let list of filteredList">
+            <!-- Individual draggable slot item -->
+            <div class="list" cdkDrag>
+              <span>{{list.SlotName}}</span>
+              <!-- Action buttons container -->
+              <div class="icon-container">
+                <!-- Edit button - only visible if user has edit access -->
+                <i (click)="editSlot(list, $event)" matTooltip="Edit" class="fa-solid fa-pencil"></i>
+                <!-- Delete button - only visible if user has delete access -->
+                <i (click)="deleteSlot(list,$event)" matTooltip="Delete" class="fa-solid fa-trash-can"></i>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right column - 8 columns wide -->
+  <div class="col-lg-8">
+    <div class="right-container">
+      <!-- Drop zone container -->
+      <div class="drop-container">
+        <!-- Horizontal drop zone for slots -->
+        <div class="drop-inside-container" cdkDropList [cdkDropListData]="droppedList"
+          (cdkDropListDropped)="drop($event)" cdkDropListOrientation="horizontal">
+          <!-- Loop through dropped items -->
+          <div class="drop-box mx-1" [ngClass]="{'selected-drop-box': i === selectedDropBoxIndex}"
+            *ngFor="let item of droppedList; let i=index;" cdkDrag (click)="toggleBackgroundColor(i, item)">
+            <!-- Slot name display -->
+            <span class="drop-title">
+              {{item.SlotName}}
+            </span>
+            <!-- Action icons for dropped items -->
+            <span class="drop-icons">
+              <!-- Edit button - only visible if user has edit access -->
+              <i (click)="editSlot(item, $event)" matTooltip="Edit" class="fa-solid fa-pencil"></i>
+              <!-- Commented out delete button -->
+              <!-- <i (click)="deleteSlot(item,$event)" matTooltip="Delete" class="fa-solid fa-lg fa-xmark"></i> -->
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

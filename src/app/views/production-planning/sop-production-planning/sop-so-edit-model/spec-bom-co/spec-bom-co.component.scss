@@ -1,0 +1,99 @@
+.container-fluid{
+    height: 58vh;
+    overflow-x: hidden;
+}
+
+.title{
+    background-color: #414345; 
+    // background: -webkit-linear-gradient(to right, #414345, #232526);  
+    // background: linear-gradient(to right, #414345, #232526);
+    color: white;
+    height: 30px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// .column-divider {
+//     background-image: linear-gradient(to right, #000 0%, #000 50%, transparent 50%, transparent 100%);
+//     background-size: 1px 100%;
+//     background-repeat: no-repeat;
+//     background-position: right;
+// }
+
+.add-remove-icon{
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.coForm, .bomForm {
+    height: 44vh;
+    overflow-y: auto;
+}
+
+@media screen and (min-width: 1900px) {
+    .coForm, .bomForm {
+        height: 58vh;
+    }
+
+    .container-fluid{
+        height: 68vh;
+        overflow-x: hidden;
+    }
+}
+
+
+button:hover{
+    cursor: pointer;
+}
+
+.file-icon{
+    .cancel-icon{
+        position: absolute;
+        top: -10px;
+        right: -15px;
+    }
+}
+
+.item-container{
+    display: flex;
+    justify-content: space-between;
+    .item-header{
+        font-size: 1rem;
+        font-weight: 500;
+    }
+    button{
+        border-radius: 5px !important;
+    }
+}
+
+.load-text{
+    font-size: 0.8rem;
+    cursor: pointer;
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+table,
+th,
+td,
+tbody,
+thead {
+  // background-color: var(--bg-color);
+  font-size: 0.75rem !important;
+}
+
+th{
+    font-weight: 500 !important;
+    height: 30px !important;
+    padding: 4px;
+}
+
+.inset-shadow{
+    box-shadow: var(--box-shadow-inset);
+    border-radius: 5px;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+}

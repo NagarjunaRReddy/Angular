@@ -1,0 +1,138 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="main-container page-layout p-0">
+      <div class="container">
+        <form [formGroup]="frmAbcInventory">
+          <div class="my-2 d-flex">
+            <!-- Container for search input and add button, aligned to right -->
+            <div
+              class="text-right col-md-5 col-xl-3 col-width d-flex top-buttons justify-content-end align-items-center offset-md-7 offset-xl-9 col-6 offset-6">
+              <!-- Search input field with real-time filtering -->
+              <input (input)="applyFilter($event)" (keydown.enter)="$event.preventDefault()" formControlName="searchTab"
+                type="text" class="form-control" placeholder="Search..." />
+              <!-- Add button - only visible if user has add access -->
+              <button class="actionBtn btn btn-dark ms-2 px-3 button-font" (click)="addAbcInventory($event)" *ngIf="subMenuAccess[0]?.AddAccess === true">
+                Add
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-12"></div>
+        </div>
+        <div *ngIf="loadTable" class="row">
+          <div class="col-12">
+            <!-- Mat Table -->
+            <div class="table-container" *ngIf="!settings.IsSorting"
+              [ngClass]="{ 'table-scrollable': settings.IsScrollable }">
+              <table matSort mat-table class="mat-elevation-z8" [dataSource]="dataSource">
+                <ng-container *ngFor="let column of columnNames; let i = index" [matColumnDef]="column">
+                  <th mat-header-cell *matHeaderCellDef class="text-center" mat-sort-header>
+                    {{ column }}
+                  </th>
+
+                  <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+                    <ng-container *ngIf="
+                        column != 'Attachment Color' &&
+                        column != 'Action' &&
+                        column != 'Sl.No.'
+                      ">
+                      {{ element[column] }}
+                    </ng-container>
+                    <ng-container *ngIf="column === 'Sl.No.'">
+                      {{ element["Sl.No."] }}
+                    </ng-container>
+                    <ng-container *ngIf="column === 'Attachment Color'">
+                      <div type="color" [style.background-color]="element['Attachment Color']" readonly
+                        class="form-control"></div>
+                    </ng-container>
+                    <ng-container *ngIf="column === 'Action'">
+
+                      <i *ngIf="subMenuAccess[0]?.EditAccess === true" matTooltip="Edit" matTooltipPosition="left"
+                      class="fa fa-pencil iconShadow icon-pd cursor-pointer actionIcon m-1" title="Edit"
+                      aria-hidden="true" (click)="editItem(element, $event)">
+                    </i>
+                    <!-- Delete Button: Show only if DeleteAccess is true -->
+                    <i *ngIf="subMenuAccess[0]?.DeleteAccess === true" matTooltip="Delete"
+                      class="fa fa-trash-can iconShadow icon-pd cursor-pointer actionIcon m-1" title="Delete"
+                      aria-hidden="true" (click)="dateteItem(element, $event)">
+                    </i>
+                    </ng-container>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnNames"></tr>
+
+                <tr mat-row *matRowDef="let row; columns: columnNames"></tr>
+              </table>
+            </div>
+
+            <div class="table-container" *ngIf="settings.IsSorting"
+              [ngClass]="{ 'table-scrollable': settings.IsScrollable }">
+              <table matSort mat-table class="mat-elevation-z8" [dataSource]="dataSource">
+                <!-- Dynamic column definitions -->
+
+                <ng-container *ngFor="let column of columnNames; let i = index" [matColumnDef]="column">
+                  <th mat-header-cell *matHeaderCellDef class="text-center" mat-sort-header>
+                    {{ column }}
+                  </th>
+
+                  <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+                    <ng-container *ngIf="
+                        column != 'Attachment Color' &&
+                        column != 'Action' &&
+                        column != 'Sl.No.'
+                      ">
+                      {{ element[column] }}
+                    </ng-container>
+                    <ng-container *ngIf="column === 'Sl.No.'">
+                      {{dataSource.filteredData.indexOf(element) + 1}}
+                    </ng-container>
+                    <ng-container *ngIf="column === 'Attachment Color'">
+                      <div type="color" [style.background-color]="element['Attachment Color']" readonly
+                        class="form-control"></div>
+                    </ng-container>
+
+                    <ng-container *ngIf="column === 'Action'">
+                      <!-- <button mat-icon-button color="primary" (click)="editItem(element)">
+                                            <mat-icon>edit</mat-icon>
+                                          </button>
+                                          <button mat-icon-button color="warn" (click)="deleteItem(element)">
+                                            <mat-icon>delete</mat-icon>
+                                          </button> -->
+
+                                          <i *ngIf="subMenuAccess[0]?.EditAccess === true" matTooltip="Edit" matTooltipPosition="left"
+                                          class="fa fa-pencil iconShadow icon-pd cursor-pointer actionIcon m-1" title="Edit"
+                                          aria-hidden="true" (click)="editItem(element, $event)">
+                                        </i>
+                                        <!-- Delete Button: Show only if DeleteAccess is true -->
+                                        <i *ngIf="subMenuAccess[0]?.DeleteAccess === true" matTooltip="Delete"
+                                          class="fa fa-trash-can iconShadow icon-pd cursor-pointer actionIcon m-1" title="Delete"
+                                          aria-hidden="true" (click)="dateteItem(element, $event)">
+                                        </i>
+                    </ng-container>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnNames"></tr>
+
+                <tr mat-row *matRowDef="let row; columns: columnNames"></tr>
+              </table>
+
+              <div *ngIf="!dataSource || dataSource.filteredData.length === 0" class="text-center my-3">
+                <p class="text-muted" style="background-color: white;"><b>No Data Available</b></p>
+              </div>
+            </div>
+
+            <!-- Pagination -->
+            <mat-paginator class="shadow-sm" *ngIf="settings.IsPagination" [pageSizeOptions]="[25, 50, 100]"
+              showFirstLastButtons>
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

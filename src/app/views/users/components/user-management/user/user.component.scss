@@ -1,0 +1,100 @@
+.table-container {
+  height: calc(100vh - 200px) !important;
+  overflow-y: auto;
+}
+
+table {
+  border-radius: 15px !important;
+
+  tr {
+    height: 35px;
+
+    th {
+      font-size: 0.8rem;
+      background-color: var(--primary-color);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      border: 1px solid var(--secondary-color);
+    }
+
+    td {
+      font-size: 0.8rem;
+      border: 1px solid var(--secondary-color);
+      white-space: nowrap;
+    }
+  }
+}
+
+.filterButton {
+  border: 1px solid;
+}
+
+.activeMenu {
+  background-color: var(--primary-color) !important;
+  color: white;
+}
+
+.top-btn {
+  display: flex !important;
+  justify-content: space-between;
+}
+
+.badge-success {
+  background-color: #28a745;
+  color: white;
+  font-size: 0.7rem;
+}
+
+.badge-danger {
+  background-color: red;
+  color: white;
+  font-size: 0.7rem;
+}
+
+.form-control {
+  width: fit-content !important;
+  height: 30px;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 5px !important;
+  font-size: 0.75rem !important;
+}
+
+@media (max-width:70em) {
+
+  th,
+  td {
+    white-space: nowrap !important;
+  }
+}
+
+
+.actionBtn {
+  background-color: var(--primary-color) !important;
+  height: 30px;
+  border-radius: 5px;
+  line-height: 1;
+  font-size: 0.8rem !important;
+}
+
+::ng-deep .cdk-overlay-pane.mat-mdc-dialog-panel {
+  max-width: unset !important;
+}
+
+// All, Active, InActive btns
+.nav-btns {
+  margin-right: 6px;
+  height: 30px;
+  line-height: 1;
+  border-radius: 5px !important;
+  border: 1px solid var(--border-color);
+
+  :active {
+    background-color: var(--primary-color);
+  }
+}
+
+// Font awesome icons
+.actionIcon {
+  cursor: pointer;
+}

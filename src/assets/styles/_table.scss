@@ -1,0 +1,25 @@
+table{
+    border-radius: 5px !important;
+    tr{
+        height: 35px;
+        th{
+            font-size: 0.8rem;
+            background-color: var(--primary-color);
+            color: #fff;
+            position: sticky;
+            top: 0;
+            border: 1px solid var(--secondary-color);
+            &:first-child{
+                border-radius: 5px 0 0 0;
+            }
+            &:last-child{
+                border-radius: 0 5px 0 0;
+            }
+        }
+        td{
+            font-size: 0.8rem;
+            border: 1px solid var(--secondary-color);
+            white-space: nowrap;
+        }
+    }
+}

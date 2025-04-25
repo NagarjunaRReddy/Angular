@@ -1,0 +1,51 @@
+.model-title {
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  font-size: 1.2rem;
+  background-color: var(--primary-color);
+}
+
+.invalid-feedback {
+  display: block !important;
+  position: absolute;
+  margin-top: 5px;
+  width: auto !important;
+  font-size: 12px !important;
+}
+ 
+.invalid-feedback span {
+  margin-top: 0px;
+  position: absolute;
+  width: max-content;
+  bottom: -6px;
+}
+
+.fa-circle-xmark {
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.header-color {
+  background-color: var(--primary-color)ed;
+}
+
+// .header-color{
+//     background-color: red;
+// }
+
+label {
+  color: black;
+}
+
+@media (max-width:70em) {
+
+  .model-title,
+  label,
+  small {
+    font-size: 0.8rem !important;
+  }
+}

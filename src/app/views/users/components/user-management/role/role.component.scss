@@ -1,0 +1,153 @@
+.row {
+
+  .side-container {
+    box-shadow: 0 0 0 .25rem inset #f2f2f2;
+    height: calc(100vh - 80px);
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+
+    button {
+      display: block;
+      text-align: center;
+      border-radius: 0px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 2px;
+      border: 1px solid;
+    }
+  }
+
+  .main-container {
+    width: 90%;
+  }
+}
+
+.active {
+  background-color: var(--primary-color) !important;
+  color: #fff;
+  //   border-radius: 5px;
+}
+
+.col-2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+
+.form-control,
+.form-select {
+  font-size: 0.8rem;
+  height: 30px;
+}
+
+.form-label {
+  margin-bottom: 0px !important;
+  margin-right: 5px;
+  font-size: 0.8rem;
+}
+
+.btn-dark,
+.btn-outline-secondary {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  background-color: var(--primary-color);
+}
+
+.btn-outline-secondary {
+  color: var(--primary-color) !important;
+  background-color: #fff !important;
+
+  &:hover {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+  }
+}
+
+.category-menu {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 2px solid #ddd;
+  margin-top: 10px;
+}
+
+.category-item {
+  padding: 4px;
+  height: 30px;
+  min-width: 100px;
+  font-family: Arial, sans-serif;
+  font-size: 0.8rem;
+  color: #333;
+  border-radius: 0px;
+  text-align: center;
+  border: 1px solid var(--primary-color);
+  cursor: pointer;
+  // border-right: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.category-item.active {
+  background-color: #333;
+  color: #fff;
+  border-bottom: 2px solid var(--secondary-color);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%, 0 40%, 10% 0);
+}
+
+.category-item:hover {
+  background-color: var(--hover-color);
+  color: #fff;
+}
+
+.table-container {
+  height: calc(100vh - 200px);
+  overflow: auto;
+}
+
+.dynamic-height {
+  height: calc(100vh - 150px) !important; // Set a different height when the condition is true
+  overflow: auto;
+}
+
+table {
+  border-radius: 5px !important;
+
+  tr {
+    height: 35px;
+
+    th {
+      font-size: 0.8rem;
+      background-color: var(--primary-color);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      border: 1px solid var(--secondary-color);
+    }
+
+    td {
+      font-size: 0.8rem;
+      border: 1px solid var(--secondary-color);
+      white-space: nowrap;
+    }
+  }
+}
+
+// FontAwesome Icons
+.actionIcon {
+  cursor: pointer;
+}
+
+.form-control {
+  width: fit-content !important;
+  height: 30px;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 5px !important;
+  font-size: 0.75rem !important;
+}

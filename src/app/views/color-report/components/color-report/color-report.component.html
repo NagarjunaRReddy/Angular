@@ -1,0 +1,133 @@
+<div class="container-fluid color-report">
+  <div class="row">
+    <div class="main-container page-layout p-0">
+      <div class="w-100 mb-2">
+        <form [formGroup]="frmColorReport">
+          <div class="row align-items-center">
+            <!-- From Date -->
+            <div class="col-sm-6 col-lg-4 col-md-4 col-xl-2 d-flex">
+              <label for="fromDate" class="form-label">From</label>
+
+              <mat-form-field class="custom-date w-100 dateFields">
+                <input matInput [matDatepicker]="picker" placeholder="From Date" class="datepicker appInputRestriction"
+                  (dateInput)="updateMinToDate($event.value)" formControlName="fromDate" (click)="picker.open()"
+                  matDatepickerInput readonly />
+                <mat-datepicker-toggle matSuffix [for]="picker" [disableRipple]="true">
+                  <mat-icon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker class="example-header"></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <!-- To Date -->
+            <div class="col-sm-6 col-lg-4 col-md-4 col-xl-2 d-flex">
+              <label for="toDate" class="form-label mb-0">To</label>
+              <div class="input-group">
+                <!-- <input type="date" id="toDate" class="form-control" formControlName="toDate"> -->
+                <mat-form-field class="custom-date w-100 dateFields">
+                  <input matInput [matDatepicker]="picker1" placeholder="To Date" class="datepicker appInputRestriction"
+                    [min]="minToDate" formControlName="toDate" (click)="picker1.open()" matDatepickerInput readonly />
+                  <mat-datepicker-toggle matSuffix [for]="picker1" [disableRipple]="true">
+                    <mat-icon>calendar_today</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #picker1 class="example-header"></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Site Dropdown -->
+            <div class="col-sm-6 col-lg-4 col-md-4 col-xl-2 d-flex">
+              <label for="siteId" class="form-label">Site</label>
+              <mat-select id="siteId" class="formSelect" formControlName="siteId" placeholder="Select Site">
+                <mat-option selected [value]="0">All</mat-option>
+                <mat-option [value]="item.Site" *ngFor="let item of allSiteMaster">
+                  {{ item.Site }}
+                </mat-option>
+                <mat-option *ngIf="allSiteMaster == []" disabled>No result found
+                </mat-option>
+              </mat-select>
+            </div>
+
+            <!-- Status Dropdown -->
+            <div class="col-sm-6 col-lg-4 col-md-4 col-xl-2 mt-1 d-flex">
+              <label for="statusId" class="form-label text-nowrap">AX PRD Status</label>
+              <mat-select formControlName="statusId" class="formSelect" panelClass="drop-panel"
+                placeholder="Select Status">
+                <mat-option selected [value]="0">All</mat-option>
+                <mat-option [value]="item.AxProdStatusName" *ngFor="let item of allProductionStatusData">
+                  {{ item.AxProdStatusName }}
+                </mat-option>
+                <mat-option *ngIf="allProductionStatusData == []" disabled>No result found
+                </mat-option>
+              </mat-select>
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-sm-6 col-lg-4 col-md-4 col-xl-2 mt-1 d-flex justify-content-start">
+              <button class="shadow-sm btn btn-dark mx-1" (click)="filterData()">
+                Go
+              </button>
+              <button class="shadow-sm btn btn-outline-secondary mx-1" matTooltip="Clear Filter"
+                (click)="clearfilters()">
+                <i class="fa-solid fa-filter-circle-xmark"></i>
+              </button>
+              <button class="shadow-sm btn btn-outline-secondary mx-1 shadow-sm" matTooltip="Export Excel"
+                (click)="exportToExcel()">
+                <i class="fa-solid fa-file-excel px-1"></i>
+              </button>
+
+              <button class="shadow-sm btn btn-outline-secondary mx-1" matTooltip="Personalize View ">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+
+            <!-- Search -->
+            <div class="col-sm-6 col-lg-4 col-md-4 col-xl-2 mt-1 d-flex">
+              <input type="text" id="searchTab" class="form-control" formControlName="searchTab"
+                (input)="doFilter($event)" (keydown.enter)="($event).preventDefault()" placeholder="Search..." />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-12">
+        <div class="alert-create-table table-container scroll table-container-max-height table-content table-custom"
+          #tableContainer>
+          <table #table id="table" mat-table matSort mat-table [dataSource]="dataSource"
+            class="mat-elevation-z8 w-100 text-center rounded-table" matSort matSortDirection="asc">
+            <ng-container *ngFor="let column of columns; let i = index" matColumnDef="{{ column.columnDef }}">
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>
+                {{ column.header }}
+              </th>
+              <td class="text-center" mat-cell *matCellDef="let row; let j = index"
+                [ngClass]="row[column.columnDef] | statusColor">
+                <ng-container *ngIf="isDateColumn(column.columnDef); else elseBlock">
+                  {{ row[column.columnDef] | convertDate }}
+                </ng-container>
+                <ng-template #elseBlock>
+                  {{ row[column.columnDef] }}
+                </ng-template>
+                <div *ngIf="column.columnDef == 'bom'" matTooltip="View BOM" matTooltipPosition="right"
+                  class="actionIcon" (click)="onBomInvoice(row)">
+                  <img src="assets/images/Bom.png" alt="Bom" class="img-fluid bom-img" />
+                </div>
+                <div *ngIf="column.columnDef == 'performaInvoice'" matTooltip="">
+                  <img src="assets/images/Invoice.png" alt="Invoice" class="img-fluid" />
+                </div>
+              </td>
+            </ng-container>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell text-center" [attr.colspan]="10">No Data
+                Available
+              </td>
+            </tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+        <mat-paginator class="shadow-sm" [pageSizeOptions]="[25, 50, 100]" showFirstLastButtons>
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+.model-title {
+  height: 30px;
+  display: flex;
+  font-size: 1.1rem;
+  background-color: var(--primary-color);
+  justify-content: center;
+  align-items: center;
+}
+
+.fa-circle-xmark {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+// .header-color{
+//     background-color: red;
+// }
+
+label {
+  color: #0950a0;
+}
+
+@media (max-width: 70em) {
+  .model-title,
+  label,
+  small {
+    font-size: 0.8rem !important;
+  }
+}

@@ -1,0 +1,24 @@
+:root {
+  --primary-color: #4c89e1;
+}
+
+.model-title {
+  height: 30px;
+  display: flex;
+  font-size: 1.1rem;
+  background-color: var(--primary-color);
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+// For icon
+.fa-circle-xmark {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+.header-color {
+  background-color: var(--primary-color);
+}

@@ -1,0 +1,285 @@
+import { Component, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
+import { map, Subscription } from 'rxjs';
+import { HelperService } from '../../../../services/helper.service';
+import { MasterdetailsService } from '../../../../services/masterdetails.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+import { AttachmentStatusService } from '../../../production-planning/services/attachment-status.service';
+import { MasterDetailsEntity } from '../../../../interfaces/master-details-entity';
+import {
+  DeleteAttachmentStatus,
+  SelectAttachMentStatus,
+} from '../../../../interfaces/Attachment-Status-Entity';
+import { AddeditattachmentstatusComponent } from './addeditattachmentstatus/addeditattachmentstatus.component';
+import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-attachmentstatus',
+  templateUrl: './attachmentstatus.component.html',
+  styleUrl: './attachmentstatus.component.scss',
+})
+export class AttachmentstatusComponent {
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  settings = {
+    TableSettingsId: 3,
+    RoleId: 6,
+    IsScrollable: false,
+    IsPagination: true,
+    IsSorting: true,
+    IsFilter: true,
+    IsMultiselect: false,
+    Pagination: true,
+    TenantId: 1,
+    CreatedBy: 1,
+    CreatedOn: '2024-12-01T06:56:53.797',
+    ModifiedBy: null,
+    ModifiedOn: null,
+  };
+
+  themeSettings = {
+    RoleId: 6,
+
+    ColourMode: 'light',
+    ColourThemeSettingId: 1,
+    PrimaryBackgroundColour: '#141bdb',
+    SecondaryBackgroundColour: '#802836',
+    PrimaryTextColour: '#000000',
+    OnHoverColour: '#000000',
+    TenantId: 1,
+    CreatedBy: 1,
+    CreatedOn: '2024-12-01T06:56:53.797',
+    ModifiedBy: null,
+    ModifiedOn: null,
+  };
+  frmAbcInventory!: FormGroup;
+  loadTable: boolean = false;
+  displayedColumns: string[] = [];
+  columnNames: string[] = [];
+  subscribedService: Subscription[] = [];
+  allAttachmentStatusMaster: any[] = [];
+  mappedData: any[] = [];
+  dataSource: MatTableDataSource<any> = new MatTableDataSource();
+  loginInfo: any;
+  menuData: any;
+menuAccess: any;
+  subMenuAccess: any;
+
+  constructor(
+    private helperService: HelperService,
+    private formBuilder: FormBuilder,
+    private masterdetailsService: MasterdetailsService,
+    private dialog: MatDialog,
+    private toster: ToastrService,
+    private attachmentStatusService: AttachmentStatusService,
+    private router: Router,
+  ) {}
+
+  ngOnInit() {
+    this.loginInfo = JSON.parse(
+      this.helperService.getValue('LoginInfo') || '{}'
+    );
+    this.menuData = JSON.parse(this.helperService.getValue('leftMenu') || '{}');
+    const table =
+      sessionStorage.getItem('tableSettings') || JSON.stringify(this.settings);
+    this.settings = JSON.parse(table);
+
+    const theme =
+      sessionStorage.getItem('themeSettings') ||
+      JSON.stringify(this.themeSettings);
+    this.themeSettings = JSON.parse(theme);
+
+    this.loadTable = true;
+
+    this.frmAbcInventory = this.formBuilder.group({
+      // excelsheet:[''],
+      searchTab: [''],
+    });
+
+    this.getColumns();
+    this.setMenuAccess();
+  }
+
+  setMenuAccess() {
+    const routerLink = this.router.url;
+    this.menuAccess = this.menuData.filter((e: any) =>
+      routerLink.includes(e.MenuPath)
+    );
+  
+    if (this.menuAccess.length > 0) {
+      const children = this.menuAccess[0].children;
+  
+      // Filter for the submenu that matches the current page
+      this.subMenuAccess = children.filter((child: any) =>
+        routerLink.includes(child.MenuPath)
+      );
+  
+      console.log("Filtered SubMenuAccess:", this.subMenuAccess);
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  getColumns(): void {
+    const masterDetailsEntity: MasterDetailsEntity = {
+      MasterName: 'Attachment Status',
+      TenantId: this.loginInfo.TenantId ? this.loginInfo.TenantId : 0, //1 // Assuming static value or retrieve from loginInfo.TenantId
+    };
+
+    const siteService = this.masterdetailsService
+      .getMasterDetailsByName(masterDetailsEntity)
+      .subscribe(
+        (res: any) => {
+          if (!res[0]?.Message) {
+            //this.displayedColumns = res.map((item: any) => item.DisplayName);
+            this.displayedColumns = res.map((itm) => itm.DisplayName);
+            //this.columnNames = res.map((item: any) => item.ColumnName);
+            this.columnNames = res.map((item) => item.ColumnName);
+
+            this.columnNames = ['Sl.No.', ...this.columnNames, 'Action']; //here add what columns you want
+            //'SiteId',
+            // Include a "select" column if multiselect is enabled
+            if (this.settings.IsMultiselect) {
+              this.displayedColumns.unshift('select');
+            }
+            // Fetch data only after initializing columns
+            this.getAttachmentStatus();
+          }
+        },
+        (error: any) => {
+          console.error('Error fetching master details:', error);
+        }
+      );
+
+    this.subscribedService.push(siteService);
+  }
+
+  getAttachmentStatus() {
+    const AttachmentData: SelectAttachMentStatus = {
+      attachmentStatusId: 0,
+      TenantId: this.loginInfo.TenantId ? this.loginInfo.TenantId : 0,
+    };
+    const AttachmenService = this.attachmentStatusService
+      .getAttachmentStatus(AttachmentData)
+      .subscribe(
+        (res: any) => {
+          if (res != null && !res[0]?.Message) {
+            this.allAttachmentStatusMaster = res;
+
+            this.dataSource.data = res.map((item: any, idx: number) => {
+              return {
+                SlNo: idx + 1,
+                ...item,
+              };
+            });
+          }
+        },
+        (error) => {
+          console.error('Some Error Occured', error);
+        }
+      );
+    this.subscribedService.push(AttachmenService);
+  }
+
+  dateteItem(element: any, event) {
+    event.stopPropagation();
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '30%',
+      data: {
+        title: 'Confirm Action',
+        message: 'Are you sure want to delete?',
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == true) {
+        let AttachmentData: DeleteAttachmentStatus = {
+          attachmentStatusId: element.attachmentStatusId,
+        };
+        const AttachmenService = this.attachmentStatusService
+          .deleteAttachmentStatus(AttachmentData)
+          .subscribe(
+            (res: any) => {
+              if (res[0].SuccessMessage) {
+                this.toster.success(res[0].SuccessMessage, 'Success');
+              } else {
+                this.toster.error(res[0].ErrorMessage, 'Error');
+              }
+              
+              this.getAttachmentStatus();
+              window.location.reload();
+            },
+            (error) => {
+              this.toster.error('Some Error Occured', 'ERROR');
+            }
+          );
+        this.subscribedService.push(AttachmenService);
+      }
+    });
+  }
+
+  applyFilter(event: Event | string) {
+    const filterValue =
+      typeof event === 'string'
+        ? event
+        : (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  editItem(element: any, event: Event) {
+    event.stopPropagation();
+    const dialogRef = this.dialog.open(AddeditattachmentstatusComponent, {
+      width: '35%',
+      data: {
+        title: 'Update Attachment Status',
+        button: 'Update',
+        view: false,
+        value: element,
+      },
+      disableClose: true,
+    });
+    dialogRef
+      .afterClosed()
+      .toPromise()
+      .then((result) => {
+        if (result == true) {
+          this.getAttachmentStatus();
+        }
+      })
+      .catch((error) => {
+        this.toster.error('Error In Updating Attachment Status', 'ERROR');
+      });
+  }
+
+  addAbcInventory(event: MouseEvent) {
+    event.stopPropagation();
+    const dialogRef = this.dialog.open(AddeditattachmentstatusComponent, {
+      width: '35%',
+      data: {
+        title: 'Add Attachment Status',
+        button: 'Save',
+        view: false,
+      },
+      disableClose: true,
+    });
+    dialogRef
+      .afterClosed()
+      .toPromise()
+      .then((result) => {
+        if (result == true) {
+          this.getAttachmentStatus();
+        }
+      })
+      .catch((error) => {
+        this.toster.error('Error Occured', error);
+      });
+  }
+}

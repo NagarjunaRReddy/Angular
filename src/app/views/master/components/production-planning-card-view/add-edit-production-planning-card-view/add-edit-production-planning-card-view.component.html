@@ -1,0 +1,102 @@
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+    {{ data.title }}
+    <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+  </h4>
+  <mat-dialog-content>
+    <form [formGroup]="addEditForm">
+      <div class="form-group row align-items-center mb-2">
+        <div class="col-lg-2 col-md-6 col-sm-12 col-form-label d-flex">
+          <label for="tabName" class="">Tab Name</label><label class="text-danger">*</label>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 validator-align">
+          <input [ngClass]="{
+              'has-error':
+                addEditForm.controls['tabName'].errors &&
+                addEditForm.controls['tabName'].touched
+            }" type="text" [readOnly]="data.view" class="form-control m-2" placeholder="Enter Tab Name"
+            formControlName="tabName" />
+          <div *ngIf="submittedForm && addEditForm.controls['tabName'].errors" class="invalid-feedback px-2 my-1">
+            <span *ngIf="addEditForm.controls['tabName'].hasError('required')" class="px-2">Tab Name is Required</span>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6 col-sm-12 col-form-label d-flex">
+          <label for="tabOrder" class="">Tab Order</label><label class="text-danger">*</label>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 validator-align">
+          <input [ngClass]="{
+              'has-error':
+                addEditForm.controls['tabOrder'].errors &&
+                addEditForm.controls['tabOrder'].touched
+            }" type="number" [readOnly]="data.view" class="form-control m-2" placeholder="Enter Tab Order"
+            formControlName="tabOrder" />
+          <div *ngIf="submittedForm && addEditForm.controls['tabOrder'].errors" class="invalid-feedback px-2 my-1">
+            <span *ngIf="addEditForm.controls['tabOrder'].hasError('required')" class="px-2">Tab Order is Required</span>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-lg-5">
+          <button mat-raised-button class="bg-dark text-light mb-3 w-100">Show <i class="fa-solid fa-eye"></i></button>
+          <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="showColumns" (cdkDropListDropped)="drop($event)"
+            class="column-container">
+            <div class="form-check">
+              <input class="form-check-input mt-0" type="checkbox" id="selectAllShow" (change)="selectAll('show', $event)">
+              <label class="form-check-label" for="selectAllShow">
+                Select All
+              </label>
+            </div>
+            <hr class="m-0">
+            <div class="form-check me-2" *ngFor="let item of showColumns; let i = index">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckBox{{i}}"
+                [checked]="setCheckInput(item)" (change)="item.checked = !item.checked">
+              <label cdkDrag class="form-check-label" for="flexCheckBox{{i}}">
+                {{item.DisplayName}}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 position-relative">
+          <div class="vertical-line"></div>
+          <div class="move-button">
+            <button matTooltip="Move Right" (click)="onMoveRight(1)"
+              [ngClass]="active == 1 ? 'tab_selected' : 'tab_unselected'" mat-raised-button
+              class="bg-dark text-light my-2"><i class="fa-solid fa-angles-right"></i></button>
+            <button matTooltip="Move Left" (click)="onMoveLeft(2)"
+              [ngClass]="active == 2 ? 'tab_selected' : 'tab_unselected'" mat-raised-button
+              class="bg-dark text-light my-2"><i class="fa-solid fa-angles-left"></i></button>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <button mat-raised-button class="bg-dark text-light mb-3 w-100">Hide <i
+              class="fa-solid fa-eye-slash"></i></button>
+          <div class="column-container">
+            <div class="form-check">
+              <input class="form-check-input mt-0" type="checkbox" id="selectAllHide" (change)="selectAll('hide', $event)">
+              <label class="form-check-label" for="selectAllHide">
+                Select All
+              </label>
+            </div>
+            <hr class="m-0">
+            <div class="form-check" *ngFor="let d of hideColumns; let i = index">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckBoxInput{{i}}" [checked]="d.checked"
+                (change)="d.checked = !d.checked">
+              <label class="form-check-label" for="flexCheckBoxInput{{i}}">
+                {{d.DisplayName}}
+              </label>
+  
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions *ngIf="!data.view" align="center" class="mb-2">
+    <button mat-raised-button color="warn" class="btn btn-danger save-cancel-button" (click)="onCancel()">
+      Cancel
+    </button>
+    <button mat-raised-button class="btn save-cancel-button btn-save ms-2" (click)="onSave()">
+      {{ data.button }}
+    </button>
+  </mat-dialog-actions>
+  

@@ -1,0 +1,16 @@
+<app-top-nav *ngIf="sideNav"></app-top-nav>
+<app-top-nav-menu *ngIf="!sideNav"></app-top-nav-menu>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 px-1">
+            <div class="main-container">
+                <div *ngIf="sideNav" class="side-nav">
+                    <app-side-nav></app-side-nav> 
+                </div>
+                <div [ngClass]="{'w-100':!sideNav , 'pe-0' : sideNav}" class="main-content position-relative">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

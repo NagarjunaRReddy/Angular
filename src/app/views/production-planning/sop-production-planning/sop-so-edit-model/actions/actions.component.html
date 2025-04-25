@@ -1,0 +1,103 @@
+<!-- Component for common SOP edit table -->
+<app-common-sop-edit-table [commonTableData]="commonTableData"></app-common-sop-edit-table>
+
+<!-- Container for the editable table -->
+<div class="table-container mt-2 p-2">
+    <!-- Form with formGroup binding -->
+    <form [formGroup]="form">
+        <!-- Table for SOP edit with formArray binding -->
+        <table class="table table-striped" style="width: 100%;">
+          <!-- Table header -->
+          <thead>
+            <tr>
+              <th style="width: 4%;">SL.No.</th>
+            <th style="min-width: 270px;">Action Identified</th>
+            <th style="width: 15%;">Responsible</th>
+            <th style="width: 15%;">Action Identified Date</th>
+            <th style="width: 15%;">Target Date</th>
+            <th style="width: 15%;">Action Status</th>
+            <th style="width: 10%;">Action</th>
+            </tr>
+          </thead>
+          <!-- Table body with formArrayName binding -->
+          <tbody formArrayName="items">
+            <!-- Table row for each form group in the formArray -->
+            <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+              <td>
+                {{i+1}}
+              </td>
+              <td>
+                <!-- Input field for Action Identified -->
+                <textarea cols="30" formControlName="actionIdentified" class="form-control"></textarea>
+              </td>
+              <td>
+                <!-- Dropdown for Responsible -->
+                <!-- <mat-form-field class="w-100"> -->
+                  <mat-select class="formSelect" formControlName="responsible">
+                    <input #actions (input)="filterActions(i, actions.value)" type="text" class="search-drpdwn" placeholder="Search"
+                          (keydown)="$event.stopPropagation()">
+                          <mat-option *ngIf="filterResponsibleLists[i]?.length == 0" disabled>No Data</mat-option>
+                    <mat-option *ngFor="let item of filterResponsibleLists[i]" [value]="item.ActionResponsibleId">{{item.ActionResponsibleName}}</mat-option>
+                  </mat-select>
+                <!-- </mat-form-field> -->
+              </td>
+              <td>
+                <!-- Datepicker for Action Date -->
+                <mat-form-field class="custom-date w-100">
+                  <input readonly formControlName="actionIdentifiedDate" matInput [matDatepicker]="picker1" placeholder="Action Identified Date"
+                      class="datepicker appInputRestriction"
+                      (click)="picker1.open()" />
+                  <mat-datepicker-toggle matSuffix [for]="picker1" [disableRipple]="true">
+                      <mat-icon>calendar_today</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #picker1 class="example-header"></mat-datepicker>
+              </mat-form-field>
+              </td>
+              <td>
+                <!-- Datepicker for Target Date -->
+                <mat-form-field class="custom-date w-100">
+                  <input readonly formControlName="targetDate" matInput [matDatepicker]="picker" placeholder="Target Date"
+                      class="datepicker appInputRestriction"
+                      (click)="picker.open()" />
+                  <mat-datepicker-toggle matSuffix [for]="picker" [disableRipple]="true">
+                      <mat-icon>calendar_today</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #picker class="example-header"></mat-datepicker>
+              </mat-form-field>
+              </td>
+              <td>
+                <!-- Dropdown for Status -->
+                <!-- <mat-form-field class="w-100"> -->
+                  <mat-select class="formSelect" formControlName="status">
+                      <mat-option *ngFor="let item of actionStatusList" [value]="item.ActionStatusId">{{item.ActionStatusName}}</mat-option>
+                  </mat-select>
+                <!-- </mat-form-field> -->
+                <!-- <div class="form-group d-flex align-items-center">
+                  <mat-select formControlName="status" class="formSelect w-100" panelClass="drop-panel"
+                      placeholder="status">
+                      <mat-option [value]="item.ActionStatusId" *ngFor="let item of actionStatusList">
+                          {{item.ActionStatusName}}
+                      </mat-option>
+                      <mat-option *ngIf="actionStatusList == []" disabled>No result found
+                      </mat-option>
+                  </mat-select>
+              </div> -->
+              </td>
+              <td>
+                <!-- Icons for adding and removing rows -->
+                <div class="actionIcon">
+                    <i matTooltip="Remove" *ngIf="i > 0 || items.length > 1" class="fa-solid fa-circle-minus text-danger px-2" (click)="removeItem(i)"></i>
+                    <i matTooltip="Add" *ngIf="i == items.length-1" class="fa-solid fa-circle-plus text-dark px-2" (click)="addItem()"></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </form>
+</div>
+
+<!-- Mat Dialog actions for Cancel and Submit buttons -->
+<mat-dialog-actions align="center">
+    <button class="btn btn-outline-danger mx-2 shadow-sm py-1 save-cancel-button" (click)="cancelChange()">Cancel</button>
+    <button class="btn btn-dark mx-2 shadow-sm py-1 save-cancel-button" (click)="onSubmit()">Submit</button>
+</mat-dialog-actions>

@@ -1,0 +1,238 @@
+<div class="container-fluid color-report">
+  <div class="row">
+    <div class="main-container page-layout p-0">
+      <div class="w-100 mb-2">
+        <form [formGroup]="actionLogForm">
+          <div class="row align-items-center">
+            <!-- From Date -->
+            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 d-flex ">
+              <label for="fromDate" class="form-label">From</label>
+
+              <mat-form-field class="custom-date w-100 dateFields">
+                <input matInput [matDatepicker]="picker" placeholder="From Date" class="datepicker appInputRestriction"
+                  (dateInput)="updateMinToDate($event.value)" formControlName="fromDate" (click)="picker.open()"
+                  matDatepickerInput readonly />
+                <mat-datepicker-toggle matSuffix [for]="picker" [disableRipple]="true">
+                  <mat-icon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker class="example-header"></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <!-- To Date -->
+            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 d-flex">
+              <label for="toDate" class="form-label mb-0">To</label>
+              <div class="input-group">
+
+                <mat-form-field class="custom-date w-100 dateFields">
+                  <input matInput [matDatepicker]="picker1" placeholder="To Date" class="datepicker appInputRestriction"
+                    [min]="minToDate" formControlName="toDate" (click)="picker1.open()" matDatepickerInput readonly />
+                  <mat-datepicker-toggle matSuffix [for]="picker1" [disableRipple]="true">
+                    <mat-icon>calendar_today</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #picker1 class="example-header"></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Responsible -->
+            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 d-flex ">
+              <label for="statusId" class="form-label text-nowrap">Responsible</label>
+              <mat-select class="formSelect w-100" panelClass="drop-panel" placeholder="Select Status"
+                formControlName="responsible">
+                <mat-option selected value="">All</mat-option>
+                <mat-option selected value="Cody Jacobs">Cody Jacobs</mat-option>
+                <mat-option selected value="Will pilcher">Will pilcher</mat-option>
+                <mat-option selected value="Alice Johnson">Alice Johnson</mat-option>
+                <mat-option selected value="Cody Jacobs">Cody Jacobs</mat-option>
+                <mat-option [value]="item.AxProdStatusName" *ngFor="let item of allProductionStatusData">
+                  {{ item.AxProdStatusName }}
+                </mat-option>
+                <mat-option *ngIf="allProductionStatusData == []" disabled>No result found
+                </mat-option>
+              </mat-select>
+            </div>
+
+            <!-- Action Status -->
+            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 d-flex my-2">
+              <label for="siteId" class="form-label">Action Status</label>
+              <mat-select id="siteId" class="formSelect" placeholder="Select Site" formControlName="actionStatus">
+                <mat-option selected value="">All</mat-option>
+                <mat-option selected value="Open">Open</mat-option>
+                <mat-option selected value="In Progress">In Progress</mat-option>
+                <mat-option selected value="Closed">Closed</mat-option>
+                <mat-option [value]="item.SiteName" *ngFor="let item of allSiteMaster">
+                  {{ item.SiteName }}
+                </mat-option>
+                <mat-option *ngIf="allSiteMaster == []" disabled>No result found
+                </mat-option>
+              </mat-select>
+            </div>
+
+
+            <div class="col-xl-2 col-lg-6 col-md-4 col-sm-6 d-flex ">
+              <button class="btn btn-dark mx-1 shadow-sm" (click)="filterData()">
+                Go
+              </button>
+              <button class="btn btn-outline-secondary mx-1 shadow-sm" (click)="clearFilters()"
+                matTooltip="Clear filters">
+                <i class="fa-solid fa-filter-circle-xmark"></i>
+              </button>
+              <button class="btn btn-outline-secondary mx-1 shadow-sm" matTooltip="Export Excel">
+                <i class="fa-solid fa-file-excel px-1"></i>
+              </button>
+
+              @if(activeTab=="Generic Action"){
+              <button class="btn btn-dark mx-1 shadow-sm" (click)="AddNewAction($event)" matTooltip="Add Action">
+                <i class="fa-solid fa-plus-circle"></i>
+              </button>
+              }
+            </div>
+
+            <!-- Search -->
+            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 my-2 d-flex">
+              <input type="text" id="searchTab" class="form-control" formControlName="searchTab" placeholder="Search..."
+                (input)="doFilter($event)" (keydown.enter)="$event.preventDefault()" />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Main Table Container -->
+      <mat-tab-group (selectedTabChange)="tabChange($event)" mat-stretch-tabs="false" mat-align-tabs="start">
+
+        <mat-tab label="Specific Action">
+          <div class="col-12">
+            <div class="alert-create-table table-container scroll table-container-max-height table-content table-custom"
+              #tableContainer>
+              <table #table id="table" mat-table [dataSource]="specificDataSource"
+                class="mat-elevation-z8 w-100 text-center rounded-table" matSort matSortDirection="asc">
+
+                <ng-container matColumnDef="salesId">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> Sales ID </th>
+                  <td mat-cell *matCellDef="let element" class="text-center"> {{element.salesId}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+                  <td mat-cell *matCellDef="let element" class="text-center"> {{element.actions}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="responsible">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> Responsible </th>
+                  <td mat-cell *matCellDef="let element" class="text-center"> {{element.responsible}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actionDate">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> Action Date </th>
+                  <td mat-cell *matCellDef="let element" class="text-center"> {{element.actionDate}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="targetDate">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> Target Date </th>
+                  <td mat-cell *matCellDef="let element" class="text-center"> {{element.targetDate}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                  <td mat-cell *matCellDef="let element" class="text-center"> {{element.status}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef> Action </th>
+                  <td class="text-center" mat-cell *matCellDef="let element">
+
+                    <i class="fa-regular fa-pen-to-square iconShadow icon-pd actionIcon m-1 icons" label="Confirm"
+                      matTooltip="Edit" aria-hidden="true"></i>
+
+                    <i class="fa-regular fa-trash-can iconShadow icon-pd actionIcon m-1 icons" label="Delete"
+                      matTooltip="Delete" aria-hidden="true" (click)="deleteItem(element, $event)"></i>
+                  </td>
+                </ng-container>
+
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell employeenodata" [attr.colspan]="specificDisplayedColumns?.length">
+                    No Data Available
+                  </td>
+                </tr>
+
+                <tr mat-header-row *matHeaderRowDef="specificDisplayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: specificDisplayedColumns;"></tr>
+              </table>
+
+            </div>
+            <mat-paginator class="shadow" [pageSizeOptions]="[25, 50, 100]" showFirstLastButtons>
+            </mat-paginator>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Generic Action">
+          <div class="col-12">
+            <div class="alert-create-table table-container scroll table-container-max-height table-content table-custom"
+              #tableContainer>
+              <table #table id="table" mat-table [dataSource]="genericDataSource"
+                class="mat-elevation-z8 w-100 text-center rounded-table" matSort matSortDirection="asc">
+
+                <ng-container matColumnDef="slNo">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> Sl.No </th>
+                  <td mat-cell *matCellDef="let element" class="text-center"> {{element.slNo}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+                  <td mat-cell *matCellDef="let element" class="text-center"> {{element.actions}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="responsible">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> Responsible </th>
+                  <td mat-cell *matCellDef="let element" class="text-center"> {{element.responsible}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actionDate">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> Action Date </th>
+                  <td mat-cell *matCellDef="let element" class="text-center"> {{element.actionDate}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="targetDate">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> Target Date </th>
+                  <td mat-cell *matCellDef="let element" class="text-center"> {{element.targetDate}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                  <td mat-cell *matCellDef="let element" class="text-center"> {{element.status}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef> Action </th>
+                  <td class="text-center" mat-cell *matCellDef="let element">
+
+                    <i class="fa-regular fa-pen-to-square iconShadow icon-pd actionIcon m-1 icons" label="Confirm"
+                      matTooltip="Edit" aria-hidden="true" (click)="editDialog($event,
+                      element)"></i>
+
+                    <i class="fa-regular fa-trash-can iconShadow icon-pd actionIcon m-1 icons" label="Delete"
+                      matTooltip="Delete" aria-hidden="true" (click)="deleteItem(element, $event)"></i>
+                  </td>
+                </ng-container>
+
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell employeenodata" [attr.colspan]="genericDisplayedColumns?.length">
+                    No Data Available
+                  </td>
+                </tr>
+
+                <tr mat-header-row *matHeaderRowDef="genericDisplayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: genericDisplayedColumns;"></tr>
+              </table>
+
+            </div>
+            <mat-paginator [length]="genericDataSource.data.length" [pageSizeOptions]="[25, 50, 100]"
+              showFirstLastButtons></mat-paginator>
+
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+    </div>
+  </div>
+</div>

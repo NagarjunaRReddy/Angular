@@ -1,0 +1,361 @@
+<app-common-sop-edit-table [commonTableData]="commonTableData"></app-common-sop-edit-table>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div [style.flex-direction]="panView ? 'column':'row'" class="general-container my-2">
+        <div [ngClass]="{'order-1': !panView, 'order-2': panView}" class="ax-container">
+          <div class="title ax-title">AX</div>
+          <div class="content">
+            <!-- your-component.component.html -->
+
+            <form [formGroup]="axForm">
+              <div class="row mt-2 mx-2">
+                <!-- First Row: SO, Category, Dealer -->
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-12 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="so">SO</label>
+                    <input formControlName="so" readOnly type="text" class="form-control" id="so" placeholder="SO" />
+                  </div>
+                </div>
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-12 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="category">Category</label>
+                    <input formControlName="category" readOnly type="text" class="form-control" id="category"
+                      placeholder="Category" />
+                  </div>
+                </div>
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-12 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="dealer">Dealer</label>
+                    <input formControlName="dealer" readOnly type="text" class="form-control" id="dealer"
+                      placeholder="Dealer" />
+                  </div>
+                </div>
+
+                <!-- Second Row: Delivery Date, Site, PRD Stage -->
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-12 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="deliveryDate">Delivery Date</label>
+                    <input formControlName="deliveryDate" readOnly type="text" class="form-control" id="deliveryDate"
+                      placeholder="Delivery Date" />
+                  </div>
+                </div>
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-12 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="site">Site</label>
+                    <input formControlName="site" readOnly type="text" class="form-control" id="site"
+                      placeholder="Site" />
+                  </div>
+                </div>
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-12 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="prdStage">PRD Stage</label>
+                    <input formControlName="prdStage" readOnly type="text" class="form-control" id="prdStage"
+                      placeholder="PRD Stage" />
+                  </div>
+                </div>
+
+                <!-- Third Row: SubCategory, Customer, PRD Start Date -->
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-12 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="subCategory">SubCategory</label>
+                    <input formControlName="subCategory" readOnly [matTooltip]="axForm.value.subCategory"
+                      matTooltipPosition="left" type="text" class="form-control" id="subCategory"
+                      placeholder="SubCategory" />
+                  </div>
+                </div>
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-12 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="customer">End User</label>
+                    <input formControlName="customer" [matTooltip]="axForm.value.customer" matTooltipPosition="left"
+                      readOnly type="text" class="form-control" id="customer" placeholder="End User" />
+                  </div>
+                </div>
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-12 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="prdStartDate">PRD Start Date</label>
+                    <input formControlName="prdStartDate" readOnly type="text" class="form-control" id="prdStartDate"
+                      placeholder="PRD Start Date" />
+                  </div>
+                </div>
+
+                <!-- Fourth Row: Status, Sold Date, Chassis VIN -->
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-12 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="status">Status</label>
+                    <input formControlName="status" readOnly type="text" class="form-control" id="status"
+                      placeholder="Status" />
+                  </div>
+                </div>
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-12 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="soldDate">Sold Date</label>
+                    <input formControlName="soldDate" readOnly type="text" class="form-control" id="soldDate"
+                      placeholder="Sold Date" />
+                  </div>
+                </div>
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-12 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="chassisvin">Chassis VIN</label>
+                    <input formControlName="chassisvin" readOnly [matTooltip]="axForm.value.chassisvin"
+                      matTooltipPosition="left" type="text" class="form-control" id="chassisvin"
+                      placeholder="Chassis VIN" />
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+        <div [ngClass]="{'d-none': panView}" class="vertical-line position-relative">
+          <button (click)="copyToRight()" class="Btn">
+            <div class="sign">
+              <i (click)="copyToRight()" class="fa-solid fa-circle-arrow-right"></i>
+            </div>
+
+            <div class="text">Copy to right</div>
+          </button>
+        </div>
+        <div class="sop-container" [ngClass]="{'order-1': panView, 'order-2': !panView}">
+          <div class="title">S&OP</div>
+          <div class="content">
+            <form [formGroup]="sopForm">
+              <div class="row mt-2 mx-2">
+                <!-- Left column -->
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="so">SO</label>
+                    <input formControlName="soNumber" readonly type="text" class="form-control " id="so"
+                      placeholder="SO" />
+                  </div>
+                </div>
+
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 label-30" for="Category">Category <span class="text-danger">*</span></label>
+                    <mat-select class="formSelect input-70" placeholder="--Select Category--"
+                      [ngClass]="{'has-error': sopForm.controls['categoryId'].errors && sopForm.controls['categoryId'].touched}"
+                      (selectionChange)="onCategorySelectionChange($event)" formControlName="categoryId">
+                      <mat-option *ngFor="let item of categoryList" [value]="item.CategoryId">{{ item.CategoryName }}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center position-relative">
+                    <label class="mx-2 label-30 " for="Dealer">Dealer</label>
+                    <mat-select class="formSelect input-70" placeholder="--Select Dealer--" formControlName="dealerId">
+                      <mat-option *ngFor="let item of dealerList" [value]="item.DealerId">{{ item.DealerName }}
+                      </mat-option>
+                    </mat-select>
+                    <i matTooltip="Clear" (click)="clearSelect('dealer')"
+                      class="fa-solid text-danger clear-select fa-xmark"></i>
+                  </div>
+                </div>
+
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 label-30" for="DeliveryDate">Delivery Date <span class="text-danger">*</span></label>
+                    <mat-form-field readonly
+                      [ngClass]="{'has-error': sopForm.controls['deliveryDate'].errors && sopForm.controls['deliveryDate'].touched}"
+                      class="custom-date input-70">
+                      <input readonly matInput [matDatepicker]="picker" formControlName="deliveryDate"
+                        placeholder="Delivery Date" class="datepicker appInputRestriction" (click)="picker.open()" />
+                      <mat-datepicker-toggle matSuffix [for]="picker" [disableRipple]="true">
+                        <mat-icon>calendar_today</mat-icon>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #picker class="example-header"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 label-30" for="Site">Site <span class="text-danger">*</span></label>
+                    <mat-select class="formSelect input-70" placeholder="--Select Site--"
+                      [ngClass]="{'has-error': sopForm.controls['site'].errors && sopForm.controls['site'].touched}"
+                      formControlName="site">
+                      <mat-option *ngFor="let item of siteList" [value]="item.SiteId">{{ item.SiteName }}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center position-relative">
+                    <label class="mx-2 label-30 " for="PRDStage">PRD Stage</label>
+                    <mat-select class="formSelect input-70 " placeholder="--Select PRD--" formControlName="prdStageId">
+                      <mat-option *ngFor="let item of prdList" [value]="item.PRDStageId">{{ item.PRDStageName }}
+                      </mat-option>
+                    </mat-select>
+                    <i matTooltip="Clear" (click)="clearSelect('prd')"
+                      class="fa-solid text-danger clear-select fa-xmark"></i>
+                  </div>
+                </div>
+
+                <!-- Right column -->
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 label-30 " for="SubCategory">SubCategory <span class="text-danger">*</span></label>
+                    <mat-select (click)="checkCategory(sopForm.controls['categoryId'].value)" class="formSelect input-70" placeholder="--Select SubCategory--"
+                      [ngClass]="{'has-error': sopForm.controls['subCategoryId'].errors && sopForm.controls['subCategoryId'].touched}"
+                      formControlName="subCategoryId">
+                      <mat-option (click)="getProductionLT(item)" [matTooltip]="item.SubCategoryName"
+                        matTooltipPosition="left" *ngFor="let item of filterSubCategoryList"
+                        [value]="item.SubCategoryId">{{ item.SubCategoryName }}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="Customer">End User</label>
+                    <input [matTooltip]="sopForm.value.customerName" matTooltipPosition="left"
+                      formControlName="customerName" type="text" class="form-control " id="Customer"
+                      placeholder="End User" />
+                  </div>
+                </div>
+
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 label-30" for="PRDStartDate">PRD Start Date</label>
+                    <mat-form-field class="custom-date input-70">
+                      <input readonly matInput [matDatepicker]="picker1" placeholder="PRD Start Date"
+                        class="datepicker appInputRestriction" formControlName="prdStartDate"
+                        (click)="picker1.open()" />
+                      <mat-datepicker-toggle matSuffix [for]="picker1" [disableRipple]="true">
+                        <mat-icon>calendar_today</mat-icon>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #picker1 class="example-header"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 label-30" for="Status">S&OP Truck Status <span class="text-danger">*</span></label>
+                    <mat-select class="formSelect input-70 " placeholder="--Select Status--"
+                      [ngClass]="{'has-error': sopForm.controls['statusId'].errors && sopForm.controls['statusId'].touched}"
+                      formControlName="statusId">
+                      <mat-option *ngFor="let item of statusList" [value]="item.TruckStatusId">
+                        {{ item.TruckStatusName }}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <!-- Additional fields with similar structure as above -->
+                <!-- Example for "Sold Date" -->
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 label-30 no-wrap" for="SoldDate">Sold Date</label>
+                    <mat-form-field class="custom-date input-70">
+                      <input readonly matInput [matDatepicker]="picker2" formControlName="soldDate"
+                        placeholder="Sold Date" class="datepicker appInputRestriction" (click)="picker2.open()" />
+                      <mat-datepicker-toggle matSuffix [for]="picker2" [disableRipple]="true">
+                        <mat-icon>calendar_today</mat-icon>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #picker2 class="example-header"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <!-- Chassis VIN -->
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 w-50" for="chassisvin">Chassis VIN</label>
+                    <input formControlName="chassisvin" [matTooltip]="sopForm.value.chassisvin"
+                      matTooltipPosition="left" type="text" class="form-control " id="chassisvin"
+                      placeholder="Chassis VIN" />
+                  </div>
+                </div>
+
+                <!-- PRD Line Finish Date -->
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 label-30" for="prdLineFinishDate">PRD Line Finish Date</label>
+                    <mat-form-field readonly class="custom-date input-70 ">
+                      <input readonly matInput [matDatepicker]="picker7" formControlName="prdLineFinishDate"
+                        placeholder="PRD Line Finish Date" class="datepicker appInputRestriction"
+                        (click)="picker7.open()" />
+                      <mat-datepicker-toggle matSuffix [for]="picker7" [disableRipple]="true">
+                        <mat-icon>calendar_today</mat-icon>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #picker7 class="example-header"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <!-- OP10 SubFrame Start Date -->
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 label-30" for="op10SubFrameStartDate"><span class="no-wrap">OP10 SubFrame</span> Start Date</label>
+                    <mat-form-field readonly class="custom-date input-70 ">
+                      <input readonly matInput [matDatepicker]="picker8" formControlName="op10SubFrameStartDate"
+                        placeholder="OP10 SubFrame Start Date" class="datepicker appInputRestriction"
+                        (click)="picker8.open()" />
+                      <mat-datepicker-toggle matSuffix [for]="picker8" [disableRipple]="true">
+                        <mat-icon>calendar_today</mat-icon>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #picker8 class="example-header"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <!-- Sales Status -->
+                <div [ngClass]="checkView()" class="col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center position-relative">
+                    <label class="mx-2 label-30" for="salesStatusId">Sales Status </label>
+                      <mat-select 
+                        placeholder="--Select Sales Status--"
+                        class="formSelect input-70"
+                        [ngClass]="{'has-error': sopForm.controls['salesStatusId'].errors && sopForm.controls['salesStatusId'].touched}"
+                        formControlName="salesStatusId">
+                        <mat-option *ngFor="let item of salesStatusList" [value]="item.salesStatusId">
+                          {{ item.salesStatus }}
+                        </mat-option>
+                      </mat-select>
+                      <i matTooltip="Clear" (click)="clearSelect('salesStatus')" class="fa-solid text-danger clear-select fa-xmark"></i>
+                  </div>
+                </div>
+
+                <!-- pumpPreWireDate  -->
+                <div [ngClass]="checkView()" class=" col-md-6 col-sm-6 p-0 mb-2">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mx-2 label-30" for="pumpPreWireDate">Pump/PreWire Date</label>
+                    <mat-form-field readonly class="custom-date input-70 ">
+                      <input readonly matInput [matDatepicker]="picker10" formControlName="pumpPreWireDate"
+                        placeholder="pumpPreWireDate " class="datepicker appInputRestriction"
+                        (click)="picker10.open()" />
+                      <mat-datepicker-toggle matSuffix [for]="picker10" [disableRipple]="true">
+                        <mat-icon>calendar_today</mat-icon>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #picker10 class="example-header"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                
+                
+              </div>
+
+            </form>
+
+          </div>
+          <div class="button-container text-center mb-2 position-relative">
+            <!-- <button [ngClass]="{'d-none': !panView}" class="btn btn-dark mx-2 shadow-sm copy-button py-1" (click)="copyToRight()">Copy from AX</button> -->
+            <button [ngClass]="{'d-none': !panView}" (click)="copyToRight()" class="Btn copy-button">
+              <div class="sign">
+                <i (click)="copyToRight()" class="fa-solid fa-circle-arrow-up"></i>
+              </div>
+  
+              <div class="text">Copy from AX</div>
+            </button>
+            <button (click)="cancelData()" class="btn btn-outline-danger mx-2 shadow-sm py-1 save-cancel-button">
+              Cancel
+            </button>
+            <button class="btn btn-dark mx-2 shadow-sm py-1 save-cancel-button" (click)="saveGeneralData()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

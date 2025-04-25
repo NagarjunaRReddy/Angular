@@ -1,0 +1,34 @@
+<!-- Include the common SOP edit table component with input binding -->
+<app-common-sop-edit-table [commonTableData]="commonTableData"></app-common-sop-edit-table>
+
+<!-- Main container with a fluid layout -->
+<div class="container-fluid">
+    <!-- Row within the container -->
+    <div class="row">
+        <!-- Centered column with offset on large screens -->
+        <div class="col-lg-6 offset-lg-3">
+            <!-- Table container with margin, padding, and elevation -->
+            <div class="table-container mx-1 mt-2 py-2">
+                <!-- Material table with sorting enabled -->
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+              
+                    <!-- Define columns dynamically using ngFor -->
+                    <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+                        <!-- Header cell with sorting capability -->
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>{{ column.header }}</th>
+                        <!-- Data cell with optional formatting -->
+                        <td [style.background-color]="element.colorCode" class="text-center" mat-cell *matCellDef="let element">
+                            <!-- Format date column specifically -->
+                            {{ column.columnDef === 'bomDate' ? ConvertDate(element[column.columnDef]) : element[column.columnDef] }}
+                        </td>
+                    </ng-container>
+              
+                    <!-- Header row definition -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:displayedColumns.includes('select')?false:true"></tr>
+                    <!-- Data row definition -->
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

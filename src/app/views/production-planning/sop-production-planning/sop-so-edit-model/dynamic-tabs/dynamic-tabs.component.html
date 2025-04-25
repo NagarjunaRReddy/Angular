@@ -1,0 +1,378 @@
+<app-common-sop-edit-table
+  [commonTableData]="commonTableData"
+></app-common-sop-edit-table>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div [style.flex-direction]="panView ? 'column':'row'" class="general-container my-2">
+        <div [ngClass]="{'order-1': !panView, 'order-2 mt-2': panView}" class="ax-container">
+          <!-- AX Section -->
+          <div class="title ax-title">AX</div>
+          <div class="content">
+            <!-- AX Form -->
+            <div class="row">
+              <div class="col-lg-6">
+                <!-- Item Name -->
+                <div class="form-group row my-2">
+                  <label for="itemName" class="col-lg-5 col-form-label"
+                    >Item Name</label
+                  >
+                  <div class="col-lg-7">
+                    <input
+                      [value]="dynamicData.itemName"
+                      readOnly
+                      disabled
+                      type="text"
+                      class="form-control"
+                      id="itemName"
+                      placeholder="Item Name"
+                    />
+                  </div>
+                </div>
+              <!-- Item Number -->
+                <div class="form-group row my-2">
+                  <label for="inventoryItemId" class="col-lg-5 col-form-label"
+                    >Item ID</label
+                  >
+                  <div class="col-lg-7">
+                    <input
+                      [value]="dynamicData.inventoryItemNumber"
+                      readOnly
+                      disabled
+                      type="text"
+                      class="form-control"
+                      id="inventoryItemId"
+                      placeholder="Item Id"
+                    />
+                  </div>
+                </div>
+                 <!-- Serial Number -->
+                 <div class="form-group row my-2">
+                  <label for="serialNumber" class="col-lg-5 col-form-label"
+                    >Serial Number</label
+                  >
+                  <div class="col-lg-7">
+                    <input
+                    [value]="dynamicData.serialNumber ? dynamicData.serialNumber : ''"
+                      readOnly
+                      disabled
+                      type="text"
+                      class="form-control"
+                      id="serialNumber"
+                      placeholder="Serial Number"
+                    />
+                  </div>
+                </div>
+                <!-- Vendor Name -->
+                <div class="form-group row my-2">
+                  <label for="VendorName" class="col-lg-5 col-form-label"
+                    >Vendor Name</label
+                  >
+                  <div class="col-lg-7">
+                    <input
+                      [value]="dynamicData.vendorName"
+                      readOnly
+                      disabled
+                      type="text"
+                      class="form-control"
+                      id="VendorName"
+                      placeholder="VendorName"
+                    />
+                  </div>
+                </div>
+                <!-- Purchase ID -->
+                <div class="form-group row my-2">
+                  <label for="PurchaseID" class="col-lg-5 col-form-label"
+                    >Purchase ID</label
+                  >
+                  <div class="col-lg-7">
+                    <input
+                      [value]="dynamicData.purchaseId"
+                      readOnly
+                      disabled
+                      type="text"
+                      class="form-control"
+                      id="PurchaseID"
+                      placeholder="PurchaseID"
+                    />
+                  </div>
+                </div>
+                
+              </div>
+              <div class="col-lg-6">
+                <!-- Parts Arrival Date -->
+                <div class="form-group row my-2">
+                  <label for="PartsArrivalDate" class="col-lg-5 col-form-label"
+                    >Parts Arrival Date</label
+                  >
+                  <div class="col-lg-7">
+                    <input
+                      [value]="ConvertDate(dynamicData.partsArrivalDate)"
+                      readOnly
+                      disabled
+                      type="text"
+                      class="form-control"
+                      id="PartsArrivalDate"
+                      placeholder="Parts Delivery Date"
+                    />
+                  </div>
+                </div>
+                <!-- Inventory Status -->
+                <div class="form-group row my-2">
+                  <label for="InventoryStatus" class="col-lg-5 col-form-label"
+                    >Inventory Status</label
+                  >
+                  <div class="col-lg-7">
+                    <input
+                      [value]="dynamicData.inventoryStatus"
+                      readOnly
+                      disabled
+                      type="text"
+                      class="form-control"
+                      id="InventoryStatus"
+                      placeholder="InventoryStatus"
+                    />
+                  </div>
+                </div>
+
+                <!-- Chassis_ST -->
+                <div *ngIf="dynamicData.dynamicData == 'Chassis'" class="form-group row my-2">
+                  <label for="InventoryStatus" class="col-lg-5 col-form-label"
+                    >Chassis ST</label
+                  >
+                  <div class="col-lg-7">
+                    <input
+                      [value]="dynamicData.Chassis_ST"
+                      readOnly
+                      disabled
+                      type="text"
+                      class="form-control"
+                      id="Chassis_ST"
+                      placeholder="Chassis ST"
+                    />
+                  </div>
+                </div>
+
+                <!-- Chassis_SL -->
+                <div *ngIf="dynamicData.dynamicData == 'Chassis'" class="form-group row my-2">
+                  <label for="InventoryStatus" class="col-lg-5 col-form-label"
+                    >Chassis SL</label
+                  >
+                  <div class="col-lg-7">
+                    <input
+                      [value]="dynamicData.Chassis_SL"
+                      readOnly
+                      disabled
+                      type="text"
+                      class="form-control"
+                      id="Chassis_SL"
+                      placeholder="Chassis SL"
+                    />
+                  </div>
+                </div>
+
+                <!-- Chassis_SL_Status -->
+                <div *ngIf="dynamicData.dynamicData == 'Chassis'" class="form-group row my-2">
+                  <label for="InventoryStatus" class="col-lg-5 col-form-label"
+                    >Chassis SL Status</label
+                  >
+                  <div class="col-lg-7">
+                    <input
+                      [value]="dynamicData.Chassis_SL_Status"
+                      readOnly
+                      disabled
+                      type="text"
+                      class="form-control"
+                      id="Chassis_SL_Status"
+                      placeholder="Chassis SL Status"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vertical Line and Copy to Right Button -->
+        <div [ngClass]="{'d-none': panView}" class="vertical-line position-relative">
+          <button (click)="copyToRight()" class="Btn">
+            <div class="sign">
+              <i class="fa-solid fa-circle-arrow-right"></i>
+            </div>
+            <div class="text">Copy to right</div>
+          </button>
+        </div>
+
+        <!-- S&OP Section -->
+        <div [ngClass]="{'order-1': panView, 'order-2': !panView}" class="sop-container">
+          <div class="title">S&OP</div>
+          <div class="content">
+            <!-- S&OP Form -->
+            <form [formGroup]="myForm">
+              <div class="row">
+                <div class="col-lg-6">
+                  <!-- Item Name -->
+                  <div class="form-group row my-2">
+                    <label [ngClass]="{'text-danger': myForm.controls['itemId'].errors && myForm.controls['itemId'].touched}" for="itemId" class="col-lg-5 col-form-label"
+                      >Item Name <span class="text-danger">*</span></label
+                    >
+                    <div class="col-lg-7">
+                      <!-- <mat-form-field class="w-100" appearance="outline"> -->
+                        <mat-select [ngClass]="{'has-error': myForm.controls['itemId'].errors && myForm.controls['itemId'].touched}" class="formSelect" placeholder="--Select Item--" (selectionChange)="selectionChangedItem($event)" formControlName="itemId">
+                          <mat-option *ngFor="let item of itemList" [value]="item.ItemMasterId">{{item.ItemMasterName}}</mat-option>
+                        </mat-select>
+                      <!-- </mat-form-field> -->
+                    </div>
+                  </div>
+                   <!-- Item Number -->
+                <div class="form-group row my-2">
+                  <label for="inventoryIId" class="col-lg-5 col-form-label"
+                    >Item ID</label
+                  >
+                  <div class="col-lg-7">
+                    <input                     
+                      type="text"
+                      class="form-control"
+                      formControlName="inventoryIId"
+                      placeholder="Item ID"
+                    />
+                  </div>
+                </div>
+                 <!-- Serial Number -->
+                 <div class="form-group row my-2">
+                  <label for="serialNumber" class="col-lg-5 col-form-label"
+                    >Serial Number</label
+                  >
+                  <div class="col-lg-7">
+                    <input                     
+                      type="text"
+                      class="form-control"
+                      formControlName="serialNumber"
+                      placeholder="Serial Number"
+                    />
+                  </div>
+                </div>
+                  <!-- Vendor Name -->
+                  <div class="form-group row my-2">
+                    <label for="VendorName" class="col-lg-5 col-form-label"
+                      >Vendor Name</label
+                    >
+                    <div class="col-lg-7">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="vendorName"
+                        placeholder="VendorName"
+                      />
+                    </div>
+                  </div>
+                  <!-- Purchase ID -->
+                  <div class="form-group row my-2">
+                    <label for="PurchaseID" class="col-lg-5 col-form-label"
+                      >Purchase ID</label
+                    >
+                    <div class="col-lg-7">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="purchaseID"
+                        placeholder="PurchaseID"
+                      />
+                    </div>
+                  </div>
+                 
+                </div>
+                <div class="col-lg-6">
+                  <!-- Parts Arrival Date -->
+                  <div class="form-group row my-2">
+                    <label
+                      for="PartsArrivalDate"
+                      class="col-lg-5 col-form-label"
+                      >Parts Arrival Date</label
+                    >
+                    <div class="col-lg-7">
+                      <mat-form-field class="custom-date w-100">
+                        <input readonly matInput (dateChange)="onDateSelection($event)" [matDatepicker]="picker" formControlName="partsArrivalDate" placeholder="Delivery Date" class="datepicker appInputRestriction" (click)="picker.open()" />
+                        <mat-datepicker-toggle matSuffix [for]="picker" [disableRipple]="true">
+                          <mat-icon>calendar_today</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker class="example-header"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- Inventory Status -->
+                  <div class="form-group row my-2">
+                    <label [ngClass]="{'text-danger': myForm.controls['inventoryStatus'].errors && myForm.controls['inventoryStatus'].touched}" for="InventoryStatus" class="col-lg-5 col-form-label"
+                      >Inventory Status <span class="text-danger">*</span></label
+                    >
+                    <div class="col-lg-7">
+                      <!-- <mat-form-field class="w-100" appearance="outline"> -->
+                        <mat-select class="formSelect" placeholder="--Select Status--" [ngClass]="{'has-error': myForm.controls['inventoryStatus'].errors && myForm.controls['inventoryStatus'].touched}" (selectionChange)="onSelectionChange($event)" formControlName="inventoryStatus">
+                          <mat-option *ngFor="let item of inventoryList" [value]="item.InventoryItemId">{{item.ItemStatus}}</mat-option>
+                        </mat-select>
+                      <!-- </mat-form-field> -->
+                    </div>
+                  </div>
+                  <!-- Item LT -->
+                  <div class="form-group row my-2">
+                    <label for="itemLt" class="col-lg-5 col-form-label"
+                      >Item LT</label
+                    >
+                    <div class="col-lg-7">
+                      <input
+                        type="text"
+                        readonly
+                        class="form-control"
+                        formControlName="itemLt"
+                        placeholder="Item LT"
+                      />
+                    </div>
+                  </div>
+                  <!-- RLT -->
+                  <div class="form-group row my-2">
+                    <label for="rlt" class="col-lg-5 col-form-label">RLT</label>
+                    <div class="col-lg-7">
+                      <input
+                          type="text"
+                          readonly
+                          class="form-control"
+                          [ngStyle]="{'color': myForm.controls['rlt'].value < 0 ? 'red' : ''}"
+                          formControlName="rlt"
+                          placeholder="RLT"
+                      />
+                  </div>
+                  
+                  </div>
+                   
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="button-container text-center position-relative">
+            <!-- <button [ngClass]="{'d-none': !panView}" class="btn btn-dark mx-2 shadow-sm copy-button py-1" (click)="copyToRight()">Copy from AX</button> -->
+            <button [ngClass]="{'d-none': !panView}" (click)="copyToRight()" class="Btn copy-button">
+              <div class="sign">
+                <i (click)="copyToRight()" class="fa-solid fa-circle-arrow-up"></i>
+              </div>
+  
+              <div class="text">Copy from AX</div>
+            </button>
+            <button (click)="cancelChange()" class="btn btn-outline-danger mx-2 shadow-sm save-cancel-button">
+              Cancel
+            </button>
+            <button class="btn btn-dark mx-2 shadow-sm save-cancel-button" (click)="saveData(dynamicData.dynamicData, dynamicData.inventoryItemId, dynamicData.inventoryItemNumber)">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Save and Cancel Buttons -->
+<!-- <mat-dialog-actions align="center" class="mb-2">
+  <div class="button-container text-center">
+    <button class="btn btn-dark mx-2 shadow-sm" (click)="saveData(dynamicData.dynamicData, dynamicData.inventoryItemId, dynamicData.inventoryItemNumber)">Save</button>
+    <button class="btn btn-outline-danger mx-2 shadow-sm">Cancel</button>
+  </div>
+</mat-dialog-actions> -->

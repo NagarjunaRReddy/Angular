@@ -1,0 +1,379 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+:root {
+  --primary-color: #4c89e1;
+  --secondary-color: #d3e4fd;
+  --delete-color: rgb(205, 29, 29);
+  --hover-color: #000000;
+  --primary-text-color: #000000;
+  --secondary-text-color: #333333;
+  --background-color: #f0f6ff;
+  --bg-color: #fff;
+  --box-shadow: 3px 3px 6px #b8b9be, -3px -3px 6px #fff;
+  --box-shadow-inset: inset 2px 2px 5px #b8b9be, inset -3px -3px 7px #fff;
+  --border-color: rgb(192, 192, 192);
+}
+
+// Dark mode overrides
+body.dark-mode {
+  --primary-color: #1d72b8;
+  --secondary-color: #3a4a72;
+  --hover-color: #ffffff;
+  --primary-text-color: #ffffff;
+  --secondary-text-color: #d3d3d3;
+  --background-color: #121212;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f0f6ff !important;
+  color: var(--primary-text-color);
+}
+
+.form-check-input {
+  font-size: 1.2rem !important;
+}
+
+// checkbox design designs
+.form-check-input:checked {
+  background-color: var(--primary-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+.form-check-input:focus {
+  border-color: var(--border-color) !important;
+  // box-shadow: 0 0 0 0.25rem var(--secondary-color) !important;
+  padding: 2px !important;
+}
+
+// inside of date picker calender
+.mat-datepicker-content .mat-calendar {
+  width: 240px !important;
+  height: 270px !important;
+  border-radius: 2px;
+  background-color: #fff;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.mat-datepicker-content .mat-calendar p,
+.mat-datepicker-content .mat-calendar span,
+.mat-datepicker-content .mat-calendar li {
+  font-size: 0.8rem !important;
+}
+
+.Save-btn {
+  background-color: var(--primary-color) !important;
+  color: var(--primary-text-color);
+  margin: 10px;
+  height: 30px;
+}
+
+.cancel-btn {
+  background-color: var(--delete-color) !important;
+  color: white !important;
+  margin: 10px;
+  height: 30px;
+}
+
+.custom-date .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}
+
+.custom-date .mat-mdc-form-field-infix {
+  padding: 2px !important;
+  min-height: 37px;
+}
+
+.datepcustom-dateicker .mdc-line-ripple::before {
+  display: none !important;
+}
+
+.custom-date .mdc-text-field--filled .mdc-line-ripple::after {
+  display: none !important;
+}
+
+.custom-date .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #fff;
+}
+
+.mdc-text-field--disabled.mdc-text-field--filled {
+  background-color: #fafafa;
+  background-color: var(--bs-secondary-bg);
+}
+
+.custom-date .mdc-line-ripple {
+  display: none;
+}
+
+.custom-date .mat-mdc-form-field:hover .mat-mdc-form-field-focus-overlay {
+  opacity: 0;
+}
+
+.custom-date .form-control:focus {
+  box-shadow: var(--box-shadow);
+}
+
+.custom-date .mat-mdc-form-field-focus-overlay {
+  background-color: rgb(0 0 0 / 0%);
+}
+
+.custom-date .mat-mdc-icon-button.mat-mdc-button-base {
+  height: 37px;
+  padding: 6px;
+  padding-top: 0px;
+}
+
+.mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
+  padding-right: 0;
+  padding-left: 5px !important;
+  font-size: 0.9rem !important;
+  border-radius: 5px;
+}
+
+.cdk-overlay-pane {
+  margin-top: 2px;
+}
+
+.mat-mdc-button:not(:disabled) {
+  color: white !important;
+}
+
+div.mat-mdc-select-panel {
+  margin-top: 6px;
+  padding: 0px !important;
+}
+
+.mat-mdc-select-trigger {
+  padding-inline: 10px;
+}
+
+.mat-mdc-select {
+  border-radius: 5px !important;
+}
+
+.mat-mdc-option {
+  min-height: 30px !important;
+}
+
+// .mat-mdc-form-field {
+//   background-color: #fff;
+//   // border: 1px solid black;
+//   border-radius: 0px;
+//   max-height: 30px;
+//   max-width: 80%;
+// }
+
+// From and To Date fields
+.dateFields {
+  background-color: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  max-height: 30px;
+}
+
+// header of date
+.mat-calendar-header {
+  // padding: 8px 8px 0 8px;
+  padding: 1px 4px 0px 0px !important;
+  background-color: var(--primary-color) !important;
+}
+
+// controls of date header
+.mat-calendar-controls {
+  display: flex;
+  align-items: center;
+  margin: 1% calc(4.7142857143% - 16px) !important;
+}
+
+// Bootstrap class edit
+.form-select {
+  padding: 0.3rem 0.75rem 0.375rem 0.75rem !important;
+  background-image: none !important;
+}
+
+// for Site Dropdown formSelect
+.formSelect {
+  width: 100%;
+  outline: none;
+  box-shadow: 0 0 1px gray;
+  background-color: #fff;
+  height: 30px;
+  display: flex !important;
+  border: 1px solid rgb(192, 192, 192);
+  align-items: center;
+  font-size: 0.75rem !important;
+}
+
+// for Site Dropdown option formselect
+.formOption {
+  font-size: 0.75rem !important;
+  background-color: #fff;
+}
+
+.mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,
+.mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+  font-size: 0.75rem !important;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+th {
+  white-space: nowrap;
+  text-transform: capitalize !important;
+}
+
+.mat-mdc-option.mdc-list-item {
+  font-size: 0.75rem !important;
+  height: 30px !important;
+}
+
+.save-cancel-button {
+  height: 30px;
+  display: flex !important;
+  align-items: center !important;
+  border-radius: 5px !important;
+}
+
+.btn-save {
+  background-color: var(--primary-color) !important;
+  color: #ffffff !important;
+}
+
+.mat-mdc-dialog-surface {
+  border-radius: 0px !important;
+}
+
+.model-title {
+  height: 30px;
+  display: flex;
+  font-size: 1.1rem;
+  background-color: var(--primary-color);
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mat-mdc-form-field {
+  flex: 1 !important;
+}
+
+// Input text
+.form-control {
+  border: 1px solid var(--border-color) !important;
+  border-radius: 5px !important;
+  font-size: 0.75rem !important;
+  // height: 30px !important;
+}
+
+textarea.form-control {
+  border-radius: 5px !important;
+  font-size: 0.75rem !important;
+}
+
+//Dropdown select options
+.mat-mdc-option .mdc-list-item__primary-text {
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+}
+
+.form-label {
+  white-space: nowrap;
+}
+
+.btn-dark {
+  border-radius: 5px !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.btn-outline-secondary {
+  border-radius: 5px !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+//** Side Container with btns*/
+.row .side-container {
+  border: 1px solid #e5e5e5ef !important;
+  border-radius: 5px !important;
+
+  button {
+    border: 1px solid var(--border-color) !important;
+    border-radius: 5px !important;
+  }
+}
+
+.cdk-overlay-pane.mat-mdc-dialog-panel {
+  max-width: inherit !important;
+}
+
+// color report BOM Export Buttons
+.export-btn {
+  height: 30px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+// For Input type = Color Picker  
+.selectColor {
+  cursor: pointer;
+}
+
+th {
+  letter-spacing: 1px !important;
+}
+
+.mat-sort-header-container {
+  justify-content: center !important;
+}
+
+// For table sorting the arrow symbol (Master Component)
+.mat-sort-header-arrow {
+  color: rgb(245, 239, 239) !important;
+}
+
+.has-error {
+  border: 2px solid red !important;
+}
+
+.invalid-feedback {
+  display: block !important;
+  position: absolute;
+  margin-top: 5px;
+  width: auto !important;
+  font-size: 12px !important;
+}
+
+.invalid-feedback span {
+  margin-top: 0px;
+  position: absolute;
+  width: max-content;
+  bottom: -6px;
+}
+
+// For Mat tab label
+.mat-mdc-tab.mdc-tab {
+  height: 30px !important;
+  border: 1px solid blueviolet;
+}
+
+// Mat TAB LABEL
+.mdc-tab.mat-mdc-tab.mat-mdc-focus-indicator.mdc-tab--active.mdc-tab-indicator--active {
+  background-color: var(--primary-color);
+  clip-path: polygon(9% 0%, 0% 0%, 100% 0%, 100% 100%, 0% 100%, -10% 100%);
+
+  .mdc-tab__text-label {
+    color: #ffffff;
+  }
+}
+
+label {
+  text-transform: capitalize !important;
+}

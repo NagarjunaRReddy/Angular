@@ -1,0 +1,15 @@
+.model-title{
+  height: 30px;
+  display: flex;    
+  justify-content: center;
+  font-size: 1.1rem;
+  background: linear-gradient(45deg, #e8363e, #8c1a15);
+}
+
+.fa-circle-xmark {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 1.3rem;
+  cursor: pointer;
+}

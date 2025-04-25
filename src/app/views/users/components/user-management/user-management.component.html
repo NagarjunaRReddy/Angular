@@ -1,0 +1,15 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="p-0 px-2 pt-2 side-container">
+      <button class="cursor-pointer btn shadow-sm px-2 mb-1" [class.active]="data.name === activeData"
+        *ngFor="let data of userSideData" [hidden]="!data.ReadAccess" [routerLink]="data.MenuPath" routerLinkActive="active" [matTooltip]="data.Menu_Name"
+        matTooltipPosition="right">
+        {{ data.Menu_Name }}
+        <!-- Display text for button -->
+      </button>
+    </div>
+    <div class="main-container page-layout p-0">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

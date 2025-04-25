@@ -1,0 +1,75 @@
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+  {{ data.title }}
+  <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+</h4>
+<mat-dialog-content class="py-1 mt-2">
+  <form [formGroup]="addEditForm">
+    <div class="form-group row align-items-center mb-2">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="CustomerOrderStatusName" class="">CO Status</label><label class="text-danger">*</label>
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align">
+        <input [ngClass]="{
+            'has-error':
+              addEditForm.controls['Co_StatusName'].errors &&
+              addEditForm.controls['Co_StatusName'].touched
+          }" type="text" [readOnly]="data.view" class="form-control m-2" placeholder="Enter Co Status"
+          formControlName="Co_StatusName" />
+        <div *ngIf="submittedForm && addEditForm.controls['Co_StatusName'].errors" class="invalid-feedback my-2">
+          <span *ngIf="addEditForm.controls['Co_StatusName'].hasError('required')" class="px-2 my-1">Co Status is
+            required</span>
+          <span class="px-2 my-1" *ngIf="
+              addEditForm.controls['Co_StatusName'].hasError(
+                'cannotContainSpace'
+              )
+            ">White Spaces not allowed</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="priority" class="">Priority</label><label class="text-danger">*</label>
+      </div>
+
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align">
+        <input [ngClass]="{
+            'has-error':
+              addEditForm.controls['priority'].errors && submittedForm
+          }" type="number" [readOnly]="data.view" class="form-control m-2" placeholder="Enter Priority"
+          formControlName="priority" />
+        <div *ngIf="submittedForm && addEditForm.controls['priority'].errors" class="invalid-feedback my-2">
+          <span *ngIf="addEditForm.controls['priority'].hasError('required')" class="px-2 my-1">Priority is
+            required</span>
+
+          <span *ngIf="addEditForm.get('priority').hasError('min')" class="px-2 my-1"> Priority must be greater than
+            0.</span>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="ColorCode" class="">Color Code</label><label class="text-danger">*</label>
+      </div>
+
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align">
+        <input [ngClass]="{
+            'has-error':
+              addEditForm.controls['ColorCode'].errors &&
+              addEditForm.controls['ColorCode'].touched
+          }" type="color" [readOnly]="data.view" class="form-control m-2 selectColor"
+          placeholder="Enter ColorCode Name" formControlName="ColorCode" />
+        <div *ngIf="submittedForm && addEditForm.controls['ColorCode'].errors" class="invalid-feedback my-2">
+          <span *ngIf="addEditForm.controls['ColorCode'].hasError('required')" class="px-2">ColorCode is required</span>
+          <span *ngIf="
+              addEditForm.controls['ColorCode'].hasError('cannotContainSpace')
+            ">White Spaces not allowed</span>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="mb-2">
+  <button mat-raised-button color="warn" (click)="onCancel()" class="btn btn-danger save-cancel-button">
+    Cancel
+  </button>
+  <button mat-raised-button class="btn save-cancel-button btn-save ms-2" (click)="onSave()">
+    {{ data.button }}
+  </button>
+</mat-dialog-actions>

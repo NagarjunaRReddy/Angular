@@ -1,0 +1,46 @@
+.container-fluid {
+  position: absolute;
+  top: 0;
+  z-index: 999;
+  .top-container {
+    margin-left: 80px;
+    padding: 10px 0px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #d8d8d8;
+    align-items: flex-end;
+    .title {
+      font-size: 1.6rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: #333;
+    }
+    .search-container {
+      display: flex;
+      justify-content: end;
+      .form-select {
+        border-radius: 25px;
+
+        &::placeholder {
+          font-size: 0.8rem;
+        }
+      }
+      .search-input {
+        i {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+        .form-control {
+          border-radius: 25px !important;
+          height: 38px !important;
+          padding-left: 35px;
+          &::placeholder {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+}

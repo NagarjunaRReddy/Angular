@@ -1,0 +1,81 @@
+<h4 mat-dialog-title class=" text-white position-relative model-title">{{ data.title }} <i class="fa-solid fa-circle-xmark" (click)="onCancel()"></i></h4>
+
+<mat-dialog-content class="m-1 p-1">
+ <div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12 px-1">
+       <!-- Container for the editable table -->
+  <div class="table-container">
+    <!-- Form with formGroup binding -->
+    <form [formGroup]="form">
+        <!-- Table for SOP edit with formArray binding -->
+        <table class="table table-striped">
+          <!-- Table header -->
+          <thead>
+            <tr>
+              <th style="width: 4%;">SL.No.</th>
+            <th style="width: 28%;">Item Description</th>
+            <th style="width: 15%;">Quantity</th>
+            <th style="width: 15%;">Status</th>
+            <th style="width: 15%;">Responsible</th>
+            <th style="width: 15%;">Comments</th>
+            <th style="width: 7%;">Action</th>
+            </tr>
+          </thead>
+          <!-- Table body with formArrayName binding -->
+          <tbody formArrayName="items">
+            <!-- Table row for each form group in the formArray -->
+            <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+              <td>
+                {{i+1}}
+              </td>
+              <td>
+                <!-- Input field for Action Identified -->
+                <textarea cols="30" formControlName="itemDesc" class="form-control"></textarea>
+              </td>
+              <td>
+                <input type="number" name="Quantity" id="Quantity" formControlName="quantity" class="form-control">
+              </td>
+              <td>
+                  <mat-select class="formSelect" placeholder="--Select Status--" formControlName="status" >
+                    <mat-option *ngIf="filterResponsibleLists[i]?.length == 0" disabled>No Data</mat-option>
+                    <mat-option *ngFor="let bom of bomStatusList" [value]="bom.BOMStatusId">{{bom.BOMStatusName}}</mat-option>
+                  </mat-select>
+              </td>
+              <td>
+                  <mat-select class="formSelect" placeholder="--Select Responsible--" formControlName="responsible">
+                    <div class="search-box">
+                      <input #actions (input)="filterActions(i, actions.value)" type="text" class="search-drpdwn" placeholder="Search"
+                          (keydown)="$event.stopPropagation()">
+                    </div>
+                    <mat-option *ngIf="filterResponsibleLists[i]?.length == 0" disabled>No Data</mat-option>
+                    <mat-option *ngFor="let item of filterResponsibleLists[i]" [value]="item.ActionResponsibleId">{{item.ActionResponsibleName}}</mat-option>
+                  </mat-select>
+              </td>
+              <td>
+                <textarea formControlName="comment" class="form-control" name="Comments" id="Comments" cols="30" rows="10"></textarea>
+              </td>
+              <td>
+                <!-- Icons for adding and removing rows -->
+                <div class="actionIcon">
+                    <i matTooltip="Remove" *ngIf="i > 0 || items.length > 1" class="fa-solid fa-circle-minus text-danger px-2" (click)="removeItem(i)"></i>
+                    <i matTooltip="Add" *ngIf="i == items.length-1" class="fa-solid fa-circle-plus text-dark px-2" (click)="addItem()"></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </form>
+</div>
+    </div>
+  </div>
+ </div> 
+ 
+</mat-dialog-content>
+
+
+<!-- Mat Dialog actions for Cancel and Submit buttons -->
+<mat-dialog-actions align="center" class="m-1">
+    <button (click)="cancelChange()" class="btn btn-outline-danger mx-2 shadow-sm py-1 save-cancel-button">Cancel</button>
+    <button class="btn btn-dark mx-2 shadow-sm py-1 save-cancel-button" (click)="onSubmit()">{{data.button}}</button>
+</mat-dialog-actions>

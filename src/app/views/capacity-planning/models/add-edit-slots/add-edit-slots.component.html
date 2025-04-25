@@ -1,0 +1,76 @@
+<!-- Dialog Header -->
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+  <!-- Dialog title from input data -->
+  {{ data.title }}
+  <!-- Close button with tooltip -->
+  <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+</h4>
+
+<!-- Dialog Content Section -->
+<mat-dialog-content class="py-1 mt-2">
+  <!-- Form container - only shown if addEditForm exists -->
+  <form *ngIf="addEditForm" [formGroup]="addEditForm">
+    <!-- Slot Number Input Section -->
+    <div class="form-group row align-items-center">
+      <!-- Label Section -->
+      <div class="col-lg-6 col-md-4 col-sm-12 col-form-label">
+        <label for="production_Number">Slot Number</label>
+        <!-- Required field indicator -->
+        <label class="text-danger">*</label><br>
+        <!-- Helper text -->
+        <small class="text-warning">In numbers</small>
+      </div>
+
+      <!-- Input Field Section -->
+      <div class="col-lg-6 col-md-4 col-sm-12 validator-align">
+        <!-- Number input for slot -->
+        <input type="number" [readOnly]="data.view" class="form-control m-2 my-2 inputControl"
+          placeholder="Enter Production Slot" maxlength="4" formControlName="production_Number" />
+
+        <!-- Validation Error Messages -->
+        <div *ngIf="submittedForm && addEditForm.controls['production_Number'].errors" class="invalid-feedback mb-2">
+          <!-- Required field error -->
+          <span *ngIf="addEditForm.controls['production_Number'].hasError('required')" class="px-2">
+            Production slot number is required
+          </span>
+          <!-- Pattern validation error -->
+          <span *ngIf="addEditForm.controls['production_Number'].hasError('pattern')">
+            Cannot contain text value.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dynamic Slot Descriptions Section -->
+    <div formArrayName="slot_Descriptions">
+      <!-- Loop through each slot description control -->
+      <div *ngFor="let control of slotDescriptions.controls; let i = index">
+        <div class="form-group row align-items-center">
+          <!-- Description Label -->
+          <div class="col-lg-6 col-md-4 col-sm-12 col-form-label">
+            <label>{{ capacityData[i]?.CapacityName }} Description</label>
+          </div>
+
+          <!-- Description Input -->
+          <div class="col-lg-6 col-md-4 col-sm-12 validator-align">
+            <input type="text" [readOnly]="data.view" class="form-control m-2 my-2 inputControl" [formControlName]="i"
+              [placeholder]="capacityData[i]?.CapacityName.trim()" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<!-- Dialog Action Buttons -->
+<mat-dialog-actions *ngIf="!data.view" align="center" class="mb-2">
+  <!-- Only shown when not in view mode -->
+  <!-- Cancel Button -->
+  <button class=" btn btn-danger save-cancel-button" (click)=" onCancel()">
+    Cancel
+  </button>
+  <!-- Save/Update Button -->
+  <button class=" btn save-cancel-button btn-save ms-2" (click)="onSave()">
+    {{ data.button }}
+  </button>
+</mat-dialog-actions>

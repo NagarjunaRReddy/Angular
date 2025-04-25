@@ -1,0 +1,33 @@
+<!-- Include the app-common-sop-edit-table component with commonTableData as input -->
+<app-common-sop-edit-table [commonTableData]="commonTableData"></app-common-sop-edit-table>
+
+<!-- Container for the table with Bootstrap classes -->
+<div class="container-fluid">
+    <!-- Row to center the table in a specific column width with offset -->
+    <div class="row">
+        <div class="col-lg-6 offset-lg-3">
+            <!-- Table container with margin, padding, and elevation -->
+            <div class="table-container mx-1 mt-2 py-2">
+                <!-- Mat table with dataSource binding and sorting functionality -->
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+                  
+                  <!-- Define columns dynamically using ngFor -->
+                  <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+                    <!-- Header cell with sorting enabled -->
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef>{{ column.header }}</th>
+                    <!-- Body cell with center-aligned text -->
+                    <td [style.background-color]="element.colorCode" class="text-center" mat-cell *matCellDef="let element">
+                        <!-- Use formatDate pipe for date column -->
+                        {{ column.columnDef === 'coDate' ? ConvertDate(element[column.columnDef]) : element[column.columnDef] }}
+                    </td>
+                  </ng-container>
+              
+                  <!-- Header row definition -->
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:displayedColumns.includes('select')?false:true"></tr>
+                  <!-- Data row definition -->
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

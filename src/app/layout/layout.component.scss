@@ -1,0 +1,19 @@
+.container-fluid {
+    .main-container {
+      display: flex;
+      height: 100vh; // Full height of the viewport for a sidebar layout
+  
+      .side-nav {
+        width: 4%;
+        background-color: #f0f0f0; // Optional: Set background color for clarity
+      }
+  
+      .main-content {
+        width: 95%;
+        padding: 20px; // Optional: Add padding for content spacing
+        // overflow-y: auto; // Enable scrolling if content is large
+        // background-color: #f2f2f2;
+      }
+    }
+  }
+  

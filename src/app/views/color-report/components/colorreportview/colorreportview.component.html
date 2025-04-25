@@ -1,0 +1,83 @@
+<h4 mat-dialog-title class=" text-white position-relative model-title p-0">{{ data.title }}
+  <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+</h4>
+<mat-dialog-content class="mat-typography position-relative bom-invoice m-1 p-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 mt-3" #content>
+        <div class="row mb-1">
+          <div class="col-sm-4">
+            <div><b>Production Order:</b> {{prodId}}</div>
+            <div>{{itemId}}</div>
+          </div>
+          <div class="col-sm-4">
+            <div><b>End User:</b> {{customer}}</div>
+            <div>{{itemName}}</div>
+          </div>
+          <div class="col-sm-4">
+            <!-- <div><b>SO:</b> {{salesId}}</div> -->
+            <div><b>SCCA:</b> {{configuration}}</div>
+          </div>
+          <hr class="m-0">
+        </div>
+
+        <div class="row bom-order-data ">
+          <div class="col-sm-4">
+            <div><b>{{salesId}}</b></div>
+            <div><b>VIN :</b> {{vin}}</div>
+            <div><b>Make:</b> {{make}}</div>
+            <div><b>Key Num:</b> {{keyNumber}}</div>
+          </div>
+          <div class="col-sm-4">
+            <!-- <div><b>Sales Order:</b> {{salesId}}</div> -->
+            <div><b>Frame Width:</b> {{frameWidth}}</div>
+            <div><b>Model:</b> {{model}}</div>
+            <div><b>YEAR:</b> {{modelYear}}</div>
+
+          </div>
+          <div class="col-sm-4">
+            <div style="visibility: hidden;"></div>
+            <div><b>CA:</b> {{ca}}</div>
+            <div><b>PRD Start Date:</b> {{ ConvertDate(prodStartDate ) | date:'MM/dd/YYYY'}}</div>
+            <div><b>PRD Delivery Date:</b> {{ConvertDate(prodDeliveryDate) | date:'MM/dd/YYYY'}}</div>
+          </div>
+        </div>
+        <hr class="m-0">
+        <div class="row mt-2">
+          <div class="col-lg-2 offset-lg-10 download-container top-buttons">
+            <button class="btn btn-outline-dark mx-1 shadow-sm export-btn" matTooltip="Export Excel"
+              (click)="SaveExcel()"><i class="fa-solid fa-file-excel "></i></button>
+            <button class="btn btn-outline-dark mx-1 shadow-sm export-btn" matTooltip="Export PDF"
+              (click)="SavePDF()"><i class="fa-solid fa-file-pdf "></i></button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 px-1">
+            <table aria-describedby="BOM table" class="table table-bordered my-2 shadow-sm">
+              <thead>
+                <tr class="bg-dark text-white">
+                  <th>Item ID</th>
+                  <th>Item Name</th>
+                  <th>Qty</th>
+                  <th>Opr Num</th>
+                  <th>Inventory Status</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let item of listData">
+                  <td>{{item.itemId}}</td>
+                  <td>{{item.itemName}}</td>
+                  <td>{{item.Qty}}</td>
+                  <td>{{item.oprNum}}</td>
+                  <td>{{item.inventStatus}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

@@ -1,0 +1,379 @@
+<div class="container-fluid py-2">
+    <div class="row">
+      <!-- Table Settings Section -->
+      <div class="col-md-3 pe-0">
+        <div class="card shadow-sm">
+          <div class="card-header p-1">
+            <p class="mb-0 card-title">Table Settings</p>
+          </div>
+          <div class="card-body">
+            <form>
+                <div class="mb-3 row">
+                  <label for="tenant" class="form-label col-lg-4">Tenant</label>
+                  <div class="col-lg-8">
+                      <select
+                        id="tenant"
+                        class="form-select col-lg-8"
+                        [(ngModel)]="settings.tenant"
+                        name="tenant"
+                      >
+                        <option value="">-</option>
+                        <option [value]="tenant.TenantId" *ngFor="let tenant of TenantData">
+                          {{tenant.TenantName}}
+                      </option>
+                      
+                      </select>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label for="role" class="form-label col-lg-4">Role</label>
+                  <div class="col-lg-8">
+                    <select
+                    id="role"
+                    class="form-select"
+                    [(ngModel)]="settings.role"
+                    name="role"
+                  > 
+                    <option value="">-</option>
+                    <option [value]="role.RoleId" *ngFor="let role of roleData">
+                      {{role.RoleName}}
+                  </option>
+                  </select>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-6">
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="scrollable"
+                        [(ngModel)]="settings.scrollable"
+                        name="scrollable"
+                        (ngModelChange)="onScrollableToggle($event)"
+                      />
+                      <label class="form-check-label" for="scrollable">Scrollable</label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="pagination"
+                        [(ngModel)]="settings.pagination"
+                        name="pagination"
+                        (ngModelChange)="onPaginationToggle($event)"
+                      />
+                      <label class="form-check-label" for="pagination">Pagination</label>
+                    </div>
+                  </div>
+                  
+                  <div class="col-6">
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="sorting"
+                        [(ngModel)]="settings.sorting"
+                        name="sorting"
+                        (change)="onSortingToggle($event)"
+                      />
+                      <label class="form-check-label" for="sorting">Sorting</label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="filter"
+                        [(ngModel)]="settings.filter"
+                        name="filter"
+                      />
+                      <label class="form-check-label" for="filter">Filter</label>
+                    </div>
+                  </div>
+                  
+                  <div class="col-6">
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="multiselect"
+                        [(ngModel)]="settings.multiselect"
+                        name="multiselect"
+                      />
+                      <label class="form-check-label" for="multiselect">Multiselect</label>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            <div class="text-center">
+              <button class="btn btn-outline-secondary me-2" (click)="resetSettings()">Cancel</button>
+              <button class="btn btn-primary" (click)="applySettings()">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Table Preview Section -->
+      <div class="col-md-9 ps-0">
+        <div class="card shadow-sm">
+            <div class="card-header p-1">
+              <p class="mb-0">Preview</p>
+            </div>
+            <div class="card-body">
+              <!-- Filter Input -->
+              <div *ngIf="settings.filter" class="mb-3">
+                  <div class="row">
+                    <div class="col-lg-3 offset-lg-9 position-relative">
+                        <i class="fa-solid search-icon fa-magnifying-glass"></i>
+                        <input class="form-control" (keyup)="applyFilter($event)" placeholder="Search...">
+                    </div>
+                  </div>
+              </div>
+    
+              <!-- Mat Table -->
+              <div *ngIf="!settings.sorting" [ngClass]="{ 'table-scrollable': settings.scrollable }">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+                  <!-- Multiselect Column -->
+                  <ng-container matColumnDef="select" *ngIf="settings.multiselect">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <mat-checkbox (change)="toggleSelectAll($event)"></mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <mat-checkbox [(ngModel)]="row.selected"></mat-checkbox>
+                    </td>
+                  </ng-container>
+    
+                  <!-- Column Definitions -->
+                  <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+                    <!-- <ng-container *ngIf="settings.sorting">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</th>
+                    </ng-container> -->
+                    <!-- <ng-container *ngIf="!settings.sorting"> -->
+                      <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
+                    <!-- </ng-container> -->
+                    <td mat-cell *matCellDef="let row">{{ row[column] }}</td>
+                  </ng-container>
+                  
+    
+                  <!-- Header Row -->
+                  <tr mat-header-row *matHeaderRowDef="getColumns()"></tr>
+                  <!-- Data Rows -->
+                  <tr mat-row *matRowDef="let row; columns: getColumns();"></tr>
+                </table>
+    
+                <!-- Pagination -->
+                <mat-paginator class="shadow-sm" *ngIf="settings.pagination" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                </mat-paginator>
+              </div>
+              <!-- Mat Table -->
+              <div *ngIf="settings.sorting" [ngClass]="{ 'table-scrollable': settings.scrollable }">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+                  <!-- Multiselect Column -->
+                  <ng-container matColumnDef="select" *ngIf="settings.multiselect">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <mat-checkbox (change)="toggleSelectAll($event)"></mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <mat-checkbox [(ngModel)]="row.selected"></mat-checkbox>
+                    </td>
+                  </ng-container>
+    
+                  <!-- Column Definitions -->
+                  <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+                    <!-- <ng-container *ngIf="settings.sorting"> -->
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</th>
+                    <!-- </ng-container> -->
+                    <!-- <ng-container *ngIf="!settings.sorting">
+                      <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
+                    </ng-container> -->
+                    <td mat-cell *matCellDef="let row">{{ row[column] }}</td>
+                  </ng-container>
+                  
+    
+                  <!-- Header Row -->
+                  <tr mat-header-row *matHeaderRowDef="getColumns()"></tr>
+                  <!-- Data Rows -->
+                  <tr mat-row *matRowDef="let row; columns: getColumns();"></tr>
+                </table>
+    
+                <!-- Pagination -->
+                <mat-paginator class="shadow-sm" *ngIf="settings.pagination" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                </mat-paginator>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+<div class="container-fluid">
+    <div class="row">
+      <!-- Table Settings Section -->
+      <div class="col-md-4 pe-0">
+        <div class="card shadow-sm">
+          <div class="card-header p-1">
+            <p class="mb-0 card-title">Theme Settings</p>
+          </div>
+          <div class="card-body">
+            <form>
+
+              <!-- Tenant -->
+              <div class="mb-3 row">
+                <label for="tenant" class="form-label col-lg-4">Tenant</label>
+                <div class="col-lg-8">
+                    <select
+                      id="tenant"
+                      class="form-select col-lg-8"
+                      [(ngModel)]="themeSettings.tenant"
+                      name="tenant"
+                    >
+                      <option value="">-</option>
+                      <option [value]="tenant.TenantId" *ngFor="let tenant of TenantData">
+                        {{tenant.TenantName}}
+                    </option>
+                    </select>
+                </div>
+              </div>
+
+              <!-- Role -->
+              <div class="mb-3 row">
+                <label for="role" class="form-label col-lg-4">Role</label>
+                <div class="col-lg-8">
+                  <select
+                  id="role"
+                  class="form-select"
+                  [(ngModel)]="themeSettings.role"
+                  name="role"
+                > 
+                  <option value="">-</option>
+                  <option [value]="role.RoleId" *ngFor="let role of roleData">
+                    {{role.RoleName}}
+                </option>
+                </select>
+                </div>
+              </div>
+
+              <!-- Header logo -->
+              <div class="row mb-3">
+                <label for="role" class="form-label col-lg-4">Header Logo</label>
+                <input (change)="onHeaderLogoFileSelected($event)" hidden type="file" accept="image/*" id="headerLogo" class="form-control my-2" placeholder="Enter URL">
+                <div class="col-lg-8 d-flex justify-content-between">
+                  <img height="30px" width="40px" [src]="headerLogo" alt="">
+                  <label class="image-upload " for="headerLogo">
+                      <i class="fa-solid fa-upload"></i>
+                      <span>Upload file(Image only)</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Logo Width -->
+              <div class="mb-3 row">
+                <label for="role" class="form-label col-lg-4">Logo Width</label>
+                <div class="col-lg-8">
+                  <input [(ngModel)]="themeSettings.logoWidth" type="number" name="logoWidth" id="logoWidth" class="form-control">
+                </div>
+              </div>
+
+              <!-- Logo Height -->
+              <div class="mb-3 row">
+                <label for="role" class="form-label col-lg-4">Logo Height</label>
+                <div class="col-lg-8">
+                  <input [(ngModel)]="themeSettings.logoHeight" type="number" name="logoHeight" id="logoHeight" class="form-control">
+                </div>
+              </div>
+
+              <!-- Navbar -->
+              <div class="mb-3 row">
+                <label for="role" class="form-label col-lg-4">Navbar</label>
+                <div class="col-lg-8">
+                  <label class="switch">
+                    <input (change)="onNavbarToggleChange($event)" [(ngModel)]="isNavbarRight" [ngModelOptions]="{standalone: true}" type="checkbox">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </form>
+
+            <div class="text-center">
+              <button class="btn btn-outline-secondary me-2" (click)="resetThemeSettings()">Cancel</button>
+              <button class="btn btn-primary" (click)="applyThemeSettings()">Save</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+  
+      <!-- Table Preview Section -->
+      <div class="col-md-8 ps-0">
+        <div class="card shadow-sm">
+            <div class="card-header p-1">
+              <p class="mb-0">Colour Theme Settings</p>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="mb-3 row">
+                    <label for="role" class="form-label col-lg-6">Color Mode</label>
+                    <div class="col-lg-6">
+                      <label class="switch">
+                        <input (change)="toggleMode($event)" [(ngModel)]="isDarkMode" [ngModelOptions]="{standalone: true}" type="checkbox">
+                        <span class="slider mode"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="role" class="form-label col-lg-6">Primary Background Colour</label>
+                    <div class="col-lg-6 color-form">
+                      <span>{{colourThemeSettings.primaryBackgroundColour}}</span>
+                      <input type="color" id="primaryBackgroundColour" [(ngModel)]="colourThemeSettings.primaryBackgroundColour" class="form-control">
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="role" class="form-label col-lg-6">Secondary Background Colour</label>
+                    <div class="col-lg-6 color-form">
+                      <span>{{colourThemeSettings.secondaryBackgroundColour}}</span>
+                      <input type="color" id="secondaryBackgroundColour" [(ngModel)]="colourThemeSettings.secondaryBackgroundColour" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="mb-3 row">
+                    <label for="role" class="form-label col-lg-6">Primary Text Colour</label>
+                    <div class="col-lg-6 color-form">
+                      <span>{{colourThemeSettings.primaryTextColour}}</span>
+                      <input type="color" id="primaryTextColour" [(ngModel)]="colourThemeSettings.primaryTextColour" class="form-control">
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="role" class="form-label col-lg-6">Secondary Text Colour</label>
+                    <div class="col-lg-6 color-form">
+                      <span>{{colourThemeSettings.secondaryTextColour}}</span>
+                      <input type="color" id="secondaryTextColour" [(ngModel)]="colourThemeSettings.secondaryTextColour" class="form-control">
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="role" class="form-label col-lg-6">On Hover Colour</label>
+                    <div class="col-lg-6 color-form">
+                      <span>{{colourThemeSettings.onHoverColour}}</span>
+                      <input type="color" id="onHoverColour" [(ngModel)]="colourThemeSettings.onHoverColour" class="form-control">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="text-center">
+                    <button (click)="resetColorThemeSettings()" class="btn btn-outline-secondary me-2">Cancel</button>
+                    <button (click)="saveColorThemeSettings()" class="btn btn-primary">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  

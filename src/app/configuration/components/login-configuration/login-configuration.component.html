@@ -1,0 +1,150 @@
+<div class="container-fluid p-2 position-relative">
+      <!-- Configuration Panel -->
+      <div cdkDragBoundary=".login-configuration" cdkDrag class="col-4 configuration-panel shadow-sm">
+          <div class="title mb-1">
+            <h6>Menu Options</h6>
+            <button (click)="toggleConfigurator()" class="btn btn-primary shadow-sm" type="button">
+                <i *ngIf="configuratorOpen" class="fa-solid fa-eye-slash pe-2"></i> 
+                <i *ngIf="!configuratorOpen" class="fa-solid fa-eye pe-2"></i> 
+                {{configuratorOpen ? 'Hide' : 'Show'}} menu
+            </button>
+        </div>
+        <hr *ngIf="configuratorOpen" class="m-0"> 
+        <form *ngIf="configuratorOpen" [formGroup]="configForm">
+            <div class="form-group  row align-items-center">
+
+                <!-- Background Type -->
+              <div class="col-lg-6 col-form-label d-flex">
+                <label for="alignment">Background Type - </label>
+              </div>
+              <div class="col-lg-6 validator-align">
+                <div id="backgroundType" class="d-flex">
+                  <label class="form-check-label me-2">
+                    <input type="radio" value="image" formControlName="backgroundType" (change)="onBackgroundTypeChange()" class="form-check-input">
+                    Image
+                  </label>
+                  <label class="form-check-label me-2">
+                    <input type="radio" value="color" formControlName="backgroundType" (change)="onBackgroundTypeChange()" class="form-check-input">
+                    Color
+                  </label>
+                </div>
+
+              </div> 
+
+              <!-- Background Color -->
+              <div *ngIf="!enableBackgroundImage" class="col-lg-6 col-form-label d-flex">
+                <label for="backgroundColor">Background Color - </label>
+              </div>
+              <div *ngIf="!enableBackgroundImage" class="col-lg-6 validator-align color-form">
+                <span>{{formValues.backgroundColor}}</span>
+                <input type="color" id="backgroundColor" formControlName="backgroundColor" class="form-control my-2">
+              </div>
+          
+              <!-- Background Image URL -->
+              <div *ngIf="enableBackgroundImage" class="col-lg-5 col-form-label d-flex my-2">
+                <label for="backgroundImage">Background Image - </label>
+              </div>
+              <div *ngIf="enableBackgroundImage" class="col-lg-7 validator-align d-flex justify-content-between my-2">
+                <img height="30px" [src]="backgroundImageURL" alt="">
+                <input (change)="onBackgroundFileSelected($event)" hidden type="file" accept="image/*" id="backgroundImage" formControlName="backgroundImage" class="form-control my-2" placeholder="Enter URL">
+                <label class="image-upload" for="backgroundImage">
+                    <i class="fa-solid fa-upload"></i>
+                    <span>Upload file(Image only)</span>
+                </label>
+              </div>
+              
+            <!-- Login Form Background Color -->
+            <div class="col-lg-6 col-form-label d-flex">
+                <label for="loginFormBackgroundColor">Form Background - </label>
+              </div>
+              <div class="col-lg-6 validator-align color-form">
+                <span>{{formValues.loginFormBackgroundColor}}</span>
+                <input type="color" id="loginFormBackgroundColor" formControlName="loginFormBackgroundColor" class="form-control my-2">
+              </div>
+            </div>
+
+          
+            <div class="form-group  row align-items-center">
+              <!-- Text Color -->
+              <div class="col-lg-6 my-2 col-form-label d-flex">
+                <label for="textColor">Text Color - </label>
+              </div>
+              <div class="col-lg-6 my-2 validator-align color-form">
+                <span>{{formValues.textColor}}</span>
+                <input type="color" id="textColor" formControlName="textColor" class="form-control">
+
+              </div>
+
+              <!-- Form Alignment -->
+              <div class="col-lg-6 col-form-label d-flex">
+                <label for="alignment">Form Alignment - </label>
+              </div>
+              <div class="col-lg-6 validator-align">
+                <div id="alignment" class="d-flex">
+                  <label class="form-check-label me-2">
+                    <input type="radio" value="left" formControlName="alignment" class="form-check-input">
+                    Left
+                  </label>
+                  <label class="form-check-label me-2">
+                    <input type="radio" value="center" formControlName="alignment" class="form-check-input">
+                    Center
+                  </label>
+                  <label class="form-check-label">
+                    <input type="radio" value="right" formControlName="alignment" class="form-check-input">
+                    Right
+                  </label>
+                </div>
+
+              </div> 
+          
+              
+          
+              
+            </div>
+            <div class="form-group my-2  row align-items-center">
+                  <!-- Button BG Color -->
+              <div class="col-lg-6 my-2 col-form-label d-flex">
+                <label for="buttonBgColor">Button background color - </label>
+              </div>
+              <div class="col-lg-6 my-2 validator-align color-form">
+                <span>{{formValues.buttonBgColor}}</span>
+                <input type="color" id="buttonBgColor" formControlName="buttonBgColor" class="form-control">
+              </div>
+
+                <!-- Button Text Color -->
+              <div class="col-lg-6 my-2 col-form-label d-flex">
+                <label for="buttonTextColor">Button text color - </label>
+              </div>
+              <div class="col-lg-6 my-2 validator-align color-form">
+                <span>{{formValues.buttonTextColor}}</span>
+                <input type="color" id="buttonTextColor" formControlName="buttonTextColor" class="form-control">
+              </div>
+              <!-- Logo Image URL -->
+              <div class="col-lg-4 col-form-label d-flex">
+                <label for="logoImage">Logo Image - </label>
+              </div>
+              <div class="col-lg-8 validator-align d-flex justify-content-between">
+                <img height="30px" [src]="logoURL" alt="">
+                <input (change)="onFileSelected($event)" hidden type="file" accept="image/*" id="logoImage" formControlName="logoImage" class="form-control" placeholder="Enter URL">
+                <label class="image-upload" for="logoImage">
+                    <i class="fa-solid fa-upload"></i>
+                    <span>Upload file(Image only)</span>
+                </label>
+              </div>
+            </div>            
+        <!-- Reset Button -->
+            <div class="col-12 text-center">
+              <button class="btn btn-primary shadow-sm my-2" type="button" (click)="resetDefaults()">
+                <i class="fa-solid fa-rotate-left"></i>
+                Reset
+            </button>
+              <button class="btn btn-primary shadow-sm my-2 ms-2" type="button" (click)="saveData()">
+                Save
+            </button>
+            </div>
+          </form>
+          
+      </div>
+      <app-login-preview *ngIf="isLoading" [logoURL]="logoURL" [backgroundImageURL]="backgroundImageURL" [formData]="formValues"></app-login-preview>
+  </div>
+  

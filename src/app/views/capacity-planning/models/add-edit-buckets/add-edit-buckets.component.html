@@ -1,0 +1,251 @@
+<!-- Dialog title section -->
+<h4 mat-dialog-title class="text-white position-relative model-title p-1">
+  {{ data.title }}
+  <!-- Title of the dialog, dynamically set based on passed data -->
+  <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i> <!-- Close button with tooltip -->
+</h4>
+
+<!-- Main content area of the dialog -->
+<mat-dialog-content class="py-1 mt-2">
+  <div class="container-fluid">
+    <form [formGroup]="addEditForm">
+      <!-- Reactive form based on FormGroup -->
+
+      <!-- Selected Time Period Input -->
+      <div class="form-group row align-items-center" *ngIf="!data.noteView">
+        <div class="col-lg-5 col-md-5 col-sm-12 col-form-label">
+          <label for="timePeriod" class="">Selected Time Period</label>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-12">
+          <input type="text" readonly formControlName="timePeriod"  class="form-control my-2 inputControl"
+            placeholder="Time Period" (keydown.enter)="$event.preventDefault()" /> <!-- Input field for time period -->
+        </div>
+      </div>
+
+      <!--Monthly datepicker Start Date Input -->
+      <div class="form-group row align-items-center" *ngIf="this.capacity == 'Monthly' && !data.noteView">
+        <div class="col-lg-5 col-md-5 col-sm-12 col-form-label">
+          <label for="start_date"> {{ capacity === 'Monthly' ? 'Start Year' : 'Start Date' }}</label>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-12 d-flex">
+          <mat-form-field class="custom-date w-100 my-3 dateFields">
+            <input matInput readonly [matDatepicker]="picker1" placeholder="Start Date" class="datepicker appInputRestriction inputControl"
+              formControlName="start_date" (click)="picker1.open()" (dateChange)="onStartDateChange($event.value)" (keydown.enter)="$event.preventDefault()" />
+            <mat-datepicker-toggle matSuffix [for]="picker1" >
+              <mat-icon>calendar_today</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker1 startView="multi-year" panelClass="example-month-picker" appMonthPicker
+              (monthSelected)="setMonthAndYear($event, picker1)">
+            </mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Monthly datepicker End Date Input -->
+      <div class="form-group row align-items-center" *ngIf="this.capacity == 'Monthly' && !data.noteView">
+        <div class="col-lg-5 col-md-5 col-sm-12 col-form-label">
+          <label for="start_date"> {{ capacity === 'Monthly' ? 'End Year' : 'End Date' }}</label>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-12">
+          <mat-form-field monthWise
+            [ngClass]="{'has-error': addEditForm.controls['end_date'].errors && addEditForm.controls['end_date'].touched}"
+            class="custom-date w-100 dateFields">
+            <input readonly matInput [matDatepicker]="picker2" placeholder="End Date"
+              class="datepicker appInputRestriction inputControl" formControlName="end_date" (click)="picker2.open()" />
+
+            <mat-datepicker-toggle matSuffix [for]="picker2" [disableRipple]="true">
+              <mat-icon>calendar_today</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker2 startView="multi-year" panelClass="example-month-picker" appMonthPicker
+              (monthSelected)="setEndMonthAndYear($event, picker2)">
+            </mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- weekly datepicker Start Date Input -->
+      <div class="form-group row align-items-center" *ngIf="this.capacity == 'Weekly' && !data.noteView">
+        <div class="col-lg-5 col-md-5 col-sm-12 col-form-label">
+          <label for="start_date"> {{ capacity === 'Weekly' ? 'Start week' : 'Start Date' }}</label>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-12 d-flex">
+          <mat-form-field class="custom-date w-100 my-3 dateFields">
+            <input matInput [matDatepicker]="picker1" placeholder="Start Date" class="datepicker  appInputRestriction inputControl"
+              formControlName="start_date" (click)="picker1.open()" (dateChange)="onStartDateChange($event.value)" />
+            <mat-datepicker-toggle matSuffix [for]="picker1">
+              <mat-icon>calendar_today</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker1 class="example-header"></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- weekly datepicker End Date Input -->
+      <div class="form-group row align-items-center" *ngIf="this.capacity == 'Weekly' && !data.noteView">
+        <div class="col-lg-5 col-md-5 col-sm-12 col-form-label">
+          <label for="start_date"> {{ capacity === 'Weekly' ? 'End week' : 'End Date' }}</label>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-12">
+          <mat-form-field monthWise
+            [ngClass]="{'has-error': addEditForm.controls['end_date'].errors && addEditForm.controls['end_date'].touched}"
+            class="custom-date w-100 dateFields">
+            <input readonly matInput [matDatepicker]="picker2" placeholder="End Date"
+              class="datepicker appInputRestriction inputControl" formControlName="end_date" (click)="picker2.open()" />
+
+            <mat-datepicker-toggle matSuffix [for]="picker2" [disableRipple]="true">
+              <mat-icon>calendar_today</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker2 class="example-header"></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <!-- Daily datepicker Start Date Input -->
+      <div class="form-group row align-items-center" *ngIf="this.capacity == 'Daily' && !data.noteView">
+        <div class="col-lg-5 col-md-5 col-sm-12 col-form-label">
+          <label for="start_date"> {{ capacity === 'Daily' ? 'Start Date' : 'Start Date' }}</label>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-12 d-flex " >
+          <mat-form-field class="custom-date w-100 my-3 dateFields " >
+            <input matInput [matDatepicker]="picker1"   placeholder="Start Date" class="datepicker  inputControl appInputRestriction"
+              formControlName="start_date" (click)="picker1.open()" (dateChange)="onStartDateChange($event.value)" (keydown.enter)="$event.preventDefault()" />
+            <mat-datepicker-toggle  matSuffix [for]="picker1" appGenericDate>
+              <mat-icon>calendar_today</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker  #picker1 class="example-header "></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Daily datepicker End Date Input -->
+      <div class="form-group row align-items-center" *ngIf="this.capacity == 'Daily' && !data.noteView">
+        <div class="col-lg-5 col-md-5 col-sm-12 col-form-label">
+          <label for="start_date" > {{ capacity === 'Daily' ? 'End Date' : 'End Date' }}</label>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-12">
+          <mat-form-field monthWise
+            [ngClass]="{'has-error': addEditForm.controls['end_date'].errors && addEditForm.controls['end_date'].touched}"
+            class="custom-date w-100 dateFields">
+            <input [min]="addEditForm.value.start_date"  matInput [matDatepicker]="picker2" placeholder="End Date"
+              class="datepicker appInputRestriction inputControl" formControlName="end_date" (click)="picker2.open()" (keydown.enter)="$event.preventDefault()" />
+
+            <mat-datepicker-toggle matSuffix [for]="picker2" [disableRipple]="true" appGenericDate>
+              <mat-icon>calendar_today</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker2 class="example-header" (keydown.enter)="$event.preventDefault()"></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Week Range Input (only visible if loginInfo.Capacity is 'Weekly') -->
+      <div class="form-group row align-items-center" *ngIf="this.capacity == 'Weekly'">
+        <div class="col-lg-5 col-md-5 col-sm-12 col-form-label">
+          <label>Week Range</label>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-12">
+          <div>
+            <mat-option *ngFor="let week of weekRanges" [value]="week">
+              Week {{ week.startWeekNumber }} - Week {{ week.endWeekNumber }}
+              <!-- Display week ranges -->
+            </mat-option>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exclude Days Input (only visible if loginInfo.Capacity is 'Daily') -->
+      <div class="form-group row align-items-center mt-2" *ngIf="this.capacity == 'Daily' && !data.noteView">
+        <div class="col-lg-5 col-md-5 col-sm-12 col-form-label">
+          <label>Exclude Days</label>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-12 d-flex justify-content-center">
+          <div class="circle-container">
+            <!-- Buttons for selecting days to exclude -->
+            <button class="day-circle btn" [ngClass]="{'active': isDaySelected('1')}"
+              (click)="toggleDay('1')">Sun</button>
+            <button class="day-circle btn" [ngClass]="{'active': isDaySelected('2')}"
+              (click)="toggleDay('2')">Mon</button>
+            <button class="day-circle btn" [ngClass]="{'active': isDaySelected('3')}"
+              (click)="toggleDay('3')">Tue</button>
+            <button class="day-circle btn" [ngClass]="{'active': isDaySelected('4')}"
+              (click)="toggleDay('4')">Wed</button>
+            <button class="day-circle btn" [ngClass]="{'active': isDaySelected('5')}"
+              (click)="toggleDay('5')">Thu</button>
+            <button class="day-circle btn" [ngClass]="{'active': isDaySelected('6')}"
+              (click)="toggleDay('6')">Fri</button>
+            <button class="day-circle btn" [ngClass]="{'active': isDaySelected('7')}"
+              (click)="toggleDay('7')">Sat</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exclude Months Input (only visible if loginInfo.Capacity is 'Monthly') -->
+      <div class="form-group row align-items-center" *ngIf="this.capacity == 'Monthly' && !data.noteView">
+        <div *ngIf="this.capacity == 'Monthly'" class="row">
+          <div class="col-lg-5 col-md-5 col-sm-12 col-form-label">
+            <label>Exclude Months</label>
+          </div>
+          <div class="col-lg-7 col-md-7 col-sm-12 d-flex justify-content-center">
+            <div class="circle-containermonth my-2">
+              <!-- First row of months -->
+              <div class="month-row">
+                <button class="btn month-circle mx-1" [ngClass]="{'active': isMonthSelected('1')}"
+                  (click)="toggleMonth('1')">Jan</button>
+                <button class="btn month-circle mx-1" [ngClass]="{'active': isMonthSelected('2')}"
+                  (click)="toggleMonth('2')">Feb</button>
+                <button class="btn month-circle mx-1" [ngClass]="{'active': isMonthSelected('3')}"
+                  (click)="toggleMonth('3')">Mar</button>
+                <button class="btn month-circle mx-1" [ngClass]="{'active': isMonthSelected('4')}"
+                  (click)="toggleMonth('4')">Apr</button>
+              </div>
+              <div class="month-row">
+                <button class="btn month-circle mx-1" [ngClass]="{'active': isMonthSelected('5')}"
+                  (click)="toggleMonth('5')">May</button>
+                <button class="btn month-circle mx-1" [ngClass]="{'active': isMonthSelected('6')}"
+                  (click)="toggleMonth('6')">Jun</button>
+                <button class="btn month-circle mx-1" [ngClass]="{'active': isMonthSelected('7')}"
+                  (click)="toggleMonth('7')">Jul</button>
+                <button class="btn month-circle mx-1" [ngClass]="{'active': isMonthSelected('8')}"
+                  (click)="toggleMonth('8')">Aug</button>
+              </div>
+              <!-- Second row of months -->
+              <div class="month-row">
+                <button class="btn month-circle mx-1" [ngClass]="{'active': isMonthSelected('9')}"
+                  (click)="toggleMonth('9')">Sep</button>
+                <button class="btn month-circle mx-1" [ngClass]="{'active': isMonthSelected('10')}"
+                  (click)="toggleMonth('10')">Oct</button>
+                <button class="btn month-circle mx-1" [ngClass]="{'active': isMonthSelected('11')}"
+                  (click)="toggleMonth('11')">Nov</button>
+                <button class="btn month-circle mx-1" [ngClass]="{'active': isMonthSelected('12')}"
+                  (click)="toggleMonth('12')">Dec</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bucket Notes Input (visible if noteView is true) -->
+      <div class="form-group row align-items-center" *ngIf="data.noteView">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-form-label d-flex">
+          <label for="note_Name" class="">Bucket notes</label>
+        </div>
+        <div class="col-lg-8 col-md-8 col-sm-12 validator-align">
+
+          <textarea formControlName="note_Name" [readOnly]="!data.view" name="textarea" class="form-control m-2 my-2"></textarea> <!-- Textarea for entering bucket notes -->
+
+        </div>
+      </div>
+
+    </form>
+  </div>
+</mat-dialog-content>
+
+<!-- Dialog button actions -->
+<mat-dialog-actions *ngIf="!data.view" align="center" class="mb-2">
+  <button class="btn btn-danger save-cancel-button" (click)="onCancel()">Cancel</button>
+  <!-- Cancel button to close the dialog -->
+  <button class="btn save-cancel-button btn-save ms-2" [disabled]="addEditForm.invalid" (click)="onSave()">
+    {{ data.button }}
+    <!-- Dynamic button text (Save or Update) -->
+  </button>
+</mat-dialog-actions>

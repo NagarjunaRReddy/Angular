@@ -1,0 +1,41 @@
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+  {{ data.title }}
+  <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+</h4>
+<mat-dialog-content class="py-1 mt-2">
+  <form [formGroup]="addEditForm">
+    <div class="form-group row align-items-center mb-2">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+        <label for="ProdStatus_Id" class="">Production Status</label><label class="text-danger">*</label>
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 validator-align">
+        <input [ngClass]="{
+            'has-error':
+              addEditForm.controls['AxProdStatus_Name'].errors &&
+              addEditForm.controls['AxProdStatus_Name'].touched
+          }" type="text" [readOnly]="data.view" class="form-control m-2" placeholder="Enter Production Status Name"
+          formControlName="AxProdStatus_Name" />
+        <div *ngIf="
+            submittedForm && addEditForm.controls['AxProdStatus_Name'].errors
+          " class="invalid-feedback my-2">
+          <span *ngIf="
+              addEditForm.controls['AxProdStatus_Name'].hasError('required')
+            " class="px-2">Production Status is required</span>
+          <span *ngIf="
+              addEditForm.controls['AxProdStatus_Name'].hasError(
+                'cannotContainSpace'
+              )
+            ">White Spaces not allowed</span>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="mb-2">
+  <button mat-raised-button color="warn" (click)="onCancel()" class="btn btn-danger save-cancel-button">
+    Cancel
+  </button>
+  <button mat-raised-button class="btn save-cancel-button btn-save ms-2" (click)="onSave()">
+    {{ data.button }}
+  </button>
+</mat-dialog-actions>

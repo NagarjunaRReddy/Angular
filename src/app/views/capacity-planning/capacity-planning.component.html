@@ -1,0 +1,65 @@
+<div class="container-fluid">
+  <div class="row">
+      <div class="p-0 px-2 pt-2 side-container">
+          <button class="cursor-pointer btn shadow-sm px-2 mb-1" [class.active]="data === activeData"
+              *ngFor="let data of capacitySideData" (click)="setActiveStatus(data)">{{data}}</button>
+      </div>
+      <div class="main-container page-layout p-0">
+          <div class="container-fluid">
+              <div class="row mt-2">
+                  <div class="col-lg-12">
+                      <div class="card">
+                          <div class="selected-list">
+                              <a (click)="setActiveStatus('Capacity Area')" *ngIf="capacityBreadCrumb">{{capacityBreadCrumb}}</a>
+                              <span><i class="fa-solid fa-chevron-right px-2" *ngIf="bucketBreadCrumb"></i></span>
+                              <a (click)="setActiveStatus('Buckets')" *ngIf="bucketBreadCrumb">{{bucketBreadCrumb}}</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-lg-12">
+                      <div class="configure-container mt-2 p-2">
+                          <mat-accordion>
+                              <mat-expansion-panel [expanded]="activeData === 'Capacity Area'"
+                                  (opened)="setActiveStatus('Capacity Area'); clearFilterValue(1)">
+                                  <mat-expansion-panel-header>
+                                      <mat-panel-title>Capacity Area</mat-panel-title>
+                                  </mat-expansion-panel-header>
+                                  <div class="capacity-area-container">
+                                      <app-capacity-area (BucketEnable)="BucketEnable($event)"></app-capacity-area>
+                                  </div>
+                              </mat-expansion-panel>
+
+                              <mat-expansion-panel [expanded]="activeData === 'Buckets'"
+                                  (opened)="setActiveStatus('Buckets'); clearFilterValue(2)">
+                                  <mat-expansion-panel-header>
+                                      <mat-panel-title>Buckets</mat-panel-title>
+                                  </mat-expansion-panel-header>
+                                  <div class="buckets-container">
+                                      <app-buckets [BucketData]="bucketData"
+                                          (SlotEnable)="SlotEnable($event)"></app-buckets>
+                                  </div>
+                              </mat-expansion-panel>
+
+                              <mat-expansion-panel [expanded]="activeData === 'Slots'"
+                                  (opened)="setActiveStatus('Slots'); clearFilterValue(3)">
+                                  <mat-expansion-panel-header>
+                                      <mat-panel-title>Slots</mat-panel-title>
+                                  </mat-expansion-panel-header>
+                                  <div class="section-container">
+                                    <app-slots [SlotData]="slotData"></app-slots>
+
+                                  </div>
+                              </mat-expansion-panel>
+                              <div class="d-flex col-lg-2 col-md-2 col-sm-2 my-2">
+                                  <button class="btn btn-dark save-button" (click)="saveLayout()">Save</button>
+                              </div>
+                          </mat-accordion>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,233 @@
+<app-common-sop-edit-table [commonTableData]="commonTableData"></app-common-sop-edit-table>
+
+<div class="container-fluid">
+    <div class="row justify-content-evenly mt-2">
+        <div [ngClass]="panView ?'col-lg-12 col-xl-12' :''" class="col-xl-4 col-lg-4 p-0 px-1 column-divider">
+            <div [ngStyle]="{'background-color':specBgColor}" class="title">Spec Review</div>
+            <form [formGroup]="specForm" class="inset-shadow" [ngClass]="panView ? '':''">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12 specForm">
+                    <!-- Spec Review Status -->
+                    <div class="form-group row m-2">
+                      <label for="specStatus" class="col-lg-5 col-form-label">Spec Review Status</label>
+                      <div class="col-lg-7">
+                          <mat-select class="formSelect" placeholder="--Select Spec Review Status--" formControlName="specStatus">
+                            <mat-option (click)="setStatusColor(item.Colorcode, 'spec')" *ngFor="let item of specStatusList" [value]="item.SpecreviewstatusID">{{ item.SpecreviewstatusName }}</mat-option>
+                          </mat-select>
+                      </div>
+                    </div>
+                    
+                    <!-- Spec Revie Date  -->
+                    <div class="form-group row m-2">
+                      <label for="specDate" class="col-lg-5 col-form-label">Spec Review Date</label>
+                      <div class="col-lg-7">
+                        <mat-form-field readonly [ngClass]="{'has-error': specForm.controls['specDate'].errors && specForm.controls['specDate'].touched}" class="custom-date w-100">
+                          <input readonly matInput [matDatepicker]="picker" formControlName="specDate" placeholder="Spec Review Date" class="datepicker appInputRestriction" (click)="picker.open()" />
+                          <mat-datepicker-toggle matSuffix [for]="picker" [disableRipple]="true">
+                            <mat-icon>calendar_today</mat-icon>
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #picker class="example-header"></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </div>
+  
+                    <!-- Spec Revie Comment  -->
+                    <div class="form-group row m-2">
+                      <label for="specComment" class="col-lg-5 col-form-label">Spec Review Comment</label>
+                      <div class="col-lg-12">
+                        <textarea matInput style="height: 180px;" formControlName="specComment" class="form-control" id="spec"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+        </div>
+        <hr *ngIf="panView" class="p-0 my-2">
+        <div [ngClass]="panView ?'col-lg-12 col-xl-12 mt-2' :'column-divider'" class="col-xl-4 col-lg-4 p-0 px-1 ">
+          <div [ngStyle]="{'background-color':bomBgColor}" class="title">BOM</div>
+          <form class="inset-shadow" [formGroup]="bomForm" [ngClass]="panView ? '':''">
+            <div class="container">
+              <div class="row">
+                <div class="col-12 bomForm">
+                  <!-- BOM Review Status -->
+                  <div class="form-group row m-2">
+                    <label for="bomStatus" class="col-lg-5 col-form-label">Upload Status</label>
+                    <div class="col-lg-7">
+                        <mat-select class="formSelect" placeholder="--Select BOM Review Status--" formControlName="bomStatus">
+                          <mat-option (click)="setStatusColor(item.Colorcode, 'bom')" *ngFor="let item of bomStatusList" [value]="item.BOMStatusId">{{ item.BOMStatusName }}</mat-option>
+                        </mat-select>
+                    </div>
+                  </div>
+                  
+                  <!-- BOM Revie Date  -->
+                  <div class="form-group row m-2">
+                    <label for="bomDate" class="col-lg-5 col-form-label">Upload Date</label>
+                    <div class="col-lg-7">
+                      <mat-form-field readonly class="custom-date w-100">
+                        <input readonly matInput [matDatepicker]="bomDate" formControlName="bomDate" placeholder="BOM Review Date" class="datepicker appInputRestriction" (click)="bomDate.open()" />
+                        <mat-datepicker-toggle matSuffix [for]="bomDate" [disableRipple]="true">
+                          <mat-icon>calendar_today</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #bomDate class="example-header"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+  
+                  <!-- BOM Revie Comment  -->
+                  <div class="form-group row m-2">
+                    <label for="bomComment" class="col-lg-5 col-form-label">BOM Comment</label>
+                    <div class="col-lg-12">
+                      <textarea matInput style="height: 180px;" formControlName="bomComment" class="form-control" id="bom"></textarea>
+                    </div>
+                  </div>
+                  <hr class="p-0 m-0" >
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="item-container">
+                        <span class="item-header">Items</span>
+                        <button (click)="addEditBomItems()" class="btn py-0 btn-dark my-1" [matTooltip]="items.length > 0 ? 'Edit' : 'Add' +' BOM Items'">
+                          <span>{{items.length > 0 ? "Edit" : "Add"}}</span>
+                        </button>
+                      </div>
+                      <hr class="p-0 m-0" >
+                      <table class="table table-bordered my-1">
+                        <thead>
+                          <tr>
+                            <th class="bg-dark text-light">S.No.</th>
+                            <th class="bg-dark text-light">Item Description</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngIf="!displayedItems">
+                            <td colspan="2">Loading...</td>
+                          </tr>
+                          <tr *ngFor="let item of displayedItems; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td></td>
+                            <!-- <td colspan="2" *ngIf="displayedItems.length == 0">No Items.</td> -->
+                          </tr>
+                          <tr *ngIf="displayedItems && displayedItems.length === 0">
+                            <td class="text-center py-1" colspan="2">No Items.</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div class="text-end">
+                        <span *ngIf="displayedItems.length < items.length" (click)="loadMore()" class="text-primary load-text">Load More</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <hr *ngIf="panView" class="p-0 my-2">
+        <div [ngClass]="panView ?'col-lg-12 col-xl-12 mt-2' :''" class="col-xl-4 col-lg-4 p-0 px-1 ">
+          <div [ngStyle]="{'background-color': coColorCode}" class="title">CO</div>
+          <form class="inset-shadow" [formGroup]="coForm" [ngClass]="panView ? '':''">
+            <div formArrayName="coForms" class="coForm">
+              <mat-accordion class="example-headers-align">
+                <mat-expansion-panel class="m-2 shadow-sm" *ngFor="let coForm of coForms.controls; let i = index" [formGroupName]="i" [expanded]="step === i" (opened)="setStep(i)" hideToggle>
+                  <mat-expansion-panel-header style="height: 30px;" class="m-2 px-1 mb-0">
+                    <mat-panel-title>
+                      Change Order {{i + 1}}
+                    </mat-panel-title>
+                    <mat-panel-description *ngIf="coForms.controls.length > 1" class="text-end" style="display: block;">
+                      <i class="fa-solid text-danger fa-circle-minus add-remove-icon" matTooltip="Remove" (click)="removeCOForm(i)"></i>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <div class="row">
+                    <div class="col-12">
+                      <!-- CO Review Status -->
+                      <div class="form-group row m-2">
+                        <label for="coStatus" class="col-lg-5 col-form-label">CO Review Status</label>
+                        <div class="col-lg-7">
+                          <mat-select class="formSelect" placeholder="--Select CO Review Status--" formControlName="coStatus">
+                            <mat-option (click)="setCoHeaderColor(item,i)" *ngFor="let item of coStatusList; let ind=index;" [value]="item.CustomerOrderStatusId">{{ item.CustomerOrderStatusName }}</mat-option>
+                          </mat-select>
+                        </div>
+                      </div>
+                      
+                      <!-- CO Review Date -->
+                      <div class="form-group row m-2">
+                        <label for="coDate" class="col-lg-5 col-form-label">CO Review Date</label>
+                        <div class="col-lg-7">
+                          <mat-form-field readonly class="custom-date w-100">
+                            <input readonly matInput [matDatepicker]="coDate" formControlName="coDate" placeholder="CO Review Date" class="datepicker appInputRestriction" (click)="coDate.open()" />
+                            <mat-datepicker-toggle matSuffix [for]="coDate" [disableRipple]="true">
+                              <mat-icon>calendar_today</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #coDate class="example-header"></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </div>
+          
+                      <!-- CO Mode -->
+                      <div class="form-group row m-2">
+                        <label for="coStatus" class="col-lg-5 col-form-label">CO Mode</label>
+                        <div class="col-lg-7">
+                          <mat-select class="formSelect" placeholder="--Select CO Mode--" formControlName="coMode">
+                            <mat-option *ngFor="let mode of coModeList" [value]="mode.CoModeStatusId">{{mode.CoModeStatusName}}</mat-option>
+                          </mat-select>
+                        </div>
+                      </div>
+          
+                      <!-- CO Attachment -->
+                      <div class="form-group row m-2">
+                        <label for="coAttachment" class="col-lg-5 col-form-label">Attachment</label>
+                        <div class="col-lg-7">
+                          <input type="file" (change)="onFileSelect($event, i)" class="d-none" [id]="'coFileInput' + i">
+                          <label [for]="'coFileInput' + i" class="btn btn-dark browse-icon">Browse</label>
+                          <ng-container *ngIf="!isImageType(getFileType(i))">
+                            <span class="ms-3 file-icon position-relative" *ngIf="coForms.at(i).get('fileName').value">
+                              <i (click)="removeFile(i)" *ngIf="getFileType(i) && getFileType(i) != 'null'" class="fa-solid cancel-icon fa-circle-xmark text-danger cursor-pointer" matTooltip="Remove File" matTooltipPosition="right"></i>
+                              <i matTooltip="View PDF"  matTooltipPosition="below" *ngIf="getFileType(i) == 'pdf'" class="fa-solid fa-2x cursor-pointer fa-file-pdf"></i>
+                              <i matTooltip="Download Excel" (click)="downloadFile(coForms.at(i).get('fileName').value, coForms.at(i).get('displayName').value)" matTooltipPosition="below" *ngIf="getFileType(i) == 'xlsx'" class="fa-solid fa-2x cursor-pointer fa-file-excel"></i>
+                              <i matTooltip="Download Word" (click)="downloadFile(coForms.at(i).get('fileName').value, coForms.at(i).get('displayName').value)" matTooltipPosition="below" *ngIf="getFileType(i) == 'docx'" class="fa-solid fa-2x cursor-pointer fa-file-word"></i>
+                              <i matTooltip="Download PPT" (click)="downloadFile(coForms.at(i).get('fileName').value, coForms.at(i).get('displayName').value)" matTooltipPosition="below" *ngIf="getFileType(i) == 'pptx'" class="fa-solid fa-2x cursor-pointer fa-file-powerpoint"></i>
+                              <i matTooltip="Download File" (click)="downloadFile(coForms.at(i).get('fileName').value, coForms.at(i).get('displayName').value)" matTooltipPosition="below" *ngIf="getFileType(i) == 'txt'" class="fa-solid fa-2x cursor-pointer fa-file-lines"></i>
+                            </span>
+                          </ng-container>
+                          <ng-container *ngIf="isImageType(getFileType(i))">
+                            <span class="file-icon position-relative">
+                              <i (click)="removeFile(i)" class="fa-solid cancel-icon fa-circle-xmark text-danger cursor-pointer" matTooltip="Remove File" matTooltipPosition="right"></i>
+                              <img matTooltip="View Image" matTooltipPosition="below" height="32px"  alt="Uploaded Image">
+                            </span>
+                          </ng-container>
+                        </div>
+                      </div>
+          
+                      <!-- CO Review Comment -->
+                      <div class="form-group row m-2">
+                        <label for="coComment" class="col-lg-5 col-form-label">CO Review Comment</label>
+                        <div class="col-lg-12">
+                          <textarea matInput style="height: 120px;" formControlName="coComment" class="form-control" id="coComment"></textarea>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </form>
+          
+          
+            <div class="d-block text-end p-2">
+              <i matTooltip="Add CO" class="fa-solid fa-circle-plus add-remove-icon" (click)="addCoForm()"></i>
+            </div>
+        </div>
+      </div>
+      <!-- <hr> -->
+    </div>
+    
+    <mat-dialog-actions align="center" class="py-0">
+      <div class="button-container text-center my-2">
+        <button (click)="cancelData()" class="btn btn-outline-danger mx-2 shadow-sm py-1 save-cancel-button">
+          Cancel
+        </button>
+        <button class="btn btn-dark mx-2 shadow-sm py-1 save-cancel-button" (click)="saveSpecBomCoData()">Save</button>
+      </div>
+</mat-dialog-actions>

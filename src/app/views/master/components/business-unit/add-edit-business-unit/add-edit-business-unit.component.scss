@@ -1,0 +1,74 @@
+.model-title {
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  font-size: 1.2rem;
+  background-color: var(--primary-color);
+}
+
+.fa-circle-xmark {
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.header-color {
+  background-color: var(--primary-color)ed;
+}
+
+label {
+  color: black;
+}
+
+@media (max-width:70em) {
+
+  .model-title,
+  label,
+  small {
+    font-size: 0.8rem !important;
+  }
+}
+
+
+.upload-area {
+  background: rgba(243, 243, 243, 0.973);
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  border: var(--border-color);
+}
+
+.upload-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: black;
+  margin: 0px;
+}
+
+.upload-subtitle {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.click-upload {
+  width: 100%;
+  border: 1px dashed var(--border-color);
+  border-radius: 5px;
+  padding: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  background-color: white;
+}
+
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.uploaded-image {
+  width: 100px;
+  height: 100px;
+}

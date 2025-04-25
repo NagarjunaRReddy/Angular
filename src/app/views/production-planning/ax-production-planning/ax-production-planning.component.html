@@ -1,0 +1,128 @@
+
+<div class="container-fluid pe-0">
+  <div class="row">
+
+<div class="search-container px-2">
+  <div class="search-list">
+    <!-- Sales Order list with search input -->
+    <div class="title">Sales Order</div>
+    <div class="list-data">
+      <div class="filter-input mx-2 py-1">
+        <input [(ngModel)]="soFilterInputValue" (input)="filterSoList($event)" type="text" class="form-control"
+          placeholder="Search SO" />
+      </div>
+      <!-- Display filtered sales order list with drag-and-drop capability -->
+      <ul>
+        <li class="shadow-sm" [ngStyle]="{'background-color': list.ItemColor, 'color':list.textColor}"
+          *ngFor="let list of filterSopList; let i=index;">
+          {{list.soNumber }}
+          <i (click)="getSoDetails(list)" matTooltip="View Details" class="fa-solid fa-eye"></i>
+          <!-- <i *ngIf="subMenuAccess[0].EditAccess" (click)="editSo(list, 'AX')" matTooltip="Edit"
+            class="fa-solid fa-pen px-1"></i> -->
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="ax-container px-2">
+  <!-- AX container for the main content -->
+  <div class="top-buttons mt-2">
+    <!-- Top buttons for different views -->
+    <div class="tab-icons">
+      <i
+      [ngClass]="{ active: activeView == 'home' }"
+      (click)="changeView('home')"
+      matTooltip="SO"
+      class="fa-solid fa-house"
+    >
+      <span *ngIf="activeView == 'home'"> SO </span>
+    </i>
+    <i
+      [ngClass]="{ active: activeView == 'user' }"
+      (click)="changeView('user')"
+      matTooltip="End User"
+      class="fa-solid fa-user"
+    >
+      <span *ngIf="activeView == 'user'"> End User </span>
+    </i>
+    <i
+      [ngClass]="{ active: activeView == 'setting' }"
+      (click)="changeView('setting')"
+      matTooltip="Configuration"
+      class="fa-solid fa-gear"
+    >
+      <span *ngIf="activeView == 'setting'"> Configuration </span>
+    </i>
+    </div>
+    <div class="overall-search py-1">
+      <label class="me-2" > Search </label>
+      <input [(ngModel)]="searchQuery" (input)="filterColumn()" type="text" class="form-control" placeholder="Search">
+    </div>
+  </div>
+  <div class="ax-content ms-1">
+    <!-- Main content with a table -->
+    <table class="table table-striped">
+      <thead>
+        <!-- Table header with dynamic columns based on slotList -->
+        <tr>
+          <th>Week / Slot</th>
+          <th *ngFor="let item of slotList">{{ item }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Table body with data from axData -->
+        <tr *ngFor="let data of axData">
+          <td>
+            <!-- Displaying week number and date range -->
+            <span>{{ data.BucketName }}</span>
+            <span class="d-block date-range">{{ data.bucketNote }}</span>
+          </td>
+          <td
+            [ngStyle]="{'backgroundColor': slot.ItemColor, 'color':slot.textColor}"
+            class="slot-data"
+            *ngFor="let slot of data.SlotPlanning"
+          >
+            <!-- Displaying different content based on slot conditions -->
+            <span *ngIf="slot.activeUser || activeView == 'user'">{{slot.customerName}}</span>
+            <!-- <span *ngIf="slot.activeSetting">
+              <p>{{slot.soNumber}}</p>
+              <p>{{slot.subCategoryName !== null ? slot.subCategoryName : "-----"}}</p>
+            </span> -->
+            <span
+            *ngIf="slot.activeSetting || activeView == 'setting'"
+                  class="home-view"
+                >
+                <span>{{slot.soNumber}}</span>
+                <span [matTooltip]="slot.subCategoryName" matTooltipPosition="left" class="home-preview" >{{ slot.subCategoryName !== null ? slot.subCategoryName : "-----" }}</span>
+                <span [matTooltip]="slot?.make" matTooltipPosition="left" class="home-preview">{{'Chassis :' + slot?.make}}</span>
+                </span>
+            <!-- <span *ngIf="!slot.activeUser && !slot.activeSetting && activeView != 'setting'">
+              <span>{{slot.soNumber}}</span>
+              {{ getDisplayedValue(slot) }}
+            </span> -->
+            <div class="home-view" *ngIf="activeView == 'home' && !slot.activeSetting && !slot.activeUser">
+              <span *ngIf="activeView == 'home'">{{ getDisplayedValue(slot) }} </span>
+              <!-- <br> -->
+              <span *ngIf="activeView == 'home' || slot.activeUser" [matTooltip]="slot.customerName" matTooltipPosition="left" class="home-preview">End User : {{slot.customerName}} </span>
+              <!-- <br>  -->
+              <span *ngIf="activeView == 'home'" [matTooltip]="slot.dealerName" matTooltipPosition="left" class="home-preview">Dealer : {{slot.dealerName}} </span>
+            </div>
+            
+            <!-- Icons for additional actions -->
+            <div class="inside-icons">
+              <i matTooltip="View" matTooltipPosition="left" (click)="getSoDetails(slot)" (keydown.enter)="getSoDetails(slot)" class="fa-solid fa-eye"></i>
+                <!-- <i (click)="changeSingleView(slot,'user')" (keydown.enter)="changeSingleView(slot,'user')" matTooltip="Customer" matTooltipPosition="right" class="fa-solid fa-user"></i> -->
+                <!-- <i (click)="changeSingleView(slot, 'setting')" matTooltip="Configuration" matTooltipPosition="right" class="fa-solid fa-gear"></i> -->
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+  </div></div>
+

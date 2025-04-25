@@ -1,0 +1,25 @@
+<h4 mat-dialog-title class=" text-white position-relative model-title p-0">{{ data.title }} <i matTooltip="Close"
+    class="fa-solid fa-circle-xmark" (click)="onCancel()"></i></h4>
+<mat-dialog-content class="py-1 mt-2">
+  <form [formGroup]="addEditForm">
+    <div class="form-group row align-items-center">
+      <div class="col-lg-5 col-md-4 col-sm-12 col-form-label d-flex">
+        <label for="capacity_Name" class="">Capacity Area Name</label><label class="text-danger">*</label>
+      </div>
+      <div class="col-lg-7 col-md-4 col-sm-12 validator-align">
+        <input type="text" [readOnly]="data.view" class="form-control m-2 my-2 inputControl"
+          placeholder="Enter Capacity area Name" maxlength="20" formControlName="capacity_Name">
+        <div *ngIf="submittedForm && addEditForm.controls['capacity_Name'].errors" class="invalid-feedback mb-2">
+          <span *ngIf="addEditForm.controls['capacity_Name'].hasError('required')" class="px-2">Capacity name is
+            required</span>
+          <span *ngIf="addEditForm.controls['capacity_Name'].hasError('cannotContainSpace')">White Spaces not
+            allowed</span>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="!data.view" align="center" class="mb-2">
+  <button mat-raised-button class="save-cancel-button btn btn-danger " (click)=" onCancel()">Cancel</button>
+  <button mat-raised-button class="btn save-cancel-button btn-save ms-2" (click)="onSave()">{{data.button}}</button>
+</mat-dialog-actions>

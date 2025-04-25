@@ -1,0 +1,491 @@
+// Overall styling for SOP container
+.sop-container {
+  width: 100%;
+  display: flex;
+
+  // Styling for the search container (15% of width)
+  .search-container {
+    width: 15%;
+
+    // Styling for the search list
+    .search-list {
+      margin: 10px 0px;
+
+      // Styling for the title of the sales order list
+      .title {
+        background-color: black;
+        color: white;
+        padding: 5px 10px;
+      }
+
+      // Styling for the sales order list
+      .list-data {
+        width: 100%;
+        box-shadow: 0 0 4px inset gray;
+        border: 1px solid lightgrey;
+
+        // Styling for the filter input
+        .filter-input {
+          border: none;
+          padding: 0;
+          position: sticky;
+          top: 0;
+
+          // Styling for the input element
+          input {
+            box-shadow: 1px 1px 3px inset lightgray;
+            border-radius: 0px;
+          }
+        }
+
+        // Styling for the list of sales orders
+        ul {
+          padding: 5px;
+          text-align: center;
+          height: calc(100vh - 200px);
+          overflow-y: auto;
+
+          // Styling for each list item
+          li {
+            list-style: none;
+            border: 1px solid;
+            margin: 5px 0px;
+            padding: 5px;
+            cursor: pointer;
+            position: relative;
+            font-size: 0.9rem;
+
+            // Hover effect on list items
+            &:hover {
+              transform: scale(1.05);
+              transition: 0.2s linear;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Styling for the data container (85% of width)
+  .data-container {
+    width: 85%;
+
+    // Styling for the top buttons
+    .top-buttons {
+      margin-left: 5px;
+      display: flex;
+      justify-content: space-between;
+
+      // Styling for each button
+      .tab-icons {
+        display: flex;
+        justify-content: center;
+        align-items: end;
+        i {
+          padding: 6px 10px;
+          cursor: pointer;
+          border: 1px solid lightgray;
+          margin-right: 5px;
+          border-bottom: none;
+          transition: 0.3s linear;
+
+          // Styling for the span inside the button
+          span {
+            font-size: 0.8rem;
+            font-family: sans-serif;
+            font-weight: 500;
+          }
+        }
+      }
+      .overall-search{
+        display: flex;
+        align-items: center;
+        .form-control:focus {
+            color: var(--bs-body-color);
+              background-color: var(--bs-body-bg);
+              outline: 0;
+              box-shadow: none;
+        }
+      }
+    }
+
+    // Styling for the SOP content
+    .sop-content {
+      width: 100%;
+      height: calc(100vh - 180px);
+      box-shadow: 0 0 3px inset gray;
+      border: 1px solid lightgray;
+      margin-left: 5px;
+      overflow: auto;
+
+      // Styling for the SOP content table
+      table {
+        width: auto;
+
+        // Styling for the table header
+        thead {
+          tr {
+            th {
+              background-color: black;
+              color: white;
+              font-size: 0.9rem;
+              font-weight: 500;
+              min-width: 180px;
+              max-width: 180px;
+              padding: 5px;
+              border: 1px solid white;
+              text-align: center;
+              position: sticky;
+              top: 0;
+              z-index: 1;
+            }
+          }
+        }
+
+        // Styling for the table body
+        tbody {
+          tr {
+            td {
+              font-size: 0.9rem;
+              font-weight: 500;
+              height: 110px;
+              min-width: 180px;
+              padding-top: 15px;
+              max-width: 180px;
+              border: 1px solid lightgray;
+              vertical-align: middle;
+
+              // Styling for the date range
+              .date-range {
+                font-size: 0.8rem;
+                font-weight: 400;
+              }
+            }
+
+            // Styling for slot data
+            .slot-data {
+              font-size: 0.75rem !important;
+              font-weight: 400;
+              position: relative;
+              cursor: pointer;
+              // Styling for the icons inside each slot
+              transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+
+              &:hover {
+                background-color: #e9ecef;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transform: scale(1.02);
+              }
+              .inside-icons {
+                // display: inline-grid;
+                position: absolute;
+                right: 0;
+                height: 100%;
+                top: 0;
+
+                i {
+                  // border: 1px solid white;
+                  padding: 4px;
+                  cursor: pointer;
+                  text-shadow: 0px 0px 1px black;
+                }
+                .fa-xmark{
+                  font-size: 0.9rem;
+                }
+              }
+
+              // Styling for the empty container
+              .empty-container {
+                font-size: 1.5rem;
+                letter-spacing: 2px;
+                opacity: 0.2;
+              }
+            }
+
+            // Styling for unavailable data
+            .unavailaibleData {
+              background-color: #343638;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Styling for the active state
+.active {
+  background-color: black;
+  color: white;
+}
+
+// Color styles for different statuses
+.red-bg {
+  background-color: #ff6961;
+  color: white;
+}
+.green-bg {
+  background-color: #8cd47e;
+  color: white;
+}
+.blue-bg {
+  background-color: #9bd1dd;
+  color: white;
+}
+.yellow-bg {
+  background-color: #ffb54c;
+  color: white;
+}
+
+.default-bg {
+  background-color: transparent;
+  color: black;
+}
+
+// Styling for the remove icon
+.remove-icon {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.unavailableData {
+  background: #232526;
+  background: -webkit-linear-gradient(to right, #232526, #414345);
+  background: linear-gradient(to right, #232526, #414345);
+  color: #fff;
+}
+
+.icon-container {
+  position: relative;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.icon-container:hover .text {
+  display: block;
+}
+
+.icon-container:hover .fa-ban {
+  display: none;
+}
+
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.trigger-enter {
+  animation: slideIn 0.3s ease;
+}
+
+.trigger-leave {
+  animation: slideOut 0.3s ease;
+}
+
+.trigger-enter-active,
+.trigger-leave-active {
+  animation: fadeInOut 0.3s ease;
+}
+
+@media (max-width: 70em) {
+  .list-data {
+    ul {
+      li {
+        font-size: 0.6rem !important;
+      }
+    }
+  }
+}
+
+.home-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: flex-start;
+  overflow: hidden;
+  .home-preview {
+    white-space: nowrap;
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.7rem;
+  }
+}
+
+.bilnker{
+  position: absolute;
+  left: 3px;
+  top: 5px;
+  i{
+    color: #ff0000;
+    pointer-events: auto !important;
+    text-shadow: 0 0 20px #333, 0 0 30px #333, 0 0 40px #333, 0 0 50px #333, 0 0 60px #333, 0 0 70px #333, 0 0 80px #333;
+  }
+}
+
+.badge-data{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  border-radius: 0px 0px 5px 0px;
+  background: #8e9eab;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.item-info{
+  font-size: 0.7rem;
+  padding-left: 12px;
+  color: #333;
+  letter-spacing: 1px;
+}
+
+.container-fluid{
+  overflow: hidden;
+}
+
+// .pan-container{
+//   zoom: 85%;
+// }
+
+.fa-magnifying-glass{
+  position: absolute;
+  right: 6px;
+  font-size: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: lightgrey;
+}
+
+.all-search{
+  overflow: hidden;
+}
+
+/* your-component.component.scss */
+.placeholder-search {
+  position: relative;
+  font-size: 0.9rem;
+  &::placeholder{
+    font-size: 0.8rem;
+  }
+}
+
+.placeholder-label {
+  position: absolute;
+  top: 0;
+  left: 0px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  color: #aaa;
+  font-size: 0.8rem !important;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: opacity 0.6s ease;
+  font-weight: 400;
+  // animation: typingEffect 1s steps(500, end) forwards;
+  animation: scrollEffect 2s ease-in-out forwards;
+}
+
+@keyframes typingEffect {
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+
+@keyframes scrollEffect {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.legend-container{
+  padding: 5px;
+  .list-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    .list-data{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      white-space: nowrap;
+      font-size: 0.8rem;
+      div{
+        height: 16px;
+        width: 16px;
+        margin: 0px 10px;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+.highlight {
+  background-color: #cfcfcf !important;
+  font-weight: bold;
+}
+.highlight-border {
+  border: 3px solid black !important;
+}

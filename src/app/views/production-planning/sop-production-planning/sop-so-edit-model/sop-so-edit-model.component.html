@@ -1,0 +1,164 @@
+<!-- Dialog title with close icon -->
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+  <!-- <span class="text-badge">Milly</span> -->
+  <i class="fa-solid fa-circle-chevron-left" (click)="changeSo('prev')" matTooltip="Previous"></i>
+  {{ currentSo + " Details" }}
+  <i class="fa-solid fa-circle-chevron-right" (click)="changeSo('next')" matTooltip="Next" ></i>
+  <i *ngIf="data.paneButtonEnable" [matTooltip]="panViewEnable ?'Pane View off':'Pane View on'" class="fa-solid fa-table-columns" (click)="enablePaneView()" ></i>
+  <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+</h4>
+
+  <!-- Dialog content container -->
+    <!-- Row for the content -->
+    <mat-dialog-content class="m-1 p-1">
+      <div class="container-fluid">
+        <div class="row">
+          <div [@slideInOut]="panViewEnable ? 'in' : 'out'" [ngClass]="panViewEnable ? 'col-lg-6':'d-none'">
+            <div class="top-buttons">
+              <!-- Top buttons to change active view -->
+              <div class="tab-icons">
+                <i *ngFor="let tab of tabs" [ngClass]="{ active: activeView === tab.view }" (click)="changeView(tab.view)"
+                  [matTooltip]="activeView == tab.view ? '' :tab.tooltip" [class]="tab.iconClass">
+                  <span class="ps-2" *ngIf="activeView == tab.view ">{{ tab.label }}</span>
+                </i>
+              </div>
+            </div>
+            <div class="edit-table-container">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Week / Slot</th>
+                    <th *ngFor="let item of slotList">{{ item }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr [ngClass]="{'highlight-border': activeView == 'production' ? isCurrentWeek(data.BucketName) : false}" *ngFor="let data of finalSopData">
+                    <td [ngClass]="{'highlight': activeView == 'production' ? isCurrentWeek(data.BucketName) : false}" class="text-center week-cell">
+                      <span>Week <br> {{ data.BucketName }}</span>
+                      <!-- <span class="d-block date-range">{{ data.bucketNote }}</span> -->
+                    </td>
+                    <td *ngFor="let slot of data.SlotPlanning" class="slot-data text-center cursor-pointer"
+                    [ngClass]="setDroppedSlotColor(slot.SoList[0], slot.SlotId)"
+                    (click)="getSoDetails(slot.SoList[0])"
+                    [ngStyle]="{'backgroundColor': setProductionColor(slot.SoList[0], slot.SlotId, activeView), 'color': bindTextColor(slot.SoList[0], slot.SlotId), 'border':setActiveBorderColor(slot.SoList[0]) , 'align-content':'center'}"
+                    >
+                      <span *ngFor="let item of slot.SoList">{{ item.soNumber }}
+                        <div *ngIf="!['production', 'home', 'spec', 'bom','co', 'attachments', 'drawing'].includes(activeView) && item?.rltDays != 0 && item?.referenceItemName != ''" class="badge badge-light badge-data">
+                          <span class="bilnker">
+                            <i class="fa-solid fa-circle fa-beat-fade"></i>
+                          </span>
+                          <span class="item-info">
+                            {{item?.referenceItemName + ': ' + item?.rltDays}}
+                          </span>
+                        </div>
+                        <div *ngIf="activeView == 'production'" class="badge badge-light badge-data">
+                          <span *ngIf="item?.prdAgeing != ''" class="bilnker">
+                            <i class="fa-solid fa-circle fa-beat-fade"></i>
+                          </span>
+                          <span [matTooltip]="'Aging' + ':  ' &nbsp; + item?.prdAgeing + ' Days'" *ngIf="item?.prdAgeing != ''" class="item-info">
+                            {{item?.prdAgeing + ' Days'}}
+                          </span>
+                        </div>
+                        <div *ngIf="activeView == 'home' && item?.salesAgeing != null && item?.salesAgeing >= 0" class="badge badge-light badge-data">
+                          <span *ngIf="item?.salesAgeing != ''" class="bilnker">
+                            <i class="fa-solid fa-circle fa-beat-fade"></i>
+                          </span>
+                          <span [matTooltip]="'Days Since Sold'+ ':  ' &nbsp; + item?.salesAgeing + ' Days'" *ngIf="item?.salesAgeing != ''" class="item-info">
+                            {{item?.salesAgeing + ' Days'}}
+                          </span>
+                        </div>
+                      </span>
+                      <span *ngIf="slot.SoList.length == 0">
+                        <i class="fa-solid fa-ban"></i>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+          </div>
+          <div [ngClass]="panViewEnable ? 'col-lg-6':'col-lg-12'">
+            <div class="row">
+              <!-- Column for the content, taking the full width of the container -->
+              <div class="col-lg-12">
+                <i matTooltip="Toggle Tab" matTooltipPosition="left" (click)="toggleTabs()" class="fa-brands fa-buromobelexperte cursor-pointer"></i>
+              </div>
+              <div class="col-lg-12 p-0">
+                <!-- MatTabGroup to organize content into tabs, ngIf checks for dataBind -->
+                <mat-tab-group  class="shadow p-1 border-radius-8" *ngIf="dataBind" [selectedIndex]="setActiveIndex(data?.selectedIndex)">
+                  <!-- General tab -->
+                  <mat-tab label="General">
+                    <!-- App-general component with input binding for generalData -->
+                    <app-general [panView]="panViewEnable" [commonTableData]="commonTableData" (subCategoryChanged)="getProductionLT($event)" (deliveryDateChanged)="getDeliveryDate($event)" [soNumber]="soNumber" [generalData]="generalData"></app-general>
+                  </mat-tab>
+          
+                  <!-- Actions tab -->
+                  <mat-tab label="Actions">
+                    <!-- App-actions component with input bindings for commonTableData, soNumber, and actionData -->
+                    <app-actions [commonTableData]="commonTableData" [soNumber]="soNumber" [actionData]="actionData"></app-actions>
+                  </mat-tab>
+          
+                  <!-- Dynamic tabs created using ngFor -->
+                  <ng-container *ngFor="let item of dynamicTabs; let i = index;">
+                    <!-- MatTab for each dynamic tab with label and App-dynamic-tabs component -->
+                    <mat-tab class="dynamic" *ngIf="item.selectedFlag == 1">
+                      <!-- App-dynamic-tabs component with input bindings for dynamicData, soNumber, and commonTableData -->
+                      <ng-template mat-tab-label>
+                        <div class="dynamic-tabs" [ngStyle]="{backgroundColor:getColor(item)}">
+                          {{ item.dynamicData }}
+                        </div>
+                      </ng-template>
+                      <app-dynamic-tabs [panView]="panViewEnable" [selectedProdLT]="selectedProdLT" [flagSelected]="flagSelected" [deliveryDateGeneral]="deliveryDateGeneral" (selectionChanged)="onSelectionChanged($event,i)" [dynamicData]="item" [soNumber]="soNumber" [commonTableData]="commonTableData"></app-dynamic-tabs>
+                    </mat-tab>
+                  </ng-container>
+                  
+                  <!-- Spec Review tab -->
+                  <!-- <mat-tab label="Spec Review"> -->
+                    <!-- App-sop-spec-review component with input bindings for commonTableData and specData -->
+                    <!-- <app-sop-spec-review [commonTableData]="commonTableData" [specData]="specData"></app-sop-spec-review>
+                  </mat-tab> -->
+          
+                  <!-- BOM tab -->
+                  <!-- <mat-tab label="BOM"> -->
+                    <!-- App-bom component with input bindings for commonTableData and bomData -->
+                    <!-- <app-bom [commonTableData]="commonTableData" [bomData]="bomData"></app-bom>
+                  </mat-tab> -->
+          
+                  <!-- CO tab -->
+                  <!-- <mat-tab label="CO"> -->
+                    <!-- App-co component with input bindings for commonTableData and coData -->
+                    <!-- <app-co [commonTableData]="commonTableData" [coData]="coData"></app-co>
+                  </mat-tab> -->
+      
+                  <!-- Spec BOM CO -->
+                  <mat-tab label="Spec/BOM/CO">
+                    <app-spec-bom-co [panView]="panViewEnable" [soNumber]="soNumber" [commonTableData]="commonTableData" [bomData]="bomData" [coData]="coData" [specData]="specData"></app-spec-bom-co>
+                  </mat-tab>
+      
+                  <!-- Decals tab -->
+                  <mat-tab label="Decals">
+                    <!-- App-co component with input bindings for commonTableData and coData -->
+                    <app-decals [panView]="panViewEnable" [soNumber]="soNumber" [commonTableData]="commonTableData" [decalData]="decalData"></app-decals>
+                  </mat-tab>
+      
+                  <!-- Attachment Tab -->
+                  <mat-tab label="Documents">
+                    <!-- App-co component with input bindings for commonTableData and coData -->
+                    <app-sop-attachments [panView]="panViewEnable" [attachmentAndDrawingStatus]="attachmentAndDrawingStatus" [attachmentDetails]="attachmentDetails" [commonTableData]="commonTableData" [soNumber]="soNumber"></app-sop-attachments>
+                  </mat-tab>
+      
+                  <!-- Drawing Tab -->
+                  <mat-tab label="Drawings">
+                    <!-- App-co component with input bindings for commonTableData and coData -->
+                    <app-sop-drawing [panView]="panViewEnable" [attachmentAndDrawingStatus]="attachmentAndDrawingStatus" [drawingDetails]="drawingDetails" [commonTableData]="commonTableData" [soNumber]="soNumber"></app-sop-drawing>
+                  </mat-tab>
+                </mat-tab-group>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+
+  

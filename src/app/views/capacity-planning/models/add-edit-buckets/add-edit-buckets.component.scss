@@ -1,0 +1,108 @@
+// Header of Model
+.model-title {
+  height: 30px;
+  display: flex;
+  font-size: 1.1rem;
+  background-color: var(--primary-color);
+  justify-content: center;
+  align-items: center;
+}
+
+// For icon
+.fa-circle-xmark {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+// .header-color{
+//     background-color: red;
+// }
+
+label {
+  color: var(primary-text-color);
+}
+
+@media (max-width: 70em) {
+
+  .model-title,
+  label,
+  small {
+    font-size: 0.8rem !important;
+  }
+}
+
+.circle-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 300px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.day-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50% !important;
+  text-align: center;
+  line-height: 40px;
+  margin: 1px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.7rem;
+  box-shadow: 1px 1px 2px #d5d3d7;
+}
+
+.day-circle.active {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.day-circle.inactive {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.circle-containermonth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.month-row {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  /* Add spacing between rows */
+}
+
+.month-circle {
+  width: 70px;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.month-circle.active {
+  background-color: var(--secondary-color);
+  /* Active color */
+  color: #fff;
+  border-color: #0950a0;
+}
+
+.month-circle:hover {
+  border-color: #0950a0;
+}

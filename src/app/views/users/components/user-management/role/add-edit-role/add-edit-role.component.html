@@ -1,0 +1,42 @@
+<h4 mat-dialog-title class="text-white position-relative model-title p-0">
+  {{ data.title }} <i class="fa-solid fa-circle-xmark" (click)="onCancel()"></i>
+</h4>
+<mat-dialog-content class="p-1 m-1">
+  <form [formGroup]="addEditForm">
+    <div class="container">
+      <div class="form-group row align-items-center">
+        <div class="col-lg-4 col-md-12 col-sm-12 col-form-label d-flex">
+          <label for="staticEmail" class="">Role Name</label><label class="text-danger">*</label>
+        </div>
+        <div class="col-lg-8 col-md-12 col-sm-12 validator-align">
+          <input [ngClass]="{
+              'has-error':  
+                addEditForm.controls['RoleName'].errors &&
+                addEditForm.controls['RoleName'].touched
+            }" type="text" [readOnly]="data.view" class="form-control m-2" placeholder="Enter Role Name"
+            formControlName="RoleName" />
+          <div *ngIf="submittedForm && addEditForm.controls['RoleName'].errors" class="invalid-feedback mb-2 px-2">
+            <span *ngIf="addEditForm.controls['RoleName'].hasError('required')" class="px-2">Role Name is
+              required</span>
+            <span *ngIf="
+                addEditForm.controls['RoleName'].hasError('cannotContainSpace')
+              " class="px-2">White Spaces not allowed</span>
+          </div>
+        </div>
+        <label for="staticEmail" class="col-lg-4 col-md-12 col-sm-12 col-form-label">Role Description</label>
+        <div class="col-lg-8 col-md-12 col-sm-12">
+          <input type="text" [readOnly]="data.view" class="form-control m-2" placeholder="Enter Role Description"
+            formControlName="Description" />
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="!data.view" align="center" class="m-1">
+  <button mat-raised-button color="warn" class="btn btn-danger save-cancel-button" (click)="onCancel()">
+    Cancel
+  </button>
+  <button mat-raised-button class="btn save-cancel-button btn-save ms-2" (click)="onSave()">
+    {{ data.button }}
+  </button>
+</mat-dialog-actions>

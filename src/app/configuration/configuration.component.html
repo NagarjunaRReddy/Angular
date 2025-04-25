@@ -1,0 +1,24 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="btn-container">
+  
+          <label class="switch btn-color-mode-switch shadow-sm">
+            <input (change)="changeView($event)" [ngModel]="activeMenu" value="1" id="color_mode" name="color_mode" type="checkbox">
+            <label class="btn-color-mode-switch-inner" data-off="Login Configuration" data-on="Theme Configuration" for="color_mode"></label>
+          </label>
+  
+        </div>
+        <div *ngIf="!activeMenu" cdkDropListGroup class="configurator-container shadow-sm">
+        <div class="login-configuration">
+          <app-login-configuration></app-login-configuration>
+        </div>
+      </div>
+        <div *ngIf="activeMenu" cdkDropListGroup class="configurator-container shadow-sm">
+        <div class="login-configuration">
+          <app-theme-configuration></app-theme-configuration>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

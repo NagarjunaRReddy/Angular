@@ -1,0 +1,165 @@
+<h4 mat-dialog-title class=" text-white position-relative model-title">{{ data.title }} <i matTooltip="Close" class="fa-solid fa-circle-xmark" (click)="onCancel()"></i></h4>
+<mat-dialog-content class="p-1 m-1">
+    <div class="alert-table col-md-12 mt-2 mx-2">
+        <div class="alert-create-table table-container scroll table-container-max-height table-content table-custom"
+            #tableContainer>
+            <table #table id="table" mat-table [dataSource]="dataSource"
+                class="mat-elevation-z8 w-100 text-center rounded-table" matSort matSortDirection="asc">
+
+                <ng-container *ngFor="let column of columns; let i = index" matColumnDef="{{column.field}}">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{column.header}}
+                    </th>
+                    <td mat-cell *matCellDef="let row; let j = index">
+                        {{ column.field == 'Sold_Date' ?  ((ConvertDate(row[column.field]) ? (row[column.field] | date:'MM/dd/yy') : '')) : row[column.field] }}
+                    </td>
+                </ng-container>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell employeenodata" [attr.colspan]="displayedColumns.length">No Data
+                        Available
+                    </td>
+                </tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+        <!-- <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons>
+        </mat-paginator> -->
+    </div>
+    <form [formGroup]="addEditForm">
+        <div class="container">
+            <div class="form-group row align-items-center">
+                <div class="col-lg-2 col-md-2 col-sm-12 col-form-label d-flex" *ngIf="action === 'Spec Review' || action === 'All'">
+                    <label for="description" class="">Spec Review Date</label>
+                    <!-- <label class="text-danger">*</label> -->
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 validator-align" *ngIf="action === 'Spec Review' || action === 'All'">
+                    <mat-form-field class="custom-date w-100 my-2" aria-disabled="true">
+                        <input matInput [matDatepicker]="picker" placeholder=""
+                            class="datepicker appInputRestriction" formControlName="spec_Date"
+                            (click)="picker.open()" readonly />
+                        <mat-datepicker-toggle matSuffix [for]="picker">
+                            <mat-icon>calendar_today</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker class="example-header"></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 col-form-label d-flex" *ngIf="action === 'BOM' || action === 'All'">
+                    <label for="description" class="">Bill Of Materials Date</label>
+                    <!-- <label class="text-danger">*</label> -->
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 validator-align" *ngIf="action === 'BOM' || action === 'All'">
+                    <mat-form-field class="custom-date w-100 my-2">
+                        <input matInput [matDatepicker]="picker1" placeholder=""
+                            class="datepicker appInputRestriction" formControlName="bom_Date"
+                            (click)="picker1.open()" readonly />
+                        <mat-datepicker-toggle matSuffix [for]="picker1">
+                            <mat-icon>calendar_today</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker1 class="example-header"></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 col-form-label d-flex" *ngIf="action === 'Change Order' || action === 'All'">
+                    <label for="description" class="">Change Order Date</label>
+                    <!-- <label class="text-danger">*</label> -->
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 validator-align" *ngIf="action === 'Change Order' || action === 'All'">
+                    <mat-form-field class="custom-date w-100 my-2">
+                        <input matInput [matDatepicker]="picker2" placeholder=""
+                            class="datepicker appInputRestriction" formControlName="change_Date"
+                            (click)="picker2.open()" readonly />
+                        <mat-datepicker-toggle matSuffix [for]="picker2">
+                            <mat-icon>calendar_today</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker2 class="example-header"></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 col-form-label d-flex" *ngIf="action === 'Spec Review' || action === 'All'">
+                    <label for="spec_Status" class="">Spec Review Status</label>
+                    <label class="text-danger">*</label>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 validator-align" *ngIf="action === 'Spec Review' || action === 'All'">
+                    <mat-select [ngClass]="{'has-error': addEditForm.controls['spec_Status'].errors && addEditForm.controls['spec_Status'].touched}" formControlName="spec_Status" name="spec_Status" id="spec_Status" class="formSelect w-100"
+                        panelClass="drop-panel">
+                        <mat-option [value]="item.SpecreviewstatusID" *ngFor="let item of specData">
+                            {{item.SpecreviewstatusName}}
+                        </mat-option>
+                        <mat-option *ngIf="specData == []" disabled>No result found
+                        </mat-option>
+                    </mat-select>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 col-form-label d-flex" *ngIf="action === 'BOM' || action === 'All'">
+                    <label for="bom_Status" class="">Bill Of Materials Status</label>
+                    <label class="text-danger">*</label>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 validator-align" *ngIf="action === 'BOM' || action === 'All'">
+                    <mat-select [ngClass]="{'has-error': addEditForm.controls['bom_Status'].errors && addEditForm.controls['bom_Status'].touched}" formControlName="bom_Status" name="bom_Status" id="bom_Status" class="formSelect w-100"
+                        panelClass="drop-panel">
+                        <mat-option [value]="item.BOMStatusId" *ngFor="let item of bomData">
+                            {{item.BOMStatusName}}
+                        </mat-option>
+                        <mat-option *ngIf="bomData == []" disabled>No result found
+                        </mat-option>
+                    </mat-select>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 col-form-label d-flex" *ngIf="action === 'Change Order' || action === 'All'">
+                    <label for="change_Status" class="">Change Order Status</label>
+                    <label class="text-danger">*</label>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 validator-align" *ngIf="action === 'Change Order' || action === 'All'">
+                    <mat-select [ngClass]="{'has-error': addEditForm.controls['change_Status'].errors && addEditForm.controls['change_Status'].touched}" formControlName="change_Status" name="change_Status" id="change_Status"
+                        class="formSelect w-100" panelClass="drop-panel">
+                        <mat-option [value]="item.CustomerOrderStatusId" *ngFor="let item of changeData">
+                            {{item.CustomerOrderStatusName}}
+                        </mat-option>
+                        <mat-option *ngIf="changeData == []" disabled>No result found
+                        </mat-option>
+                    </mat-select>
+                </div>
+           
+
+            <!-- <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-12 col-form-label d-flex">
+                    <label for="comments" class="">Comments</label>
+                </div>
+                <div class="col-lg-10 col-md-6 col-sm-12 validator-align">
+                    <textarea formControlName="comments" name="textarea"
+                        class="form-control m-2 my-2"></textarea>
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-12 col-form-label d-flex" *ngIf="action === 'Spec Review' || action === 'All'">
+                    <label for="specreviewcomments" class="">Spec Review Comments</label>
+                </div>
+                <div class="col-lg-10 col-md-6 col-sm-12 validator-align" *ngIf="action === 'Spec Review' || action === 'All'">
+                    <textarea formControlName="specreviewcomments" name="textarea"
+                        class="form-control m-2 my-2"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-12 col-form-label d-flex" *ngIf="action === 'BOM' || action === 'All'">
+                    <label for="bomcomments" class="">BOM Comments</label>
+                </div>
+                <div class="col-lg-10 col-md-6 col-sm-12 validator-align" *ngIf="action === 'BOM' || action === 'All'">
+                    <textarea formControlName="bomcomments" name="textarea"
+                        class="form-control m-2 my-2"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-12 col-form-label d-flex" *ngIf="action === 'Change Order' || action === 'All'">
+                    <label for="changeordercomments" class="">Change Order Comments</label>
+                </div>
+                <div class="col-lg-10 col-md-6 col-sm-12 validator-align" *ngIf="action === 'Change Order' || action === 'All'">
+                    <textarea formControlName="changeordercomments" name="textarea"
+                        class="form-control m-2 my-2"></textarea>
+                </div>
+            </div>
+
+            
+        </div>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="m-1">
+    <button mat-raised-button color="warn" [hidden]="data.view" (click)="onCancel()">Cancel</button>
+    <button mat-raised-button class="bg-dark text-light" id="btnSave" [hidden]="data.view" (click)="onSave()">Save</button>
+</mat-dialog-actions>

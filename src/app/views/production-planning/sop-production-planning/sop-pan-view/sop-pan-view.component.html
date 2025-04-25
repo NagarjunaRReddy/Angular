@@ -1,0 +1,65 @@
+<h4 mat-dialog-title class=" text-white position-relative model-title"> {{data.soNumber}} <i matTooltip="Close" (click)="closePaneView()" class="fa-solid fa-circle-xmark"></i></h4>
+
+<!-- Dialog content container -->
+    <!-- Row for the content -->
+    <div class="container-fluid mt-2">
+        <div class="row">
+          <!-- Column for the content, taking the full width of the container -->
+          <div class="col-lg-12">
+            <i matTooltip="Toggle Tab" matTooltipPosition="left" (click)="toggleTabs()" class="fa-brands fa-buromobelexperte cursor-pointer"></i>
+          </div>
+          <div class="col-lg-12 my-1">
+            <!-- MatTabGroup to organize content into tabs, ngIf checks for dataBind -->
+            <mat-tab-group  class="shadow" *ngIf="dataBind" [selectedIndex]="setActiveIndex(data?.selectedIndex)">
+              <!-- General tab -->
+              <mat-tab label="General">
+                <!-- App-general component with input binding for generalData -->
+                <app-general [commonTableData]="commonTableData" (subCategoryChanged)="getProductionLT($event)" (deliveryDateChanged)="getDeliveryDate($event)" [soNumber]="data.soNumber" [generalData]="generalData"></app-general>
+              </mat-tab>
+      
+              <!-- Actions tab -->
+              <mat-tab label="Actions">
+                <!-- App-actions component with input bindings for commonTableData, soNumber, and actionData -->
+                <app-actions [commonTableData]="commonTableData" [soNumber]="data.soNumber" [actionData]="actionData"></app-actions>
+              </mat-tab>
+      
+              <!-- Dynamic tabs created using ngFor -->
+              <ng-container *ngFor="let item of dynamicTabs; let i = index;">
+                <!-- MatTab for each dynamic tab with label and App-dynamic-tabs component -->
+                <mat-tab>
+                  <!-- App-dynamic-tabs component with input bindings for dynamicData, soNumber, and commonTableData -->
+                  <ng-template mat-tab-label>
+                    <div class="dynamic-tabs" [ngStyle]="{backgroundColor:getColor(item)}">
+                      {{ item.dynamicData }}
+                    </div>
+                  </ng-template>
+                  <app-dynamic-tabs [selectedProdLT]="selectedProdLT" [flagSelected]="flagSelected" [deliveryDateGeneral]="deliveryDateGeneral" (selectionChanged)="onSelectionChanged($event,i)" [dynamicData]="item" [soNumber]="data.soNumber" [commonTableData]="commonTableData"></app-dynamic-tabs>
+                </mat-tab>
+              </ng-container>
+  
+              <!-- Spec BOM CO -->
+              <mat-tab label="Spec/BOM/CO">
+                <app-spec-bom-co [soNumber]="data.soNumber" [commonTableData]="commonTableData" [bomData]="bomData" [coData]="coData" [specData]="specData"></app-spec-bom-co>
+              </mat-tab>
+  
+              <!-- Decals tab -->
+              <mat-tab label="Decals">
+                <!-- App-co component with input bindings for commonTableData and coData -->
+                <app-decals [soNumber]="data.soNumber" [commonTableData]="commonTableData" [decalData]="decalData"></app-decals>
+              </mat-tab>
+  
+              <!-- Attachment Tab -->
+              <mat-tab label="Attachments">
+                <!-- App-co component with input bindings for commonTableData and coData -->
+                <app-sop-attachments [attachmentAndDrawingStatus]="attachmentAndDrawingStatus" [attachmentDetails]="attachmentDetails" [commonTableData]="commonTableData" [soNumber]="data.soNumber"></app-sop-attachments>
+              </mat-tab>
+  
+              <!-- Drawing Tab -->
+              <mat-tab label="Drawing">
+                <!-- App-co component with input bindings for commonTableData and coData -->
+                <app-sop-drawing [attachmentAndDrawingStatus]="attachmentAndDrawingStatus" [drawingDetails]="drawingDetails" [commonTableData]="commonTableData" [soNumber]="data.soNumber"></app-sop-drawing>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+      </div>

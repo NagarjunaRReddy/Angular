@@ -1,0 +1,40 @@
+<div class="container-fluid pe-0 production-plan">
+    <!-- Main container fluid -->
+    <div class="row">
+        <!-- Row containing side container and main container -->
+        <div class="p-0 side-container">
+            <!-- Side container with top and bottom menus -->
+            <div class="top-menu">
+                <!-- Top menu with buttons for capacity areas -->
+                <ng-container *ngFor="let item of capacityArea">
+                    <!-- Button for each capacity area -->
+                    <button class="btn mb-1 shadow-sm" [ngClass]="{'active':activeCapacity == item.CapacityName}"
+                        (click)="setActiveCapacity(item.CapacityName, item.Id)">{{item.CapacityName}}</button>
+                </ng-container>
+            </div>
+            <div class="bottom-menu">
+                <!-- Bottom menu with buttons for production side data -->
+                <!-- <p class="cursor-pointer btn btn-light shadow" (click)="navigateTo('sop-production')">
+                    S&OP
+                </p>
+
+                <p class="cursor-pointer btn btn-light shadow" (click)="navigateTo('ax-production')">
+                    AX
+                </p> -->
+                <!-- Example menu items (commented out)-->
+
+                <!-- <p [hidden]="!data.ReadAccess" class="cursor-pointer shadow" *ngFor="let data of productionSideData"
+                [routerLink]="[data.MenuPath,selectedCapacityId]" routerLinkActive="active">{{data.Menu_Name}}</p> -->
+
+                <p [hidden]="!data.ReadAccess" class="cursor-pointer shadow" *ngFor="let data of productionSideData"
+                    [routerLink]="[data.MenuPath,selectedCapacityId]" routerLinkActive="active">{{data.Menu_Name}}</p>
+            </div>
+        </div>
+        <div class="main-container page-layout p-0">
+            <!-- Main container for dynamic content -->
+            <!-- <app-sop-production-planning></app-sop-production-planning> -->
+             <router-outlet></router-outlet>
+            <!-- Router outlet for rendering components based on route configuration -->
+        </div>
+    </div>
+</div>
